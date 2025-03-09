@@ -16,22 +16,27 @@
                             <h4 class="mt-1 mb-5 pb-1">Tejero Medical and Maternity Clinic</h4>
                         </div>
         
-                        <form>
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
                             <p>Please login to your account</p>
         
                             <div data-mdb-input-init class="form-outline mb-2">
-                            <input type="email" id="form2Example11" class="form-control"
-                                placeholder="Phone number or email address" />
-                            <label class="form-label" for="form2Example11">Username</label>
+                                <label class="form-label" for="form2Example11">Username</label>
+                                <input type="text" name="username" id="form2Example11" class="form-control @error('username') is-invalid @enderror"
+                                    placeholder="Username of Email Address" />
+                                    
+                                @error('username')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
         
                             <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="password" id="form2Example22" class="form-control" />
-                            <label class="form-label" for="form2Example22">Password</label>
+                                <label class="form-label" for="form2Example22">Password</label>
+                                <input type="password" name="password" id="form2Example22" class="form-control" />
                             </div>
         
                             <div class="text-center pt-1 mb-5 pb-1">
-                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block fa-lg gradient-custom-2 mb-3" type="button">Log
+                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log
                                 in</button>
                             <a class="text-muted" href="#!">Forgot password?</a>
                             </div>
@@ -47,10 +52,10 @@
                     </div>
                     <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                         <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                        <h4 class="mb-4">We are more than just a company</h4>
-                        <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        {{-- <h4 class="mb-4">We are more than just a company</h4>
+                        {{-- <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> --}}
                         </div>
                     </div>
                     </div>
