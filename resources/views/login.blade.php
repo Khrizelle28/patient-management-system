@@ -22,7 +22,7 @@
         
                             <div data-mdb-input-init class="form-outline mb-2">
                                 <label class="form-label" for="form2Example11">Username</label>
-                                <input type="text" name="username" id="form2Example11" class="form-control @error('username') is-invalid @enderror"
+                                <input type="text" name="username" id="form2Example11" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror"
                                     placeholder="Username of Email Address" />
                                     
                                 @error('username')

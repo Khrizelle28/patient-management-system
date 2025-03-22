@@ -1,1 +1,0 @@
-<h1>Hello {{ auth()->user()->first_name }}</h1>
