@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,5 +14,10 @@ Route::get('/', function () {
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::resource('register', RegisterController::class);
+// Route::resource('register', RegisterController::class);
+// regiter.in
+Route::get('register', [RegisterController::class, 'index'])->name('register.index');
+Route::post('register', [RegisterController::class, 'store'])->name('register.store');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('create-record', [RecordController::class, 'create'])->name('record.create');

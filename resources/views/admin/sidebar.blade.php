@@ -64,6 +64,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                         Create Account
                 </a>
+                <a class="nav-link" href="{{ route('record.create') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Create Record
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">

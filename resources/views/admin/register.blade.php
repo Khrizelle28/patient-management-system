@@ -498,7 +498,7 @@
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <div class="form-floating mb-3 mb-md-0 ">
+                                <div class="form-floating mb-3 mb-md-0">
                                     <select name="role" id="selectRole" class="form-control @error('role') is-invalid @enderror">
                                         <option value selected disabled>Please select role</option>
                                         @foreach ($role_datas as $key => $role_data)
@@ -515,7 +515,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
-                                    <input class="form-control @error('first_name') is-invalid @enderror" id="inputFirstName" name="first_name" type="text" placeholder="Enter your first name" />
+                                    <input class="form-control @error('first_name') is-invalid @enderror" id="inputFirstName" value="{{ old('first_name') }}" name="first_name" type="text" placeholder="Enter your first name" />
                                     <label for="inputFirstName">First name</label>
                                     @error('first_name')
                                         <small class="invalid-feedback">Please enter a First name.</small>
@@ -567,7 +567,7 @@
                             </div>
                         </div>
                         <div class="form-floating mb-3">
-                            <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="email" name="email" placeholder="name@example.com" />
+                            <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="text" value="{{ old('email') }}" name="email" placeholder="name@example.com" />
                             <label for="inputEmail">Email address</label>
                             @error('email')
                                 <small class="invalid-feedback">Please enter a email.</small>
