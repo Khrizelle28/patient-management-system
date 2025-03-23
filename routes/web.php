@@ -14,3 +14,4 @@ Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('register', RegisterController::class);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');

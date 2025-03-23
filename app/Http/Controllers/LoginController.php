@@ -63,4 +63,13 @@ class LoginController extends Controller
         $user = Auth::user();
         return redirect()->intended(route('dashboard'));
     }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect('/login');
+    }
 }
