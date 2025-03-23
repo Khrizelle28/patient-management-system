@@ -577,7 +577,7 @@
                             <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Create Account</button></div>
                         </div>
                     </form>
-                </div>x
+                </div>
             </div>
         </div>
     </div>
