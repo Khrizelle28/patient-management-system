@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Classes\UserRoles;
+use App\Classes\UserStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -47,6 +48,7 @@ class RolesAndPermissionSeeder extends Seeder
             'last_name'         => "Sablan",
             'username'          => "administrator",
             'email'             => "sablankhrizelle@gmail.com",
+            'status'            => UserStatus::ACTIVATED,
             'password'          => bcrypt('Secret123'),
             'email_verified_at' => Carbon::now(),
             'created_at'        => Carbon::now(),

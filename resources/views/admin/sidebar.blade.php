@@ -60,13 +60,13 @@
                     Tables
                 </a> --}}
                 <div class="sb-sidenav-menu-heading">User Management</div>
-                <a class="nav-link" href="{{ route('register.index') }}">
+                <a class="nav-link" href="{{ route('admin.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Create Account
+                        Employee Accounts
                 </a>
-                <a class="nav-link" href="{{ route('record.create') }}">
+                <a class="nav-link" href="{{ route('patient.index') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Create Record
+                        Patient Records
                 </a>
             </div>
         </div>

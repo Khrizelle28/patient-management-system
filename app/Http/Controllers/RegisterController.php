@@ -16,8 +16,7 @@ class RegisterController extends Controller
     }
 
     public function store(RegisterRequest $request)
-    {
-        // dd($request->all());    
+    { 
         $data = $request->except(['_token']);
         $data['username'] = str_replace(' ', '', strtolower($data['first_name']));
         $data['password'] = bcrypt($data['license_no']);
