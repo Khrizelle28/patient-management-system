@@ -30,3 +30,8 @@ body {
     display: block;
     width: 100%;
 }
+
+.datatable-selector {
+    padding-left: 1.125rem !important;
+    padding-right: 2.125rem !important;
+}
