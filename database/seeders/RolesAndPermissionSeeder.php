@@ -10,6 +10,7 @@ use Illuminate\Database\Seeder;
 use ReflectionClass;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class RolesAndPermissionSeeder extends Seeder
 {
@@ -47,7 +48,7 @@ class RolesAndPermissionSeeder extends Seeder
             'last_name'         => "Sablan",
             'username'          => "administrator",
             'email'             => "sablankhrizelle@gmail.com",
-            'password'          => bcrypt('Secret123'),
+            'password'          => Hash::make('Secret123'),
             'email_verified_at' => Carbon::now(),
             'created_at'        => Carbon::now(),
             'updated_at'        => Carbon::now(),
