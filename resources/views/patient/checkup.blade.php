@@ -1,37 +1,208 @@
 @extends('admin.index')
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-lg-11">
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-7">
             <div class="card mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Add Checkup</h3></div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('patient.update', ['id' => $patient->id]) }}">
+                    <form method="POST" action="{{ route('patient.diagnosis', ['id' => $patient->id]) }}">
                         @csrf
-                        @method('PUT')
+                        @method('POST')
                         <div class="row mb-3">
                             <div class="col-md-4">
-                               <label>Full Name</label>
-                                <h4>{{ $patient->full_name }}</h4>
+                               <label><strong>Full Name</strong></label>
+                                <p>{{ $patient->full_name }}</p>
                             </div>
                             <div class="col-md-4">
-                                <label>Age</label>
-                                <h4>{{ $patient->age }}</h4>
+                                <label><strong>Age</strong></label>
+                                <p>{{ $patient->age }}</p>
                             </div>
                             <div class="col-md-4">
-                                <label>Civil Status</label>
-                                <h4>{{ $patient->civil_status }}</h4>
+                                <label><strong>Civil Status</strong></label>
+                                <p>{{ $patient->civil_status }}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-8">
-                               <label>Full Address</label>
-                                <h4>{{ $patient->full_address }}</h4>
+                               <label><strong>Full Address</strong></label>
+                                <p>{{ $patient->full_address }}</p>
                             </div>
                             <div class="col-md-4">
-                                <label>Occupation</label>
-                                <h4>{{ $patient->occupation }}</h4>
+                                <label><strong>Occupation</strong></label>
+                                <p>{{ $patient->occupation }}</p>
                             </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                               <label><strong>Contact No.</strong></label>
+                                <p>{{ $patient->full_address }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label><strong>Birthdate</strong></label>
+                                <p>{{ $patient->occupation }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label><strong>Birthplace</strong></label>
+                                <p >{{ $patient->occupation }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <h4 class="font-weight-light my-4">Checkup Details</h4>
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <textarea class="form-control @error('ob_score') is-invalid @enderror" id="inputOBScore" value="{{ old('ob_score') }}" name="ob_score" style="height: 100px; resize: none;" type="text" placeholder="Enter your first name"></textarea>
+                                    <label for="inputOBScore">OB Score</label>
+                                    @error('ob_score')
+                                        <small class="invalid-feedback">Please enter a OB Score.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputGravida" name="gravida" type="text" value="{{ old('gravida') }}" placeholder="Enter your gravida" />
+                                    <label for="inputGravida">Gravida</label>
+                                    @error('gravida')
+                                        <small class="invalid-feedback">Please enter a Gravida.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputPara" name="para" type="text" value="{{ old('para') }}" placeholder="Enter your para" />
+                                    <label for="inputPara">Para</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputLmp" name="last_menstrual_period" type="text" value="{{ old('lmp') }}" placeholder="Enter your LMP" />
+                                    <label for="inputLmp">LMP</label>
+                                    @error('lmp')
+                                        <small class="invalid-feedback">Please enter LMP.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputBp" name="blood_pressure" type="text" value="{{ old('blood_pressure') }}" placeholder="Enter your BP" />
+                                    <label for="inputBp">BP</label>
+                                    @error('lmp')
+                                        <small class="invalid-feedback">Please enter BP.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputWt" name="weight" type="text" value="{{ old('weight') }}" placeholder="Enter your Weight" />
+                                    <label for="inputWt">WT</label>
+                                    @error('weight')
+                                        <small class="invalid-feedback">Please enter Weight.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label><strong>Type</strong></label>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input type" type="radio" name="type" value="non-pregnant" id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Non pregnant
+                                    </strong></label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input type" type="radio" name="type" value="pregnant" id="flexRadioDefault2">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                      Pregnant
+                                    </strong></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 pregnant-details" style="display: none;">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputAog" name="age_of_gestation" type="text" value="{{ old('age_of_gestation') }}" placeholder="Enter your AOG" />
+                                    <label for="inputAog">AOG</label>
+                                    @error('age_of_gestation')
+                                        <small class="invalid-feedback">Please enter AOG.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputFh" name="fundal_height" type="text" value="{{ old('fundal_height') }}" placeholder="Enter your FH" />
+                                    <label for="inputFh">FH</label>
+                                    @error('fundal_height')
+                                        <small class="invalid-feedback">Please enter FH.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" id="inputFht" name="fetal_heart_tone" type="text" value="{{ old('fetal_heart_tone') }}" placeholder="Enter your FHT" />
+                                    <label for="inputFht">FHT</label>
+                                    @error('fetal_heart_tone')
+                                        <small class="invalid-feedback">Please enter FHT.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <h5>FM_Hx</h5>
+                                    <div class="row row-remarks">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="asthma" id="checkbox1">
+                                              <label class="form-check-label" for="checkbox1">Asthma</label>
+                                            </div>
+                                            <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="hpn" id="checkbox2">
+                                              <label class="form-check-label" for="checkbox2">HPN</label>
+                                            </div>
+                                            <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="diabetes" id="checkbox3">
+                                              <label class="form-check-label" for="checkbox3">Diabetes</label>
+                                            </div>
+                                            <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="heart_disease" id="checkbox4">
+                                              <label class="form-check-label" for="checkbox4">Heart Disease</label>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                            <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="allergy" id="checkbox5">
+                                              <label class="form-check-label" for="checkbox5">Allergy</label>
+                                            </div>
+                                            <div class="form-check">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="thyroid_problem_goiter" id="checkbox6">
+                                              <label class="form-check-label" for="checkbox6">Thyroid Problem/Goiter</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input chkbox_others" type="checkbox" name="remarks[]" value="others" id="checkbox6">
+                                                <label class="form-check-label" for="checkbox6">Others, Specify</label>
+                                              </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <textarea class="form-control @error('txtarea_remarks') is-invalid @enderror" id="inputTxtareaRemarks" value="{{ old('txtarea_remarks') }}" name="txtarea_remarks" style="height: 100px; resize: none;" type="text" placeholder="Enter your first name"></textarea>
+                                    <label for="inputTxtareaRemarks">Remarks</label>
+                                    @error('txtarea_remarks')
+                                        <small class="invalid-feedback">Please enter a Remarks.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 mb-0">
+                            <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Submit</button></div>
                         </div>
                     </form>
                 </div>
@@ -39,3 +210,6 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script src="{{ asset('js/diagnosis.js') }}"></script>
+@endpush

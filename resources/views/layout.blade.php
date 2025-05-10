@@ -7,9 +7,12 @@
     <link rel="icon" href="{{asset('image/brand-logo.png')}}">
     <title>Tejero Medical and Maternity Clinic</title>
     @include('style')
+    @stack('styles')
 </head>
 <body>
     @yield('page-body')
     @include('script')
+    @stack('scripts')
+    @stack('modals')
 </body>
 </html>

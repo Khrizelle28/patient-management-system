@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DiagnosisRequest;
 use App\Http\Requests\PatientUserRegisterRequest;
+use App\Models\Diagnosis;
 use App\Models\PatientUser;
 use Illuminate\Http\Request;
 
@@ -50,5 +52,25 @@ class PatientController extends Controller
     {
         $patient = PatientUser::find($id);
         return view('patient.checkup', compact('patient'));
+    }
+
+    public function diagnosis(DiagnosisRequest $request, $id)
+    {
+        try {
+            $data = $request->safe()->except(['_token', '_method']);
+            $patient = PatientUser::find($id);
+            $data['user_id'] = $patient->id;
+            if(isset($data['txtarea_remarks']))
+            {
+                // $data['remarks']['others'] = $data['txtarea_remarks'];
+                
+            }
+            $data['remarks'] = json_encode($data['remarks']);
+            $user = Diagnosis::create($data);
+
+            return redirect()->route('patient.index');
+        } catch (\Throwable $th) {
+            dd($th);
+        }
     }
 }

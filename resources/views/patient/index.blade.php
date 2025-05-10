@@ -35,7 +35,7 @@
             </tfoot>
             <tbody>
                 @forelse($patients as $patient)
-                    <tr>
+                    <tr onclick="window.location='{{ route('patient.checkup', ['id' => $patient->id]) }}'" style="cursor:pointer;">
                         <td>{{ $patient->full_name }}</td>
                         <td>{{ $patient->age ?? 'N/A' }}</td>
                         <td>{{ $patient->civil_status ?? 'N/A' }}</td>
@@ -44,6 +44,7 @@
                         <td>{{ $patient->contact_no }}</td>
                         <td>{{ $patient->birthday }}</td>
                         <td>
+                            <a class="btn btn-primary" href="{{ route('patient.show', ['id' => $patient->id]) }}">View</a>
                             <a class="btn btn-primary" href="{{ route('patient.checkup', ['id' => $patient->id]) }}">Add Checkup</a>
                             <a class="btn btn-primary" href="{{ route('patient.edit', ['id' => $patient->id]) }}">Edit</a>
                             <a class="btn btn-primary" href="{{ route('admin.create') }}">Deactivate</a>
