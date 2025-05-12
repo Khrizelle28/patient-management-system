@@ -8,7 +8,7 @@
     </div>
     <div class="card-body">
         <a class="btn btn-primary" href="{{ route('admin.create') }}">New Admin</a>
-        <table id="datatablesSimple">
+        <table id="datatablesSimple" class="tableAdmin">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -38,9 +38,9 @@
                         <td>{{ $admin->license_no ?? 'N/A' }}</td>
                         <td>{{ $admin->ptr_no ?? 'N/A' }}</td>
                         <td>{{ $admin->email }}</td>
-                        <td>{{ implode(', ', $admin->role) }}</td>
-                        <td>{{ $admin->status }}</td>
-                        <td>
+                        <td class="test123213">{{ implode(', ', $admin->role) }}</td>
+                        <td class="test123213">{{ $admin->status }}</td>
+                        <td style="test123213">
                             <a class="btn btn-primary" href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>
                             <a class="btn btn-primary" href="{{ route('admin.create') }}">Deactivate</a>
                             <a class="btn btn-primary" href="{{ route('admin.create') }}">Delete</a>

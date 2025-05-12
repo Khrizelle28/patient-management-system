@@ -62,7 +62,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputGravida" name="gravida" type="text" value="{{ old('gravida') }}" placeholder="Enter your gravida" />
+                                    <input class="form-control @error('gravida') is-invalid @enderror" id="inputGravida" name="gravida" type="text" value="{{ old('gravida') }}" placeholder="Enter your gravida" />
                                     <label for="inputGravida">Gravida</label>
                                     @error('gravida')
                                         <small class="invalid-feedback">Please enter a Gravida.</small>
@@ -71,33 +71,36 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputPara" name="para" type="text" value="{{ old('para') }}" placeholder="Enter your para" />
+                                    <input class="form-control @error('para') is-invalid @enderror" id="inputPara" name="para" type="text" value="{{ old('para') }}" placeholder="Enter your para" />
                                     <label for="inputPara">Para</label>
+                                    @error('para')
+                                        <small class="invalid-feedback">Please enter a Para.</small>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputLmp" name="last_menstrual_period" type="text" value="{{ old('lmp') }}" placeholder="Enter your LMP" />
+                                    <input class="form-control @error('last_menstrual_period') is-invalid @enderror" id="inputLmp" name="last_menstrual_period" type="text" value="{{ old('lmp') }}" placeholder="Enter your LMP" />
                                     <label for="inputLmp">LMP</label>
-                                    @error('lmp')
+                                    @error('last_menstrual_period')
                                         <small class="invalid-feedback">Please enter LMP.</small>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputBp" name="blood_pressure" type="text" value="{{ old('blood_pressure') }}" placeholder="Enter your BP" />
+                                    <input class="form-control @error('blood_pressure') is-invalid @enderror" id="inputBp" name="blood_pressure" type="text" value="{{ old('blood_pressure') }}" placeholder="Enter your BP" />
                                     <label for="inputBp">BP</label>
-                                    @error('lmp')
+                                    @error('blood_pressure')
                                         <small class="invalid-feedback">Please enter BP.</small>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputWt" name="weight" type="text" value="{{ old('weight') }}" placeholder="Enter your Weight" />
+                                    <input class="form-control @error('weight') is-invalid @enderror" id="inputWt" name="weight" type="text" value="{{ old('weight') }}" placeholder="Enter your Weight" />
                                     <label for="inputWt">WT</label>
                                     @error('weight')
                                         <small class="invalid-feedback">Please enter Weight.</small>
@@ -109,23 +112,26 @@
                             <label><strong>Type</strong></label>
                             <div class="col-md-4">
                                 <div class="form-check">
-                                    <input class="form-check-input type" type="radio" name="type" value="non-pregnant" id="flexRadioDefault1">
+                                    <input class="form-check-input type @error('type') is-invalid @enderror" type="radio" name="type" value="non-pregnant" id="radioNonPregnant" {{ old('type') == 'non-pregnant' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="flexRadioDefault1">
                                       Non pregnant
                                     </strong></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input type" type="radio" name="type" value="pregnant" id="flexRadioDefault2">
+                                    <input class="form-check-input type @error('type') is-invalid @enderror" type="radio" name="type" value="pregnant" id="radioPregnant" {{ old('type') == 'pregnant' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="flexRadioDefault2">
                                       Pregnant
                                     </strong></label>
+                                    @error('type')
+                                        <small class="invalid-feedback">Please select type.</small>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3 pregnant-details" style="display: none;">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputAog" name="age_of_gestation" type="text" value="{{ old('age_of_gestation') }}" placeholder="Enter your AOG" />
+                                    <input class="form-control @error('age_of_gestation') is-invalid @enderror" id="inputAog" name="age_of_gestation" type="text" value="{{ old('age_of_gestation') }}" placeholder="Enter your AOG" />
                                     <label for="inputAog">AOG</label>
                                     @error('age_of_gestation')
                                         <small class="invalid-feedback">Please enter AOG.</small>
@@ -134,7 +140,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputFh" name="fundal_height" type="text" value="{{ old('fundal_height') }}" placeholder="Enter your FH" />
+                                    <input class="form-control @error('fundal_height') is-invalid @enderror" id="inputFh" name="fundal_height" type="text" value="{{ old('fundal_height') }}" placeholder="Enter your FH" />
                                     <label for="inputFh">FH</label>
                                     @error('fundal_height')
                                         <small class="invalid-feedback">Please enter FH.</small>
@@ -143,7 +149,7 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control" id="inputFht" name="fetal_heart_tone" type="text" value="{{ old('fetal_heart_tone') }}" placeholder="Enter your FHT" />
+                                    <input class="form-control @error('fetal_heart_tone') is-invalid @enderror" id="inputFht" name="fetal_heart_tone" type="text" value="{{ old('fetal_heart_tone') }}" placeholder="Enter your FHT" />
                                     <label for="inputFht">FHT</label>
                                     @error('fetal_heart_tone')
                                         <small class="invalid-feedback">Please enter FHT.</small>
@@ -156,33 +162,33 @@
                                     <div class="row row-remarks">
                                         <div class="col-md-6">
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="asthma" id="checkbox1">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="asthma" id="checkbox1" {{ in_array('asthma', old('remarks', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox1">Asthma</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="hpn" id="checkbox2">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="hpn" id="checkbox2" {{ in_array('hpn', old('remarks', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox2">HPN</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="diabetes" id="checkbox3">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="diabetes" id="checkbox3" {{ in_array('diabetes', old('remarks', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox3">Diabetes</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="heart_disease" id="checkbox4">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="heart_disease" id="checkbox4" {{ in_array('heart_disease', old('remarks', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox4">Heart Disease</label>
                                             </div>
                                           </div>
                                           <div class="col-md-6">
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="allergy" id="checkbox5">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="allergy" id="checkbox5" {{ in_array('allergy', old('remarks', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox5">Allergy</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="thyroid_problem_goiter" id="checkbox6">
+                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="thyroid_problem_goiter" id="checkbox6" {{ in_array('thyroid_problem_goiter', old('remarks', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox6">Thyroid Problem/Goiter</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input chkbox_others" type="checkbox" name="remarks[]" value="others" id="checkbox6">
+                                                <input class="form-check-input chkbox_others" type="checkbox" name="remarks[]" value="others" id="checkbox6" {{ in_array('others', old('remarks', [])) ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="checkbox6">Others, Specify</label>
                                               </div>
                                           </div>

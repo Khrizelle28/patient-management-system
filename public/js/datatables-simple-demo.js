@@ -6,4 +6,8 @@ window.addEventListener('DOMContentLoaded', event => {
     if (datatablesSimple) {
         new simpleDatatables.DataTable(datatablesSimple);
     }
+
+    $('.tableAdmin tbody tr').each(function () {
+        $(this).find('td:eq(6)').addClass('text-success');
+    });
 });

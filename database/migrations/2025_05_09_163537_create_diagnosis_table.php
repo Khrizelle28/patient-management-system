@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('last_menstrual_period');
             $table->string('blood_pressure');
             $table->string('weight');
+            $table->string('type');
             $table->string('age_of_gestation')->nullable();
             $table->string('fundal_height')->nullable();
             $table->string('fetal_heart_tone')->nullable();

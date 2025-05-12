@@ -62,8 +62,7 @@ class PatientController extends Controller
             $data['user_id'] = $patient->id;
             if(isset($data['txtarea_remarks']))
             {
-                // $data['remarks']['others'] = $data['txtarea_remarks'];
-                
+                $data['remarks']['others'] = $data['txtarea_remarks'];
             }
             $data['remarks'] = json_encode($data['remarks']);
             $user = Diagnosis::create($data);

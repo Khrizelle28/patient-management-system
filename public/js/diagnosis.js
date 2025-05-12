@@ -15,7 +15,8 @@ let Diagnosis = (function () {
     }
 
     function checkUpType() {
-        if($(this).val() == 'pregnant')
+        // console.log($(this), $('input[name="type"]:checked').val());
+        if($('input[name="type"]:checked').val() == 'pregnant')
         {
             $(".pregnant-details").show();
             $("[name='txtarea_remarks']").closest('.row').hide();
@@ -25,6 +26,7 @@ let Diagnosis = (function () {
         } else
         {
             $(".pregnant-details").hide();
+            $("[name='txtarea_remarks']").closest('.row').show();
         }
     }
 
@@ -32,12 +34,26 @@ let Diagnosis = (function () {
     {
         if($(_ui.chkboxRemarksOther).is(':checked'))
         {
+            $("[name='txtarea_remarks']").closest('.row').show();
+            checkUpType();
+        } else
+        {
+            $("[name='txtarea_remarks']").closest('.row').hide();
+        }
+    }
 
+    function onLoad()
+    {
+        console.log($(_ui.type).val());
+        if($(_ui.type).val() && $(_ui.type).is(':checked'))
+        {
+            checkUpType();
         }
     }
 
     function init() {
         ui = bindUi();
+        onLoad();
         bindEvents();
     }
 
