@@ -35,3 +35,49 @@ body {
     padding-left: 1.125rem !important;
     padding-right: 2.125rem !important;
 }
+
+/* kebab menu  */
+
+.kebab-menu {
+    position: absolute;
+    display: inline-block;
+
+    text-align: left;
+}
+
+.kebab-icon {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.menu-options {
+    display: none;
+    position: relative;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    min-width: 120px;
+    z-index: 1;
+}
+
+.menu-options a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.menu-options a:hover {
+    background-color: #f0f0f0;
+}
+
+.show {
+    display: block;
+}
+
+.table-options{
+    padding: 0 20px !important;
+}

@@ -8,6 +8,10 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
     $('.tableAdmin tbody tr').each(function () {
-        $(this).find('td:eq(6)').addClass('text-success');
+        $(this).find('td:eq(6)').addClass('table-options');
+    });
+
+      $('.tablePatient tbody tr').each(function () {
+        $(this).find('td:eq(7)').addClass('table-options');
     });
 });

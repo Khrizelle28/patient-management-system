@@ -13,7 +13,7 @@
                         <div class="text-center">
                             <img src="{{ asset('image/brand-logo.png') }}"
                             style="width: 185px;" alt="logo">
-                            <h4 class="mt-1 mb-5 pb-1">Tejero Medical and Maternity Clinic</h4>
+                            {{-- <h4 class="mt-1 mb-5 pb-1">Tejero Medical and Maternity Clinic</h4> --}}
                         </div>
         
                         <form method="POST" action="{{ route('login') }}">

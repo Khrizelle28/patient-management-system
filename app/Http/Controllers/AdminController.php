@@ -34,7 +34,7 @@ class AdminController extends Controller
             $user->assignRole($data['role']);
         }
 
-        return redirect()->route('register.index');
+        return redirect()->route('admin.index');
     }
 
     public function edit($id)

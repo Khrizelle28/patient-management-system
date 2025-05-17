@@ -8,7 +8,7 @@
     </div>
     <div class="card-body">
         <a class="btn btn-primary" href="{{ route('patient.create') }}">New Patient</a>
-        <table id="datatablesSimple">
+        <table id="datatablesSimple" class="tablePatient">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -18,7 +18,7 @@
                     <th>Occupation</th>
                     <th>Contact No.</th>
                     <th>Birthday</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tfoot>
@@ -30,7 +30,7 @@
                     <th>Occupation</th>
                     <th>Contact No.</th>
                     <th>Birthday</th>
-                    <th></th>
+                     <th>Actions</th>
                 </tr>
             </tfoot>
             <tbody>
@@ -44,11 +44,16 @@
                         <td>{{ $patient->contact_no }}</td>
                         <td>{{ $patient->birthday }}</td>
                         <td>
-                            <a class="btn btn-primary" href="{{ route('patient.show', ['id' => $patient->id]) }}">View</a>
-                            <a class="btn btn-primary" href="{{ route('patient.checkup', ['id' => $patient->id]) }}">Add Checkup</a>
-                            <a class="btn btn-primary" href="{{ route('patient.edit', ['id' => $patient->id]) }}">Edit</a>
-                            <a class="btn btn-primary" href="{{ route('admin.create') }}">Deactivate</a>
-                            <a class="btn btn-primary" href="{{ route('admin.create') }}">Delete</a>
+                            <div class="kebab-menu">
+                                <div class="kebab-icon">⋮</div>
+                                    <div class="menu-options">
+                                        <a href={{ route('patient.show', ['id' => $patient->id]) }}">View</a>
+                                        <a href="{{ route('patient.checkup', ['id' => $patient->id]) }}">Add Checkup</a>
+                                        <a href="{{ route('patient.edit', ['id' => $patient->id]) }}">Edit</a>
+                                        <a href="{{ route('admin.create') }}">Deactivate</a>
+                                        <a href="{{ route('admin.create') }}">Delete</a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @empty

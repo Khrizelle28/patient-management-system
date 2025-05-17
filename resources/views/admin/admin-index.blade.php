@@ -38,12 +38,22 @@
                         <td>{{ $admin->license_no ?? 'N/A' }}</td>
                         <td>{{ $admin->ptr_no ?? 'N/A' }}</td>
                         <td>{{ $admin->email }}</td>
-                        <td class="test123213">{{ implode(', ', $admin->role) }}</td>
-                        <td class="test123213">{{ $admin->status }}</td>
-                        <td style="test123213">
-                            <a class="btn btn-primary" href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>
-                            <a class="btn btn-primary" href="{{ route('admin.create') }}">Deactivate</a>
-                            <a class="btn btn-primary" href="{{ route('admin.create') }}">Delete</a>
+                        <td>{{ implode(', ', $admin->role) }}</td>
+                        <td>{{ $admin->status }}</td>
+                        <td>
+                            {{-- <a class="btn btn-primary" href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>  --}}
+                            {{-- <a class="btn btn-primary" href="{{ route('admin.create') }}">Deactivate</a> --}}
+                            {{-- <a class="btn btn-primary" href="{{ route('admin.create') }}">Delete</a> --}}
+                            <div class="kebab-menu">
+                                <div class="kebab-icon">⋮</div>
+                                    <div class="menu-options">
+                                        <a href="#">Edit</a>
+                                        <a href="#">Delete</a>
+                                        <a href="#">Share</a>
+                                </div>
+                            </div>
+
+                            
                         </td>
                     </tr>
                 @empty
