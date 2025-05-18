@@ -30,9 +30,11 @@ class DiagnosisRequest extends FormRequest
             'blood_pressure'         => 'required',
             'weight'                 => 'required',
             'type'                   => 'required',
+            'doctor_id'              => 'required',
             'age_of_gestation'       => 'required_if:type,pregnant',
             'fundal_height'          => 'required_if:type,pregnant',
             'fetal_heart_tone'       => 'required_if:type,pregnant',
+            'estimated_date_confinement' => 'required_if:type,pregnant',
             'remarks'                => 'array', 
             'remarks.*'              => 'required_if:type,pregnant|string',
             'txtarea_remarks'       => [

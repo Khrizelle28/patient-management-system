@@ -63,4 +63,9 @@ class PatientUser extends User
 
         return $house_street . "$this->barangay, $this->province, $this->city_municipality";
     }
+
+    public function diagnosis()
+    {
+        return $this->hasMany(Diagnosis::class);
+    }
 }

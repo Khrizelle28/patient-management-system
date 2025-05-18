@@ -6,6 +6,7 @@ use App\Http\Requests\DiagnosisRequest;
 use App\Http\Requests\PatientUserRegisterRequest;
 use App\Models\Diagnosis;
 use App\Models\PatientUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -35,6 +36,12 @@ class PatientController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $patient = PatientUser::find($id);
+        return view('patient.show', compact('patient'));
+    }
+
     public function edit($id)
     {
         $patient = PatientUser::find($id);
@@ -51,7 +58,8 @@ class PatientController extends Controller
     public function checkup($id)
     {
         $patient = PatientUser::find($id);
-        return view('patient.checkup', compact('patient'));
+        $doctors = User::role('Doctor')->get();
+        return view('patient.checkup', compact('patient', 'doctors'));
     }
 
     public function diagnosis(DiagnosisRequest $request, $id)

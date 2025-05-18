@@ -47,7 +47,7 @@
                             <div class="kebab-menu">
                                 <div class="kebab-icon">⋮</div>
                                     <div class="menu-options">
-                                        <a href={{ route('patient.show', ['id' => $patient->id]) }}">View</a>
+                                        <a href="{{ route('patient.show', ['id' => $patient->id]) }}">View</a>
                                         <a href="{{ route('patient.checkup', ['id' => $patient->id]) }}">Add Checkup</a>
                                         <a href="{{ route('patient.edit', ['id' => $patient->id]) }}">Edit</a>
                                         <a href="{{ route('admin.create') }}">Deactivate</a>
@@ -59,5 +59,5 @@
                 @empty
                 @endforelse
             </tbody>
-        </table?
+        </table>
 @endsection

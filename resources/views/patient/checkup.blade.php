@@ -49,6 +49,20 @@
                         </div>
                         <div class="row mb-3">
                             <h4 class="font-weight-light my-4">Checkup Details</h4>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <select name="doctor_id" id="selectDoctor" class="form-select @error('doctor_id') is-invalid @enderror">
+                                        <option value selected disabled>Please select doctor</option>
+                                        @foreach ($doctors as $key => $doctor)
+                                            <option value="{{ $doctor->id }}">{{ $doctor->full_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <label for="selectDoctor">Doctors</label>
+                                    @error('doctor_id')
+                                        <small class="invalid-feedback">Please select doctors.</small>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="col-md-12">
                                 <div class="form-floating mb-3 mb-md-0">
                                     <textarea class="form-control @error('ob_score') is-invalid @enderror" id="inputOBScore" value="{{ old('ob_score') }}" name="ob_score" style="height: 100px; resize: none;" type="text" placeholder="Enter your first name"></textarea>
@@ -82,7 +96,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control @error('last_menstrual_period') is-invalid @enderror" id="inputLmp" name="last_menstrual_period" type="text" value="{{ old('lmp') }}" placeholder="Enter your LMP" />
+                                    <input class="form-control @error('last_menstrual_period') is-invalid @enderror" id="inputLmp" name="last_menstrual_period" type="date" value="{{ old('lmp') }}" placeholder="Enter your LMP" />
                                     <label for="inputLmp">LMP</label>
                                     @error('last_menstrual_period')
                                         <small class="invalid-feedback">Please enter LMP.</small>
@@ -147,12 +161,21 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input class="form-control @error('fetal_heart_tone') is-invalid @enderror" id="inputFht" name="fetal_heart_tone" type="text" value="{{ old('fetal_heart_tone') }}" placeholder="Enter your FHT" />
                                     <label for="inputFht">FHT</label>
                                     @error('fetal_heart_tone')
                                         <small class="invalid-feedback">Please enter FHT.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control @error('estimated_date_confinement') is-invalid @enderror" id="inputEdc" name="estimated_date_confinement" type="date" value="{{ old('estimated_date_confinement') }}" placeholder="Enter your EDC" />
+                                    <label for="inputEdc">EDC</label>
+                                    @error('estimated_date_confinement')
+                                        <small class="invalid-feedback">Please enter EDC.</small>
                                     @enderror
                                 </div>
                             </div>

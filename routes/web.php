@@ -28,8 +28,8 @@ Route::put('admin/{id}', [AdminController::class, 'update'])->name('admin.update
 Route::get('patient', [PatientController::class, 'index'])->name('patient.index');
 Route::get('patient/create', [PatientController::class, 'create'])->name('patient.create');
 Route::post('patient/store', [PatientController::class, 'store'])->name('patient.store');
-Route::get('patient//{id}/show', [PatientController::class, 'show'])->name('patient.show');
-Route::get('patient//{id}/edit', [PatientController::class, 'edit'])->name('patient.edit');
+Route::get('patient/{id}/show', [PatientController::class, 'show'])->name('patient.show');
+Route::get('patient/{id}/edit', [PatientController::class, 'edit'])->name('patient.edit');
 Route::put('patient/{id}', [PatientController::class, 'update'])->name('patient.update');
-Route::get('patient//{id}/checkup', [PatientController::class, 'checkup'])->name('patient.checkup');
-Route::post('patient//{id}/diagnosis', [PatientController::class, 'diagnosis'])->name('patient.diagnosis');
+Route::get('patient/{id}/checkup', [PatientController::class, 'checkup'])->name('patient.checkup');
+Route::post('patient/{id}/diagnosis', [PatientController::class, 'diagnosis'])->name('patient.diagnosis');
