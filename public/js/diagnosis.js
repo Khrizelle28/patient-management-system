@@ -5,13 +5,15 @@ let Diagnosis = (function () {
         this._ui = {
             type: "[name=type]",
             chkboxRemarks: "input[name='remarks[]']",
-            chkboxRemarksOther: "input[name='remarks[]'][value='others']"
+            chkboxRemarksOther: "input[name='remarks[]'][value='others']",
+            toComeBack: "#toComeBack"
         };
         return this._ui;
     }
     function bindEvents() {
         $(document).on("click", _ui.type, checkUpType);
         $(document).on("click", _ui.chkboxRemarks, updateRemarks);
+        $(document).on("change", _ui.toComeBack, toggleFields);
     }
 
     function checkUpType() {
@@ -27,6 +29,16 @@ let Diagnosis = (function () {
         {
             $(".pregnant-details").hide();
             $("[name='txtarea_remarks']").closest('.row').show();
+        }
+    }
+
+    function toggleFields() {
+        if ($('#toComeBack').is(':checked')) {
+            $('#returnDateField').show();
+            $('#reasonField').hide();
+        } else {
+            $('#returnDateField').hide();
+            $('#reasonField').show();
         }
     }
 
@@ -55,6 +67,7 @@ let Diagnosis = (function () {
         ui = bindUi();
         onLoad();
         bindEvents();
+        toggleFields();
     }
 
     return {

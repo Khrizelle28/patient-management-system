@@ -222,13 +222,36 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <div class="form-floating mb-3 mb-md-0">
-                                    <textarea class="form-control @error('txtarea_remarks') is-invalid @enderror" id="inputTxtareaRemarks" value="{{ old('txtarea_remarks') }}" name="txtarea_remarks" style="height: 100px; resize: none;" type="text" placeholder="Enter your first name"></textarea>
+                                    <textarea class="form-control @error('txtarea_remarks') is-invalid @enderror" id="inputTxtareaRemarks" value="{{ old('txtarea_remarks') }}" name="txtarea_remarks" style="height: 100px; resize: none;" type="text" placeholder="Enter your first name">{{ old('txtarea_remarks') ?? '' }}</textarea>
                                     <label for="inputTxtareaRemarks">Remarks</label>
                                     @error('txtarea_remarks')
                                         <small class="invalid-feedback">Please enter a Remarks.</small>
                                     @enderror
                                 </div>
                             </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="toComeBack" name="to_come_back" {{ old('to_come_back') == true ? 'checked' : '' }}>
+                            <label class="form-check-label" for="toComeBack">To Come Back</label>
+                            
+                        </div>
+
+                        <!-- Return Date Field -->
+                        <div class="mb-3" id="returnDateField" style="display: none;">
+                            <label for="returnDate" class="form-label">Expected Return Date</label>
+                            <input type="datetime-local" class="form-control @error('return_date') is-invalid @enderror" id="returnDate" name="return_date" value="{{ old('return_date') }}">
+                            @error('return_date')
+                                <small class="invalid-feedback">Please enter return date.</small>
+                            @enderror
+                        </div>
+
+                        <!-- Reason Textarea -->
+                        <div class="mb-3" id="reasonField" style="display: none;">
+                            <label for="noReturnReason" class="form-label">Reason for Not Coming Back</label>
+                            <textarea class="form-control @error('no_return_reason') is-invalid @enderror" id="noReturnReason" name="no_return_reason" rows="3" style="resize: none;">{{ old('no_return_reason') ?? '' }}"</textarea>
+                            @error('no_return_reason')
+                                <small class="invalid-feedback">Please enter no return reason.</small>
+                            @enderror
                         </div>
                         <div class="mt-4 mb-0">
                             <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Submit</button></div>

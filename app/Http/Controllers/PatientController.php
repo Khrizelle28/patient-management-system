@@ -7,6 +7,7 @@ use App\Http\Requests\PatientUserRegisterRequest;
 use App\Models\Diagnosis;
 use App\Models\PatientUser;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -67,12 +68,13 @@ class PatientController extends Controller
         try {
             $data = $request->safe()->except(['_token', '_method']);
             $patient = PatientUser::find($id);
-            $data['user_id'] = $patient->id;
+            $data['patient_user_id'] = $patient->id;
             if(isset($data['txtarea_remarks']))
             {
                 $data['remarks']['others'] = $data['txtarea_remarks'];
             }
             $data['remarks'] = json_encode($data['remarks']);
+            $data['comeback_info'] = isset($data['to_come_back']) ? Carbon::parse($data['return_date'])->format('Y-m-d h:i A') : $data['no_return_reason'];
             $user = Diagnosis::create($data);
 
             return redirect()->route('patient.index');

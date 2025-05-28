@@ -37,7 +37,7 @@ class DiagnosisRequest extends FormRequest
             'estimated_date_confinement' => 'required_if:type,pregnant',
             'remarks'                => 'array', 
             'remarks.*'              => 'required_if:type,pregnant|string',
-            'txtarea_remarks'       => [
+            'txtarea_remarks'        => [
                                         Rule::requiredIf(function () {
                                             return $this->type === 'non-pregnant' ||
                                                 in_array('others', $this->remarks ?? []);
@@ -45,6 +45,9 @@ class DiagnosisRequest extends FormRequest
                                         'string',
                                         'nullable',
                                     ],
+            'to_come_back'           => 'nullable',
+            'return_date'            => 'required_if:to_come_back,1,yes,true',
+            'no_return_reason'       => 'required_unless:to_come_back,1,yes,true'
         ];
     }
 }
