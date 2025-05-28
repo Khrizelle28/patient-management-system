@@ -1,7 +1,7 @@
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-success">
+<nav class="sb-topnav navbar navbar-expand navbar-dark " style="background-color: #009EAD;">
     <!-- Navbar Brand-->
-    <img src="{{ asset('image/brand-logo.png') }}"
-                            style="width: 40px;" alt="logo">
+    <img src="{{ asset('image/medscan.ico') }} "
+                            style="width: 40px; margin-left:10px;" alt="logo;" >
     <a class="navbar-brand ps-3" href="{{ route('dashboard') }}">{{ env('APP_NAME') }}</a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>

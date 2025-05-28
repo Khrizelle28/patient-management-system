@@ -1,5 +1,26 @@
 @extends('layout')
+<script>
+function togglePassword() {
+    const passwordField = document.getElementById("form2Example22");
+    const toggleIcon = document.getElementById("toggleEye");
 
+    const isPassword = passwordField.type === "password";
+    passwordField.type = isPassword ? "text" : "password";
+    toggleIcon.src = isPassword ? "image/eye.svg" : "image/eye_hide.png";
+    toggleIcon.alt = isPassword ? "Hide Password" : "Show Password";
+}
+
+function toggleEyeVisibility() {
+    const passwordField = document.getElementById("form2Example22");
+    const toggleIcon = document.getElementById("toggleEye");
+
+    if (passwordField.value.trim() === "") {
+        toggleIcon.style.display = "none";
+    } else {
+        toggleIcon.style.display = "block";
+    }
+}
+</script>
 @section('page-body')
     <section style="background-color: #eee;">
         <div class="container py-5 h-100">
@@ -12,12 +33,13 @@
         
                         <div class="text-center">
                             <img src="{{ asset('image/brand-logo.png') }}"
-                            style="width: 185px;" alt="logo">
+                            style="width: 170px;" alt="logo">
                             {{-- <h4 class="mt-1 mb-5 pb-1">Tejero Medical and Maternity Clinic</h4> --}}
                         </div>
         
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
+                            
                             <p>Please login to your account</p>
         
                             <div data-mdb-input-init class="form-outline mb-2">
@@ -30,13 +52,19 @@
                                 @enderror
                             </div>
         
-                            <div data-mdb-input-init class="form-outline mb-4">
+                            <div data-mdb-input-init class="form-outline mb-4 position-relative">
                                 <label class="form-label" for="form2Example22">Password</label>
-                                <input type="password" name="password" id="form2Example22" class="form-control" />
+                                <input type="password" name="password" id="form2Example22" class="form-control" oninput="toggleEyeVisibility()" />
+                                
+                                <img src="image/eye_hide.png" id="toggleEye" 
+                                    onclick="togglePassword()" 
+                                    class="position-absolute end-0 me-3" 
+                                    style="top: 73.5%; transform: translateY(-50%); cursor: pointer; width: 20px; display: none;" 
+                                    alt="Show Password">
                             </div>
         
                             <div class="text-center pt-1 mb-5 pb-1">
-                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log
+                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-block fa-lg gradient-custom-2 mb-3" type="submit" style="background-color: #009EAD; color:white;">Log
                                 in</button>
                             <a class="text-muted" href="#!">Forgot password?</a>
                             </div>
@@ -50,7 +78,7 @@
         
                         </div>
                     </div>
-                    <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                    <div class="col-lg-6 d-flex align-items-center" style="background-color: #009EAD; color:white;">
                         <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                         {{-- <h4 class="mb-4">We are more than just a company</h4>
                         {{-- <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
