@@ -7,7 +7,7 @@
             <div class="card mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Admin Account</h3></div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.store') }}">
+                    <form method="POST" action="{{ route('admin.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-12">
@@ -79,11 +79,144 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="email" value="{{ old('email') }}" name="email" placeholder="" />
+                                    <label for="inputEmail">Email address</label>
+                                    @error('email')
+                                        <small class="invalid-feedback">Please enter a email.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <select name="sex" id="selectSex" class="form-control @error('sex') is-invalid @enderror">
+                                        <option value selected disabled>Please select sex</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                    </select>
+                                    <label for="selectSex">sex</label>
+                                    @error('sex')
+                                        <small class="invalid-feedback">Please select sex.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <h3>Schedule</h3>
+                            <div class="col-md-6 mb-4">
+                                <div class="border rounded p-3">
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input day-toggle" type="checkbox" id="mondaySwitch" value="monday" name="schedule[monday]" data-day="monday">
+                                        <label class="form-check-label" for="mondaySwitch">Monday</label>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Start Time</label>
+                                        <input type="time" class="form-control monday-field" name="schedule[monday][time_in]" disabled>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">End Time</label>
+                                        <input type="time" class="form-control monday-field" name="schedule[monday][time_out]" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tuesday -->
+                            <div class="col-md-6 mb-4">
+                                <div class="border rounded p-3">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input day-toggle" type="checkbox" id="tuesdaySwitch" name="schedule[tuesday]" data-day="tuesday">
+                                    <label class="form-check-label" for="tuesdaySwitch">Tuesday</label>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Start Time</label>
+                                    <input type="time" class="form-control tuesday-field" name="schedule[tuesday][time_in]" disabled>
+                                </div>
+                                <div>
+                                    <label class="form-label">End Time</label>
+                                    <input type="time" class="form-control tuesday-field" name="schedule[tuesday][time_out]" disabled>
+                                </div>
+                                </div>
+                            </div>
+
+                            <!-- Wednesday -->
+                            <div class="col-md-6 mb-4">
+                                <div class="border rounded p-3">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input day-toggle" type="checkbox" id="wednesdaySwitch" name="schedule[wednesday]" data-day="wednesday">
+                                    <label class="form-check-label" for="wednesdaySwitch">Wednesday</label>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Start Time</label>
+                                    <input type="time" class="form-control wednesday-field" name="schedule[wednesday][time_in]" disabled>
+                                </div>
+                                <div>
+                                    <label class="form-label">End Time</label>
+                                    <input type="time" class="form-control wednesday-field" name="schedule[wednesday][time_out]" disabled>
+                                </div>
+                                </div>
+                            </div>
+
+                            <!-- Thursday -->
+                            <div class="col-md-6 mb-4">
+                                <div class="border rounded p-3">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input day-toggle" type="checkbox" id="thursdaySwitch" name="schedule[thursday]" data-day="thursday">
+                                    <label class="form-check-label" for="thursdaySwitch">Thursday</label>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Start Time</label>
+                                    <input type="time" class="form-control thursday-field" name="schedule[thursday][time_in]" disabled>
+                                </div>
+                                <div>
+                                    <label class="form-label">End Time</label>
+                                    <input type="time" class="form-control thursday-field" name="schedule[thursday][time_out]" disabled>
+                                </div>
+                                </div>
+                            </div>
+
+                            <!-- Friday -->
+                            <div class="col-md-6 mb-4">
+                                <div class="border rounded p-3">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input day-toggle" type="checkbox" id="fridaySwitch" name="schedule[friday]" data-day="friday">
+                                    <label class="form-check-label" for="fridaySwitch">Friday</label>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Start Time</label>
+                                    <input type="time" class="form-control friday-field" name="schedule[friday][time_in]" disabled>
+                                </div>
+                                <div>
+                                    <label class="form-label">End Time</label>
+                                    <input type="time" class="form-control friday-field" name="schedule[friday][time_out]" disabled>
+                                </div>
+                                </div>
+                            </div>
+
+                            <!-- Saturday -->
+                            <div class="col-md-6 mb-4">
+                                <div class="border rounded p-3">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input day-toggle" type="checkbox" id="saturdaySwitch" name="schedule[saturday]" data-day="saturday">
+                                    <label class="form-check-label" for="saturdaySwitch">Saturday</label>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Start Time</label>
+                                    <input type="time" class="form-control saturday-field" name="schedule[saturday][time_in]" disabled>
+                                </div>
+                                <div>
+                                    <label class="form-label">End Time</label>
+                                    <input type="time" class="form-control saturday-field" name="schedule[saturday][time_out]" disabled>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <img id="imagePreview" width="200" src="{{ asset('image/profile-pic.png') }}" height="200" style="max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
                         <div class="form-floating mb-3">
-                            <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="text" value="{{ old('email') }}" name="email" placeholder="name@example.com" />
-                            <label for="inputEmail">Email address</label>
-                            @error('email')
-                                <small class="invalid-feedback">Please enter a email.</small>
+                            <input type="file" name="profile_pic" id="imageInput" class="form-control @error('profile_pic') is-invalid @enderror" accept="image/*" style="">
+                            <label for="imageInput">Profile Picture</label>
+                            @error('profile_pic')
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mt-4 mb-0">

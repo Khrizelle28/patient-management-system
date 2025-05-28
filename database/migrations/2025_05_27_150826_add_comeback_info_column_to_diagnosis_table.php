@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('diagnosis', function (Blueprint $table) {
-            $table->dropColumn('user_id');
-            $table->string('estimated_date_confinement')->nullable()->after('fetal_heart_tone');
-            $table->foreignId('doctor_id')->after('fetal_heart_tone');
-            $table->foreignId('patient_user_id')->after('id');
-            $table->string('type')->after('weight');
+            $table->string('comeback_info')->nullable()->after('remarks');
         });
     }
 
@@ -26,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('diagnosis', function (Blueprint $table) {
-            $table->dropColumn(['doctor_id', 'estimated_date_confinement']);
+            $table->dropColumn(['comeback_info']);
         });
     }
 };

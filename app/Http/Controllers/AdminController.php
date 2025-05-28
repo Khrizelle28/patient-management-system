@@ -28,6 +28,14 @@ class AdminController extends Controller
         $data['username'] = str_replace(' ', '', strtolower($data['first_name']));
         $data['password'] = bcrypt($data['license_no']);
         $data['status']   = UserStatus::ACTIVATED;
+        if ($request->input('schedule', false)) {
+            $data['schedule'] = json_encode($data['schedule']);
+        }
+        if ($request->hasFile('profile_pic')) {
+            $fileName = $request->file('profile_pic')->hashName();
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
+            $data["profile_pic"] = '/storage/' . $path;
+        }
         $user = User::create($data);
 
         if ($request->input('role', false)) {
