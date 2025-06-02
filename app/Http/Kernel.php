@@ -24,6 +24,8 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             // Web middleware group
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ],
 
         'api' => [

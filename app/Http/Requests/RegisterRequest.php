@@ -29,9 +29,10 @@ class RegisterRequest extends FormRequest
             'suffix'       => 'nullable',
             'license_no'   => 'required',
             'ptr_no'       => 'required',
-            'email'        => 'required|email',
+            'email'        => 'required|email|unique:users,email',
             'schedule'     => 'nullable',
-            'profile_pic'  => 'nullable'
+            'profile_pic'  => 'nullable',
+            'sex'          => 'required'
         ];
     }
 }

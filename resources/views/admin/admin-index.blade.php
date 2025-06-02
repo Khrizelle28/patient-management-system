@@ -15,7 +15,7 @@
                     <th>License No.</th>
                     <th>PTR No.</th>
                     <th>Email</th>
-                    <th>Start date</th>
+                    <th>Position</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -26,7 +26,7 @@
                     <th>License No.</th>
                     <th>PTR No.</th>
                     <th>Email</th>
-                    <th>Start date</th>
+                    <th>Position</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -47,9 +47,9 @@
                             <div class="kebab-menu">
                                 <div class="kebab-icon">⋮</div>
                                     <div class="menu-options">
-                                        <a href="#">Edit</a>
+                                        <a href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>
                                         <a href="#">Delete</a>
-                                        <a href="#">Share</a>
+                                        <a href="#">Add Schedule</a>
                                 </div>
                             </div>
 

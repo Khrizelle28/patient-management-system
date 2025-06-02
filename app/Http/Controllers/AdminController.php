@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Classes\UserStatus;
 use App\Http\Requests\RegisterRequest;
+use App\Models\DoctorSchedule;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -25,7 +27,7 @@ class AdminController extends Controller
     public function store(RegisterRequest $request)
     {
         $data = $request->except(['_token']);
-        $data['username'] = str_replace(' ', '', strtolower($data['first_name']));
+        $data['username'] = $data['email'];
         $data['password'] = bcrypt($data['license_no']);
         $data['status']   = UserStatus::ACTIVATED;
         if ($request->input('schedule', false)) {
@@ -37,7 +39,19 @@ class AdminController extends Controller
             $data["profile_pic"] = '/storage/' . $path;
         }
         $user = User::create($data);
+        if ($request->input('schedule', false)) {
+            foreach($request->schedule as $index => $schedule)
+            {
+                $data_schedule = [
+                    'doctor_id' => $user->id,
+                    'day_of_week' => $index,
+                    'start_time' => Carbon::parse($schedule['time_in'])->format('h:i A') ?? '',
+                    'end_time' => Carbon::parse($schedule['time_out'])->format('h:i A') ?? '',
+                ];
 
+                DoctorSchedule::create($data_schedule);
+            }
+        }
         if ($request->input('role', false)) {
             $user->assignRole($data['role']);
         }
