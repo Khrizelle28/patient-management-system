@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('estimated_date_confinement')->nullable()->after('fetal_heart_tone');
             $table->foreignId('doctor_id')->after('fetal_heart_tone');
             $table->foreignId('patient_user_id')->after('id');
-            $table->string('type')->after('weight');
+            // $table->string('type')->after('weight');
         });
     }
 
