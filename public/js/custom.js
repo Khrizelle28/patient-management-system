@@ -33,4 +33,19 @@ $(document).ready(function () {
         });
         });
     });
+
+ /*sidebar click change color*/
+    document.addEventListener('DOMContentLoaded', function () {
+    const menuItems = document.querySelectorAll('.nav-link');
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove 'active' from all
+            menuItems.forEach(i => i.classList.remove('active'));
+
+            // Add 'active' to clicked item
+            item.classList.add('active');
+        });
+    });
+});
 });

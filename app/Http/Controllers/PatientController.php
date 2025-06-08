@@ -7,8 +7,10 @@ use App\Http\Requests\PatientUserRegisterRequest;
 use App\Models\Diagnosis;
 use App\Models\PatientUser;
 use App\Models\User;
+use App\Services\SemaphoreSmsServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
 {
@@ -27,13 +29,20 @@ class PatientController extends Controller
     {
         try {
             $data = $request->except(['_token']);
-            $data['username'] = str_replace(' ', '', strtolower($data['first_name']));
-            $data['password'] = bcrypt($data['last_name']);
+            $data['username'] = strtolower(substr($data['first_name'], 0, 1) . $data['last_name'] . rand(1000, 9999));;
+            $firstName = ucfirst(strtolower($data['first_name']));
+            $birthYear = str_replace('-', '', $data['birthday']);
+            $rawPassword = '@'. $firstName . '' . $birthYear;
+            $data['password'] = bcrypt($rawPassword);
             $user = PatientUser::create($data);
+            if(env('ENABLE_SMS_NOTIFICATION', false) == true)
+            {
+                $this->sendSmsNotification($data, $user, $rawPassword);
+            }
 
             return redirect()->route('patient.index');
         } catch (\Throwable $th) {
-            dd($th);
+            Log::error($th);
         }
     }
 
@@ -82,4 +91,81 @@ class PatientController extends Controller
             dd($th);
         }
     }
+
+    public function sendSmsNotification($data, $user, $password)
+    {
+        try {
+            // Add debug logging
+            Log::info('Starting SMS notification', [
+                'user_id' => $user->id,
+                'contact_no' => $data['contact_no'] ?? 'NOT_SET',
+                'sms_enabled' => env('ENABLE_SMS_NOTIFICATION', false)
+            ]);
+
+            $patientName = $data['first_name'] . ' ' . ucfirst(strtolower($data['last_name']));
+            $appName = env('APP_NAME', 'Good Health Clinic');
+
+            $rawPassword = $password ?? $data['password'];
+
+            $message = "Hello {$patientName},\n\n";
+            $message .= "Your account has been successfully created at {$appName}.\n\n";
+            $message .= "Here are your login details:\n";
+            $message .= "Username: {$data['username']}\n";
+            $message .= "Password: {$rawPassword}\n\n";
+            $message .= "Please change your password after your first login.\n\n";
+            $message .= "Thank you,\n{$appName}";
+
+            // Debug: Log the message content and length
+            Log::info('SMS message prepared', [
+                'message_length' => strlen($message),
+                'message_preview' => substr($message, 0, 100) . '...'
+            ]);
+
+            // Check if contact number exists
+            if (empty($data['contact_no'])) {
+                Log::error('Contact number is empty', ['data' => $data]);
+                return;
+            }
+
+            $smsService = new SemaphoreSmsServices();
+
+            // Debug: Test service configuration
+            Log::info('SMS service configuration', [
+                'api_key_set' => !empty($smsService->apiKey),
+            ]);
+
+            $result = $smsService->sendSms(
+                $data['contact_no'],
+                $message
+            );
+
+            // Enhanced logging
+            Log::info('SMS send attempt completed', [
+                'user_id' => $user->id,
+                'result' => $result,
+                'success' => $result['success'] ?? false
+            ]);
+
+            if ($result['success']) {
+                Log::info('Welcome SMS sent to user', [
+                    'user_id' => $user->id,
+                    'message_id' => $result['message_id'] ?? null
+                ]);
+            } else {
+                Log::error('Failed to send welcome SMS', [
+                    'user_id' => $user->id,
+                    'error' => $result['error'] ?? 'Unknown error',
+                    'response' => $result['response'] ?? null
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('SMS notification exception', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
+
 }

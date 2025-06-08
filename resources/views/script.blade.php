@@ -7,3 +7,26 @@
 <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
 <script src="{{ asset('js/scripts.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
+
+<script>
+function togglePassword() {
+    const passwordField = document.getElementById("form2Example22");
+    const toggleIcon = document.getElementById("toggleEye");
+
+    const isPassword = passwordField.type === "password";
+    passwordField.type = isPassword ? "text" : "password";
+    toggleIcon.src = isPassword ? "image/eye.svg" : "image/eye_hide.png";
+    toggleIcon.alt = isPassword ? "Hide Password" : "Show Password";
+}
+
+function toggleEyeVisibility() {
+    const passwordField = document.getElementById("form2Example22");
+    const toggleIcon = document.getElementById("toggleEye");
+
+    if (passwordField.value.trim() === "") {
+        toggleIcon.style.display = "none";
+    } else {
+        toggleIcon.style.display = "block";
+    }
+}
+</script>

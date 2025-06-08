@@ -81,3 +81,9 @@ body {
 .table-options{
     padding: 0 20px !important;
 }
+
+/* sidebar color */
+.nav-link.active {
+    background-color: #0d6efd;
+    color: white !important;
+}
