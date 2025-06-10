@@ -28,7 +28,7 @@ class DoctorScheduleController extends Controller
                 'fridayPeople' => $this->formatDoctorData($groupedSchedules['friday'] ?? collect()),
                 'saturdayPeople' => $this->formatDoctorData($groupedSchedules['saturday'] ?? collect()),
             ];
-
+            // dd($schedule);
             return response()->json($schedule);
             
         } catch (\Exception $e) {
@@ -49,7 +49,7 @@ class DoctorScheduleController extends Controller
             $doctor = $schedule->doctor;
             
             return [
-                'id' => $doctor->id ?? null,
+                'id' => (string) $doctor->id ?? null,
                 'name' => $doctor ? $this->formatDoctorName($doctor) : 'Unknown Doctor',
                 'specialty' => $this->getDoctorSpecialty($doctor),
                 'schedule' => $this->formatTimeRange($schedule->start_time, $schedule->end_time),

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorScheduleController;
 use Illuminate\Http\Request;
@@ -16,3 +17,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('doctor-schedule', [DoctorScheduleController::class, 'getDoctorSchedule']);
+Route::post('appointments', [AppointmentController::class, 'store']);
