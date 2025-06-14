@@ -8,11 +8,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Dashboard
                 </a>
-
-                <a class="nav-link {{ request()->routeIs('admin.index') ? 'active' : '' }}" href="{{ route('admin.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
-                    Employee Accounts
-                </a>
+                @hasanyrole('Administrator')
+                    <a class="nav-link {{ request()->routeIs('admin.index') ? 'active' : '' }}" href="{{ route('admin.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                        Employee Accounts
+                    </a>
+                @endhasanyrole
                 @hasanyrole('Doctor|Medical Staff')
                     <a class="nav-link {{ request()->routeIs('patient.index') ? 'active' : '' }}" href="{{ route('patient.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
