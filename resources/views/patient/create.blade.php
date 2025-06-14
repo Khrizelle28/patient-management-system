@@ -1,7 +1,7 @@
 @extends('admin.index')
 
 @section('content')
-    
+
     <div class="row justify-content-center">
         <div class="col-lg-7">
             <div class="card mt-5">
@@ -30,7 +30,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input class="form-control @error('last_name') is-invalid @enderror" id="inputLastName" type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Enter your last name" />
-                                    <label for="inputLastName">Last name <span style="color: red">*</span></label> 
+                                    <label for="inputLastName">Last name <span style="color: red">*</span></label>
                                     @error('last_name')
                                         <small class="invalid-feedback">Please enter a Last name.</small>
                                     @enderror
@@ -46,15 +46,30 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input class="form-control @error('street') is-invalid @enderror" id="inputStreet" type="text" value="{{ old('street') }}" name="street" placeholder="Enter your street" />
-                                    <label for="inputStreet">Street</label>
-                                    @error('street')
-                                        <small class="invalid-feedback">Please input street</small>
+
+                                     <input class="form-control  @error('province') is-invalid @enderror" id="inputProvince" type="text" value="{{ old('province') }}" name="province" placeholder="Enter your province" />
+                                    <label for="inputProvince">Province<span style="color: red">*</span></label>
+                                    @error('province')
+                                        <small class="invalid-feedback">Please input province.</small>
                                     @enderror
+
+
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
+                                    <input class="form-control  @error('city_municipality') is-invalid @enderror" id="inputCityMunicipality" type="text" value="{{ old('city_municipality') }}" name="city_municipality" placeholder="Enter your city/municipality" />
+                                    <label for="inputCityMunicipality">City/Municipality<span style="color: red">*</span></label>
+                                    @error('city_municipality')
+                                        <small class="invalid-feedback">Please input city/municipality.</small>
+                                    @enderror
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
                                     <input class="form-control @error('barangay') is-invalid @enderror" id="inputBarangay" type="text" name="barangay" value="{{ old('barangay') }}" placeholder="Enter your barangay" />
                                     <label for="inputBarangay">Barangay<span style="color: red">*</span></label>
                                     @error('barangay')
@@ -62,23 +77,12 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input class="form-control  @error('city_municipality') is-invalid @enderror" id="inputCityMunicipality" type="text" value="{{ old('city_municipality') }}" name="city_municipality" placeholder="Enter your city/municipality" />
-                                    <label for="inputCityMunicipality">City/Municipality<span style="color: red">*</span></label>
-                                    @error('city_municipality')
-                                        <small class="invalid-feedback">Please input city/municipality.</small>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input class="form-control  @error('province') is-invalid @enderror" id="inputProvince" type="text" value="{{ old('province') }}" name="province" placeholder="Enter your province" />
-                                    <label for="inputProvince">Province<span style="color: red">*</span></label>
-                                    @error('province')
-                                        <small class="invalid-feedback">Please input province.</small>
+                                    <input class="form-control @error('street') is-invalid @enderror" id="inputStreet" type="text" value="{{ old('street') }}" name="street" placeholder="Enter your street" />
+                                    <label for="inputStreet">Street</label>
+                                    @error('street')
+                                        <small class="invalid-feedback">Please input street</small>
                                     @enderror
                                 </div>
                             </div>

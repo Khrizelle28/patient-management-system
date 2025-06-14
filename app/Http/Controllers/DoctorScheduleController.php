@@ -16,10 +16,10 @@ class DoctorScheduleController extends Controller
         try {
             // Get all doctor schedules with doctor information
             $doctorSchedules = DoctorSchedule::with('doctor')->get();
-            
+
             // Group by day of week
             $groupedSchedules = $doctorSchedules->groupBy('day_of_week');
-            
+
             $schedule = [
                 'mondayPeople' => $this->formatDoctorData($groupedSchedules['monday'] ?? collect()),
                 'tuesdayPeople' => $this->formatDoctorData($groupedSchedules['tuesday'] ?? collect()),
@@ -30,7 +30,7 @@ class DoctorScheduleController extends Controller
             ];
             // dd($schedule);
             return response()->json($schedule);
-            
+
         } catch (\Exception $e) {
             Log::error($e);
             return response()->json([
@@ -47,7 +47,7 @@ class DoctorScheduleController extends Controller
     {
         return $doctorSchedules->map(function ($schedule) {
             $doctor = $schedule->doctor;
-            
+
             return [
                 'id' => (string) $doctor->id ?? null,
                 'name' => $doctor ? $this->formatDoctorName($doctor) : 'Unknown Doctor',
@@ -86,9 +86,9 @@ class DoctorScheduleController extends Controller
     {
         // If you have a specialty field in users table, use it:
         // return $doctor->specialty ?? 'General Practice';
-        
+
         // For now, return a default or determine based on license/other data
-        return 'General Practice';
+        return 'Obstetrician - Gynecologyst';
     }
 
     /**
