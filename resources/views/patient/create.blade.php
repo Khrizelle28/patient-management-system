@@ -134,7 +134,7 @@
                                         <option value selected disabled>Please select Civil Status </option>
                                         <option value="SINGLE">Single</option>
                                         <option value="MARRIED">Married</option>
-                                        <option value="DIVORCED">Divorced</option>
+                                        <option value="ANNULLED">Annulled</option>
                                         <option value="SEPARATED">Separated</option>
                                         <option value="WIDOWED">Widowed</option>
                                 </select>
