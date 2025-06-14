@@ -126,10 +126,17 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
-                                    <input class="form-control  @error('civil_status') is-invalid @enderror" id="inputCivilStatus" type="text" value="{{ old('civil_status') }}" name="civil_status" placeholder="Enter your civil status" />
-                                    <label for="inputCivilStatus">Civil Status<span style="color: red">*</span></label>
+                                    <select name="civil_status" class="form-control  @error('civil_status') is-invalid @enderror" id="selectCivilStatus" >
+                                        <option value selected disabled>Please select Civil Status </option>
+                                        <option value="SINGLE">Single</option>
+                                        <option value="MARRIED">Married</option>
+                                        <option value="DIVORCED">Divorced</option>
+                                        <option value="SEPARATED">Separated</option>
+                                        <option value="WIDOWED">Widowed</option>
+                                </select>
+                                    <label for="selectCivilStatus">Civil Status<span style="color: red">*</span></label>
                                     @error('civil_status')
-                                        <small class="invalid-feedback">Please input Civil Status.</small>
+                                        <small class="invalid-feedback">Please Select Civil Status.</small>
                                     @enderror
                                 </div>
                             </div>
