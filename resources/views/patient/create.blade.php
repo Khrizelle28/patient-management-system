@@ -13,7 +13,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
                                     <input class="form-control @error('first_name') is-invalid @enderror" id="inputFirstName" value="{{ old('first_name') }}" name="first_name" type="text" placeholder="Enter your first name" />
-                                    <label for="inputFirstName">First name</label>
+                                    <label for="inputFirstName">First name <span style="color: red">*</span></label>
                                     @error('first_name')
                                         <small class="invalid-feedback">Please enter a First name.</small>
                                     @enderror
@@ -30,7 +30,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input class="form-control @error('last_name') is-invalid @enderror" id="inputLastName" type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Enter your last name" />
-                                    <label for="inputLastName">Last name</label>
+                                    <label for="inputLastName">Last name <span style="color: red">*</span></label>
                                     @error('last_name')
                                         <small class="invalid-feedback">Please enter a Last name.</small>
                                     @enderror
@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
                                     <input class="form-control" id="inputAge" type="text" name="age" value="{{ old('age') }}" placeholder="Enter your age" />
-                                    <label for="inputAge">Age</label>
+                                    <label for="inputAge">Age<span style="color: red">*</span></label>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                                 <div class="form-floating">
 
                                      <input class="form-control  @error('province') is-invalid @enderror" id="inputProvince" type="text" value="{{ old('province') }}" name="province" placeholder="Enter your province" />
-                                    <label for="inputProvince">Province</label>
+                                    <label for="inputProvince">Province<span style="color: red">*</span></label>
                                     @error('province')
                                         <small class="invalid-feedback">Please input province.</small>
                                     @enderror
@@ -59,7 +59,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
                                     <input class="form-control  @error('city_municipality') is-invalid @enderror" id="inputCityMunicipality" type="text" value="{{ old('city_municipality') }}" name="city_municipality" placeholder="Enter your city/municipality" />
-                                    <label for="inputCityMunicipality">City/Municipality</label>
+                                    <label for="inputCityMunicipality">City/Municipality<span style="color: red">*</span></label>
                                     @error('city_municipality')
                                         <small class="invalid-feedback">Please input city/municipality.</small>
                                     @enderror
@@ -71,7 +71,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input class="form-control @error('barangay') is-invalid @enderror" id="inputBarangay" type="text" name="barangay" value="{{ old('barangay') }}" placeholder="Enter your barangay" />
-                                    <label for="inputBarangay">Barangay</label>
+                                    <label for="inputBarangay">Barangay<span style="color: red">*</span></label>
                                     @error('barangay')
                                         <small class="invalid-feedback">Please input barangay</small>
                                     @enderror
@@ -91,7 +91,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input class="form-control  @error('occupation') is-invalid @enderror" id="inputOccupation" type="text" value="{{ old('occupation') }}" name="occupation" placeholder="Enter your occupation" />
-                                    <label for="inputOccupation">Occupation</label>
+                                    <label for="inputOccupation">Occupation<span style="color: red">*</span></label>
                                     @error('occupation')
                                         <small class="invalid-feedback">Please input occupation.</small>
                                     @enderror
@@ -100,7 +100,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input class="form-control  @error('contact_no') is-invalid @enderror" id="inputContactNo" type="text" value="{{ old('contact_no') }}" name="contact_no" placeholder="Enter your contact no" />
-                                    <label for="inputContactNo">Contact No.</label>
+                                    <label for="inputContactNo">Contact No.<span style="color: red">*</span></label>
                                     @error('contact_no')
                                         <small class="invalid-feedback">Please input contact no.</small>
                                     @enderror
@@ -111,7 +111,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input class="form-control  @error('birthday') is-invalid @enderror" id="inputBirthday" type="date" value="{{ old('birthday') }}" name="birthday" placeholder="Enter your city/municipality" />
-                                    <label for="inputBirthday">Birthday</label>
+                                    <label for="inputBirthday">Birthday<span style="color: red">*</span></label>
                                     @error('birthday')
                                         <small class="invalid-feedback">Please input birthday.</small>
                                     @enderror
@@ -120,7 +120,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input class="form-control  @error('birthplace') is-invalid @enderror" id="inputBirthplace" type="text" value="{{ old('birthplace') }}" name="birthplace" placeholder="Enter your birthplace" />
-                                    <label for="inputBirthplace">Birthplace</label>
+                                    <label for="inputBirthplace">Birthplace<span style="color: red">*</span></label>
                                     @error('birthplace')
                                         <small class="invalid-feedback">Please input Birthplace.</small>
                                     @enderror
@@ -131,7 +131,7 @@
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
                                     <input class="form-control  @error('civil_status') is-invalid @enderror" id="inputCivilStatus" type="text" value="{{ old('civil_status') }}" name="civil_status" placeholder="Enter your civil status" />
-                                    <label for="inputCivilStatus">Civil Status</label>
+                                    <label for="inputCivilStatus">Civil Status<span style="color: red">*</span></label>
                                     @error('civil_status')
                                         <small class="invalid-feedback">Please input Civil Status.</small>
                                     @enderror
