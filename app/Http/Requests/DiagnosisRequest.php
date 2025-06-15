@@ -35,7 +35,7 @@ class DiagnosisRequest extends FormRequest
             'fundal_height'          => 'required_if:type,pregnant',
             'fetal_heart_tone'       => 'required_if:type,pregnant',
             'estimated_date_confinement' => 'required_if:type,pregnant',
-            'remarks'                => 'array', 
+            'remarks'                => 'array',
             'remarks.*'              => 'required_if:type,pregnant|string',
             'txtarea_remarks'        => [
                                         Rule::requiredIf(function () {
@@ -46,8 +46,8 @@ class DiagnosisRequest extends FormRequest
                                         'nullable',
                                     ],
             'to_come_back'           => 'nullable',
-            'return_date'            => 'required_if:to_come_back,1,yes,true',
-            'no_return_reason'       => 'required_unless:to_come_back,1,yes,true'
+            'return_date'            => 'required_if:to_come_back,on',
+            'no_return_reason'       => 'required_unless:to_come_back,on'
         ];
     }
 }

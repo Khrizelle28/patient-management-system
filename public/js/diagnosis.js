@@ -24,7 +24,7 @@ let Diagnosis = (function () {
             $("[name='txtarea_remarks']").closest('.row').hide();
             if ($(".chkbox_others").is(':checked')) {
                 $("[name='txtarea_remarks']").closest('.row').show();
-            } 
+            }
         } else
         {
             $(".pregnant-details").hide();
@@ -46,11 +46,11 @@ let Diagnosis = (function () {
     {
         if($(_ui.chkboxRemarksOther).is(':checked'))
         {
-            $("[name='txtarea_remarks']").closest('.row').show();
+            $("[name='family_histories']").show();
             checkUpType();
         } else
         {
-            $("[name='txtarea_remarks']").closest('.row').hide();
+            $("[name='family_histories']").hide();
         }
     }
 

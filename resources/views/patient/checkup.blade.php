@@ -54,7 +54,7 @@
                                     <select name="doctor_id" id="selectDoctor" class="form-select @error('doctor_id') is-invalid @enderror">
                                         <option value selected disabled>Please select doctor</option>
                                         @foreach ($doctors as $key => $doctor)
-                                            <option value="{{ $doctor->id }}">{{ $doctor->full_name }}</option>
+                                            <option value="{{ $doctor->id }}" {{ auth()->user()->id == $doctor->id ? 'selected' : "" }}>{{ $doctor->full_name }}</option>
                                         @endforeach
                                     </select>
                                     <label for="selectDoctor">Doctors</label>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-floating mb-3 mb-md-0">
-                                    <textarea class="form-control @error('ob_score') is-invalid @enderror" id="inputOBScore" value="{{ old('ob_score') }}" name="ob_score" style="height: 100px; resize: none;" type="text" placeholder="Enter your first name"></textarea>
+                                    <textarea class="form-control @error('ob_score') is-invalid @enderror" id="inputOBScore" name="ob_score" style="height: 100px; resize: none;" placeholder="Enter your first name">{{ old('ob_score') }}</textarea>
                                     <label for="inputOBScore">OB Score</label>
                                     @error('ob_score')
                                         <small class="invalid-feedback">Please enter a OB Score.</small>
@@ -96,7 +96,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input class="form-control @error('last_menstrual_period') is-invalid @enderror" id="inputLmp" name="last_menstrual_period" type="date" value="{{ old('lmp') }}" placeholder="Enter your LMP" />
+                                    <input class="form-control @error('last_menstrual_period') is-invalid @enderror" id="inputLmp" name="last_menstrual_period" type="date" value="{{ old('last_menstrual_period') }}" placeholder="Enter your LMP" />
                                     <label for="inputLmp">LMP</label>
                                     @error('last_menstrual_period')
                                         <small class="invalid-feedback">Please enter LMP.</small>
@@ -216,6 +216,15 @@
                                               </div>
                                           </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <textarea class="form-control @error('family_histories') is-invalid @enderror" id="inputFamilyHostories" name="family_histories" style="height: 100px; resize: none;" placeholder="Enter your first name">{{ old('family_histories') }}</textarea>
+                                    <label for="inputFamilyHostories">OB Score</label>
+                                    @error('family_histories')
+                                        <small class="invalid-feedback">Please enter a OB Score.</small>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
