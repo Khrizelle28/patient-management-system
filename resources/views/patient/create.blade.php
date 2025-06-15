@@ -132,11 +132,11 @@
                                 <div class="form-floating mb-3">
                                     <select name="civil_status" class="form-control  @error('civil_status') is-invalid @enderror" id="selectCivilStatus" >
                                         <option value selected disabled>Please select Civil Status </option>
-                                        <option value="SINGLE">Single</option>
-                                        <option value="MARRIED">Married</option>
-                                        <option value="ANNULLED">Annulled</option>
-                                        <option value="SEPARATED">Separated</option>
-                                        <option value="WIDOWED">Widowed</option>
+                                        <option value="SINGLE" {{ old('civil_status') ==  'SINGLE' ? 'selected' : '' }}>Single</option>
+                                        <option value="MARRIED" {{ old('civil_status') ==  'MARRIED' ? 'selected' : '' }} >Married</option>
+                                        <option value="ANNULLED" {{ old('civil_status') ==  'ANNULLED' ? 'selected' : '' }} >Annulled</option>
+                                        <option value="SEPARATED" {{ old('civil_status') ==  'SEPARATED' ? 'selected' : '' }}>Separated</option>
+                                        <option value="WIDOWED" {{ old('civil_status') ==  'WIDOWED' ? 'selected' : '' }}>Widowed</option>
                                 </select>
                                     <label for="selectCivilStatus">Civil Status<span style="color: red">*</span></label>
                                     @error('civil_status')
