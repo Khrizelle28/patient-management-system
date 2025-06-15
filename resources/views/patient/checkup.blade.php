@@ -233,7 +233,7 @@
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="toComeBack" name="to_come_back" {{ old('to_come_back') == true ? 'checked' : '' }}>
                             <label class="form-check-label" for="toComeBack">To Come Back</label>
-                            
+
                         </div>
 
                         <!-- Return Date Field -->
@@ -248,7 +248,7 @@
                         <!-- Reason Textarea -->
                         <div class="mb-3" id="reasonField" style="display: none;">
                             <label for="noReturnReason" class="form-label">Reason for Not Coming Back</label>
-                            <textarea class="form-control @error('no_return_reason') is-invalid @enderror" id="noReturnReason" name="no_return_reason" rows="3" style="resize: none;">{{ old('no_return_reason') ?? '' }}"</textarea>
+                            <textarea class="form-control @error('no_return_reason') is-invalid @enderror" id="noReturnReason" name="no_return_reason" rows="3" style="resize: none;">{{ old('no_return_reason') ?? '' }}</textarea>
                             @error('no_return_reason')
                                 <small class="invalid-feedback">Please enter no return reason.</small>
                             @enderror

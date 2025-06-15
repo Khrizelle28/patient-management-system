@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
@@ -37,4 +38,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('patient/{id}', [PatientController::class, 'update'])->name('patient.update');
     Route::get('patient/{id}/checkup', [PatientController::class, 'checkup'])->name('patient.checkup');
     Route::post('patient/{id}/diagnosis', [PatientController::class, 'diagnosis'])->name('patient.diagnosis');
+
+    Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
 });

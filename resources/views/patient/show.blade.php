@@ -52,33 +52,31 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center mb-4">
-        <div class="col-lg-10">
-            <div class="card mt-4">
-                <div class="card-header"><h3 class="text-center font-weight-light my-4">Diagnosis Details</h3></div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('patient.diagnosis', ['id' => $patient->id]) }}">
-                        @csrf
-                        @method('POST')
+    @if ($patient->diagnosis->isNotEmpty())
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-10">
+                <div class="card mt-4">
+                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Diagnosis Details</h3></div>
+                    <div class="card-body">
                         @php
                             $lastDiagnosis = $patient->diagnosis->last();
                             $doctor        = $lastDiagnosis->doctor;
                         @endphp
                         <div class="row mb-3">
                             <div class="col-md-12">
-                               <label><strong>Doctor</strong></label>
+                                <label><strong>Doctor</strong></label>
                                 <p>{{ $doctor->full_name }}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
-                               <label><strong>OB Score</strong></label>
+                                <label><strong>OB Score</strong></label>
                                 <p>{{ $lastDiagnosis->ob_score }}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                               <label><strong>Gravida</strong></label>
+                                <label><strong>Gravida</strong></label>
                                 <p>{{ $lastDiagnosis->gravida }}</p>
                             </div>
                             <div class="col-md-6">
@@ -87,7 +85,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label><strong>LMP</strong></label>
-                                <p>{{ $lastDiagnosis->last_menstrual_period }}</p>
+                                <p>{{ Carbon\Carbon::parse($lastDiagnosis->last_menstrual_period)->format('F d, Y') }}</p>
                             </div>
                             <div class="col-md-6">
                                 <label><strong>BP</strong></label>
@@ -102,39 +100,52 @@
                                 <p>{{ $lastDiagnosis->type }}</p>
                             </div>
                         </div>
-                    </form>
-                    <table id="datatablesSimple" class="tablePatient">
-                        <thead>
-                            <tr>
-                                <th>DATE</th>
-                                <th>AOG</th>
-                                <th>FH</th>
-                                <th>FHT</th>
-                                <th colspan="2">Remarks</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>DATE</th>
-                                <th>AOG</th>
-                                <th>FH</th>
-                                <th>FHT</th>
-                                <th colspan="2">Remarks</th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            @forelse($patient->diagnosis as $diagnosis)
-                            <td>{{ $diagnosis->created_at }}</td>
-                            <td>{{ $diagnosis->age_of_gestation }}</td>
-                            <td>{{ $diagnosis->fundal_height }}</td>
-                            <td>{{ $diagnosis->fetal_heart_tone }}</td>
-                            <td colspan="2">{{ implode(', ', json_decode($diagnosis->remarks)) }}</td>
-                            @empty
-                            @endforelse
-                        </tbody>
-                    </table>
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>AOG</th>
+                                    <th>FH</th>
+                                    <th>FHT</th>
+                                    <th>TCB</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>AOG</th>
+                                    <th>FH</th>
+                                    <th>FHT</th>
+                                    <th>TCB</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @forelse($patient->diagnosis as $diagnosis)
+                                    <tr>
+                                    @php
+                                        $comeback_info = '';
+                                        try {
+                                            $comeback_info = Carbon\Carbon::parse($diagnosis->comeback_info)->format('F d, Y H:i A');
+                                        } catch (\Exception $e) {
+                                            $comeback_info = $diagnosis->comeback_info;
+                                        }
+                                    @endphp
+                                    <td>{{ Carbon\Carbon::parse($diagnosis->created_at)->format('F d, Y H:i A') }}</td>
+                                    <td>{{ $diagnosis->age_of_gestation ?? 'N/A' }}</td>
+                                    <td>{{ $diagnosis->fundal_height ?? 'N/A' }}</td>
+                                    <td>{{ $diagnosis->fetal_heart_tone ?? 'N/A' }}</td>
+                                    <td>{{ $diagnosis->comeback_info }}</td>
+                                    <td>{{ implode(', ', json_decode($diagnosis->remarks, true)) }}</td>
+                                    </tr>
+                                @empty
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection

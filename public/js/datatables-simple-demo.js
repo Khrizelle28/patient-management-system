@@ -12,6 +12,6 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
       $('.tablePatient tbody tr').each(function () {
-        $(this).find('td:eq(7)').addClass('table-options');
+        $(this).find('td:eq(8)').addClass('table-options');
     });
 });
