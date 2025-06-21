@@ -12,9 +12,11 @@
                             <div class="col-md-12">
                                 <div class="form-floating mb-3 mb-md-0">
                                     <select name="role" id="selectRole" class="form-control @error('role') is-invalid @enderror">
-                                        <option value selected disabled>Please select role </option>
+                                        <option value="" selected disabled>Please select role</option>
                                         @foreach ($role_datas as $key => $role_data)
-                                            <option value="{{ $role_data['name'] }}">{{ $role_data['name'] }}</option>
+                                            <option value="{{ $role_data['name'] }}" {{ old('role') == $role_data['name'] ? 'selected' : '' }}>
+                                                {{ $role_data['name'] }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <label for="selectRole">Role <span style="color: red">*</span></label>
@@ -71,7 +73,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
-                                    <input class="form-control @error('ptr_no') is-invalid @enderror" id="inputPtrNo" type="text" name="ptr_no" placeholder="Enter your PTR number" />
+                                    <input class="form-control @error('ptr_no') is-invalid @enderror" id="inputPtrNo" type="text" name="ptr_no" value="{{ old('ptr_no') }}"  placeholder="Enter your PTR number" />
                                     <label for="inputPtrNo">PTR No. <span style="color: red">*</span></label>
                                     @error('ptr_no')
                                         <small class="invalid-feedback">Please enter a PTR No.</small>
@@ -85,16 +87,16 @@
                                     <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="email" value="{{ old('email') }}" name="email" placeholder="" />
                                     <label for="inputEmail">Email address <span style="color: red">*</span></label>
                                     @error('email')
-                                        <small class="invalid-feedback">Please enter a email.</small>
+                                        <small class="invalid-feedback">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3 mb-md-0">
                                     <select name="sex" id="selectSex" class="form-control @error('sex') is-invalid @enderror">
-                                        <option value selected disabled>Please select sex </option>
-                                        <option value="MALE">Male</option>
-                                        <option value="FEMALE">Female</option>
+                                        <option value="" selected disabled>Please select sex</option>
+                                        <option value="MALE" {{ old('sex') == 'MALE' ? 'selected' : '' }}>Male</option>
+                                        <option value="FEMALE" {{ old('sex') == 'FEMALE' ? 'selected' : '' }}>Female</option>
                                     </select>
                                     <label for="selectSex">Sex <span style="color: red">*</span></label>
                                     @error('sex')

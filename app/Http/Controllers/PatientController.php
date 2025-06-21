@@ -32,7 +32,7 @@ class PatientController extends Controller
             $data['username'] = strtolower(substr($data['first_name'], 0, 1) . $data['last_name'] . rand(1000, 9999));;
             $firstName = ucfirst(strtolower($data['first_name']));
             $birthYear = str_replace('-', '', $data['birthday']);
-            $rawPassword = '@'. $firstName . '' . $birthYear;
+            $rawPassword = '@'. str_replace(' ', '', $firstName) . '' . $birthYear;
             $data['password'] = bcrypt($rawPassword);
             $user = PatientUser::create($data);
             if(env('ENABLE_SMS_NOTIFICATION', false) == true)

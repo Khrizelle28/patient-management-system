@@ -16,7 +16,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admins = User::get();
+        $admins = User::where('id', '!=', '1')->get();
         return view('admin.admin-index', compact('admins'));
     }
 
