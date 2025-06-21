@@ -78,11 +78,20 @@ class PatientController extends Controller
             $data = $request->safe()->except(['_token', '_method']);
             $patient = PatientUser::find($id);
             $data['patient_user_id'] = $patient->id;
-            if(isset($data['txtarea_remarks']))
+            if(isset($data['family_histories_other']))
             {
-                $data['remarks']['others'] = $data['txtarea_remarks'];
+                $data['family_histories']['others'] = $data['family_histories_other'];
             }
-            $data['remarks'] = json_encode($data['remarks']);
+
+            if($request->input('family_histories', false))
+            {
+                $data['family_histories'] = json_encode($data['family_histories']);
+            }
+
+            if($request->input('txtarea_remarks', false))
+            {
+                $data['remarks'] = $data['txtarea_remarks'];
+            }
             $data['comeback_info'] = isset($data['to_come_back']) ? Carbon::parse($data['return_date'])->format('Y-m-d h:i A') : $data['no_return_reason'];
             $user = Diagnosis::create($data);
 

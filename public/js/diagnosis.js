@@ -4,8 +4,8 @@ let Diagnosis = (function () {
     function bindUi() {
         this._ui = {
             type: "[name=type]",
-            chkboxRemarks: "input[name='remarks[]']",
-            chkboxRemarksOther: "input[name='remarks[]'][value='others']",
+            chkboxRemarks: "input[name='family_histories[]']",
+            chkboxRemarksOther: "input[name='family_histories[]'][value='others']",
             toComeBack: "#toComeBack"
         };
         return this._ui;
@@ -21,14 +21,14 @@ let Diagnosis = (function () {
         if($('input[name="type"]:checked').val() == 'pregnant')
         {
             $(".pregnant-details").show();
-            $("[name='txtarea_remarks']").closest('.row').hide();
+            $("[name='family_histories_other']").closest('.other_row').hide();
             if ($(".chkbox_others").is(':checked')) {
-                $("[name='txtarea_remarks']").closest('.row').show();
+                $("[name='family_histories_other']").closest('.other_row').show();
             }
         } else
         {
             $(".pregnant-details").hide();
-            $("[name='txtarea_remarks']").closest('.row').show();
+            $("[name='family_histories_other']").closest('.other_row').show();
         }
     }
 
@@ -46,11 +46,11 @@ let Diagnosis = (function () {
     {
         if($(_ui.chkboxRemarksOther).is(':checked'))
         {
-            $("[name='family_histories']").show();
+            $("[name='family_histories_other']").closest('.other_row').show();
             checkUpType();
         } else
         {
-            $("[name='family_histories']").hide();
+            $("[name='family_histories_other']").closest('.other_row').hide();
         }
     }
 

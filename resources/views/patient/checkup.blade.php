@@ -182,48 +182,48 @@
                             <div class="col-md-12">
                                 <div class="form-floating">
                                     <h5>FM_Hx</h5>
-                                    <div class="row row-remarks">
+                                    <div class="row row-family_histories">
                                         <div class="col-md-6">
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="asthma" id="checkbox1" {{ in_array('asthma', old('remarks', [])) ? 'checked' : '' }}>
+                                              <input class="form-check-input" type="checkbox" name="family_histories[]" value="asthma" id="checkbox1" {{ in_array('asthma', old('family_histories', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox1">Asthma</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="hpn" id="checkbox2" {{ in_array('hpn', old('remarks', [])) ? 'checked' : '' }}>
+                                              <input class="form-check-input" type="checkbox" name="family_histories[]" value="hpn" id="checkbox2" {{ in_array('hpn', old('family_histories', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox2">HPN</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="diabetes" id="checkbox3" {{ in_array('diabetes', old('remarks', [])) ? 'checked' : '' }}>
+                                              <input class="form-check-input" type="checkbox" name="family_histories[]" value="diabetes" id="checkbox3" {{ in_array('diabetes', old('family_histories', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox3">Diabetes</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="heart_disease" id="checkbox4" {{ in_array('heart_disease', old('remarks', [])) ? 'checked' : '' }}>
+                                              <input class="form-check-input" type="checkbox" name="family_histories[]" value="heart_disease" id="checkbox4" {{ in_array('heart_disease', old('family_histories', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox4">Heart Disease</label>
                                             </div>
                                           </div>
                                           <div class="col-md-6">
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="allergy" id="checkbox5" {{ in_array('allergy', old('remarks', [])) ? 'checked' : '' }}>
+                                              <input class="form-check-input" type="checkbox" name="family_histories[]" value="allergy" id="checkbox5" {{ in_array('allergy', old('family_histories', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox5">Allergy</label>
                                             </div>
                                             <div class="form-check">
-                                              <input class="form-check-input" type="checkbox" name="remarks[]" value="thyroid_problem_goiter" id="checkbox6" {{ in_array('thyroid_problem_goiter', old('remarks', [])) ? 'checked' : '' }}>
+                                              <input class="form-check-input" type="checkbox" name="family_histories[]" value="thyroid_problem_goiter" id="checkbox6" {{ in_array('thyroid_problem_goiter', old('family_histories', [])) ? 'checked' : '' }}>
                                               <label class="form-check-label" for="checkbox6">Thyroid Problem/Goiter</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input chkbox_others" type="checkbox" name="remarks[]" value="others" id="checkbox6" {{ in_array('others', old('remarks', [])) ? 'checked' : '' }}>
+                                                <input class="form-check-input chkbox_others" type="checkbox" name="family_histories[]" value="others" id="checkbox6" {{ in_array('others', old('family_histories', [])) ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="checkbox6">Others, Specify</label>
                                               </div>
                                           </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-3 other_row">
                                 <div class="form-floating mb-3 mb-md-0">
-                                    <textarea class="form-control @error('family_histories') is-invalid @enderror" id="inputFamilyHostories" name="family_histories" style="height: 100px; resize: none;" placeholder="Enter your first name">{{ old('family_histories') }}</textarea>
-                                    <label for="inputFamilyHostories">OB Score</label>
-                                    @error('family_histories')
-                                        <small class="invalid-feedback">Please enter a OB Score.</small>
+                                    <textarea class="form-control @error('family_histories_other') is-invalid @enderror" id="inputFamilyHostories" name="family_histories_other" style="height: 100px; resize: none;" placeholder="Enter your first name">{{ old('family_histories_other') }}</textarea>
+                                    <label for="inputFamilyHostories">Other Family Histories</label>
+                                    @error('family_histories_other')
+                                        <small class="invalid-feedback">Please input other Family Histories.</small>
                                     @enderror
                                 </div>
                             </div>

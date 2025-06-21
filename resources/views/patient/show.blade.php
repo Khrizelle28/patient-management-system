@@ -108,6 +108,7 @@
                                     <th>FH</th>
                                     <th>FHT</th>
                                     <th>TCB</th>
+                                    <th>Family Histories</th>
                                     <th>Remarks</th>
                                 </tr>
                             </thead>
@@ -118,26 +119,28 @@
                                     <th>FH</th>
                                     <th>FHT</th>
                                     <th>TCB</th>
+                                    <th>Family Histories</th>
                                     <th>Remarks</th>
                                 </tr>
                             </tfoot>
                             <tbody>
                                 @forelse($patient->diagnosis as $diagnosis)
                                     <tr>
-                                    @php
-                                        $comeback_info = '';
-                                        try {
-                                            $comeback_info = Carbon\Carbon::parse($diagnosis->comeback_info)->format('F d, Y H:i A');
-                                        } catch (\Exception $e) {
-                                            $comeback_info = $diagnosis->comeback_info;
-                                        }
-                                    @endphp
-                                    <td>{{ Carbon\Carbon::parse($diagnosis->created_at)->format('F d, Y H:i A') }}</td>
-                                    <td>{{ $diagnosis->age_of_gestation ?? 'N/A' }}</td>
-                                    <td>{{ $diagnosis->fundal_height ?? 'N/A' }}</td>
-                                    <td>{{ $diagnosis->fetal_heart_tone ?? 'N/A' }}</td>
-                                    <td>{{ $diagnosis->comeback_info }}</td>
-                                    <td>{{ implode(', ', json_decode($diagnosis->remarks, true)) }}</td>
+                                        @php
+                                            $comeback_info = '';
+                                            try {
+                                                $comeback_info = Carbon\Carbon::parse($diagnosis->comeback_info)->format('F d, Y H:i A');
+                                            } catch (\Exception $e) {
+                                                $comeback_info = $diagnosis->comeback_info;
+                                            }
+                                        @endphp
+                                        <td>{{ Carbon\Carbon::parse($diagnosis->created_at)->format('F d, Y H:i A') }}</td>
+                                        <td>{{ $diagnosis->age_of_gestation ?? 'N/A' }}</td>
+                                        <td>{{ $diagnosis->fundal_height ?? 'N/A' }}</td>
+                                        <td>{{ $diagnosis->fetal_heart_tone ?? 'N/A' }}</td>
+                                        <td>{{ $diagnosis->comeback_info }}</td>
+                                        <td>{{ isset($diagnosis->family_histories) ? implode(', ', json_decode($diagnosis->family_histories, true)) : 'N/A' }}</td>
+                                        <td>{{ $diagnosis->remarks ?? 'N/A' }}</td>
                                     </tr>
                                 @empty
                                 @endforelse

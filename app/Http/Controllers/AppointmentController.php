@@ -119,4 +119,27 @@ class AppointmentController extends Controller
     {
         //
     }
+
+    public function getPatientAppointments($patientId)
+    {
+        try {
+            $appointments = Appointment::with(['doctor'])
+                ->where('patient_id', $patientId)
+                ->orderBy('appointment_date')
+                ->orderBy('appointment_time')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $appointments
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch appointments: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch appointments'
+            ], 500);
+        }
+    }
 }

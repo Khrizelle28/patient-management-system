@@ -35,16 +35,16 @@ class DiagnosisRequest extends FormRequest
             'fundal_height'          => 'required_if:type,pregnant',
             'fetal_heart_tone'       => 'required_if:type,pregnant',
             'estimated_date_confinement' => 'required_if:type,pregnant',
-            'remarks'                => 'array',
-            'remarks.*'              => 'required_if:type,pregnant|string',
-            'txtarea_remarks'        => [
+            'family_histories'       => 'nullable',
+            'family_histories_other' => [
                                         Rule::requiredIf(function () {
                                             return $this->type === 'non-pregnant' ||
-                                                in_array('others', $this->remarks ?? []);
+                                                in_array('others', $this->family_histories ?? []);
                                         }),
                                         'string',
                                         'nullable',
                                     ],
+            'txtarea_remarks'        => 'required',
             'to_come_back'           => 'nullable',
             'return_date'            => 'required_if:to_come_back,on',
             'no_return_reason'       => 'required_unless:to_come_back,on'

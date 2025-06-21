@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Classes\UserStatus;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\VerifyEmail;
 use App\Models\DoctorSchedule;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -27,8 +29,9 @@ class AdminController extends Controller
     public function store(RegisterRequest $request)
     {
         $data = $request->except(['_token']);
+        $passwordNo       = rand(1000, 9999);
         $data['username'] = $data['email'];
-        $data['password'] = bcrypt($data['license_no']);
+        $data['password'] = '@'.$data['license_no'] .''.$passwordNo;
         $data['status']   = UserStatus::ACTIVATED;
         if ($request->input('schedule', false)) {
             $data['schedule'] = json_encode($data['schedule']);
@@ -55,6 +58,8 @@ class AdminController extends Controller
         if ($request->input('role', false)) {
             $user->assignRole($data['role']);
         }
+
+        Mail::to($user->email)->send(new VerifyEmail($data));
 
         return redirect()->route('admin.index');
     }

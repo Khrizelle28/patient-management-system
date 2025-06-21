@@ -93,4 +93,9 @@ class User extends Authenticatable
     public function getRoleAttribute(){
         return $this->roles->pluck('name')->toArray();
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

@@ -18,3 +18,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('doctor-schedule', [DoctorScheduleController::class, 'getDoctorSchedule']);
 Route::post('appointments', [AppointmentController::class, 'store']);
+Route::get('/appointments/patient/{patientId}', [AppointmentController::class, 'getPatientAppointments']);
