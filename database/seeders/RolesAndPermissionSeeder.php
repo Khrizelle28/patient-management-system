@@ -49,7 +49,7 @@ class RolesAndPermissionSeeder extends Seeder
             'last_name'         => "Sablan",
             'username'          => "administrator",
             'email'             => "sablankhrizelle@gmail.com",
-            'password'          => Hash::make('Secret123'),
+            'password'          => 'Secret123',
             'status'            => UserStatus::ACTIVATED,
             'email_verified_at' => Carbon::now(),
             'created_at'        => Carbon::now(),
