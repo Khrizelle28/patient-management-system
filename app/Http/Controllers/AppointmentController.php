@@ -14,7 +14,11 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::with('patient')->where('doctor_id', auth()->user()->id)->get();
+        $appointments = Appointment::with('patient')
+            ->when(auth()->user()->hasRole('Doctor'), function ($query) {
+                $query->where('doctor_id', auth()->user()->id);
+            })
+            ->get();
 
         return view('appointment.index', compact('appointments'));
     }

@@ -40,7 +40,7 @@ class PatientController extends Controller
                 $this->sendSmsNotification($data, $user, $rawPassword);
             }
 
-            return redirect()->route('patient.index');
+            return redirect()->route('patient.checkup', ['id' => $user->id]);
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -95,7 +95,7 @@ class PatientController extends Controller
             $data['comeback_info'] = isset($data['to_come_back']) ? Carbon::parse($data['return_date'])->format('Y-m-d h:i A') : $data['no_return_reason'];
             $user = Diagnosis::create($data);
 
-            return redirect()->route('patient.index');
+            return redirect()->route('patient.show', ['id' => $patient->id]);
         } catch (\Throwable $th) {
             dd($th);
         }

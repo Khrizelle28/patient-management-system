@@ -3,11 +3,11 @@
 @section('content')
 <div class="card mt-4">
     <div class="card-header">
-        <i class="fas fa-table me-1"></i>
+        <i class="fa-solid fa-users"></i>
         Employee Accounts
     </div>
     <div class="card-body">
-        <a class="btn btn-primary" href="{{ route('admin.create') }}">New Admin</a>
+        <a class="btn btn-primary" href="{{ route('admin.create') }}">New Employee</a>
         <table id="datatablesSimple" class="tableAdmin">
             <thead>
                 <tr>
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
 
-                            
+
                         </td>
                     </tr>
                 @empty

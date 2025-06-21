@@ -20,12 +20,10 @@
                         Patient Records
                     </a>
                 @endhasanyrole
-                @hasanyrole('Doctor')
-                    <a class="nav-link {{ request()->routeIs('appointment.index') ? 'active' : '' }}" href="{{ route('appointment.index') }}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
-                        Appointment Records
-                    </a>
-                @endhasanyrole
+                <a class="nav-link {{ request()->routeIs('appointment.index') ? 'active' : '' }}" href="{{ route('appointment.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                    Appointment Records
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">

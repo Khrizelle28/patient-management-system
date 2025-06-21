@@ -116,7 +116,7 @@
     <div class="email-container">
         <div class="header">
             <div class="logo">
-                <div class="logo-icon">M</div>
+                <img src="{{ $message->embed(asset('image/medscan.ico')) }}" alt="Logo" style="width: 50px;">
                 <div class="logo-text">MEDSCAN</div>
             </div>
         </div>

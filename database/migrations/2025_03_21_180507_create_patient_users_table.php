@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('age');
             $table->string('civil_status');
-            $table->string('street');
+            $table->string('street')->nullable();
             $table->string('barangay');
             $table->string('city_municipality');
             $table->string('province');
