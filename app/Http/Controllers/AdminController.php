@@ -31,7 +31,7 @@ class AdminController extends Controller
         $data = $request->except(['_token']);
         $passwordNo       = rand(1000, 9999);
         $data['username'] = $data['email'];
-        $data['password'] = '@'. ucwords($data['first_name']) .''.$passwordNo;
+        $data['password'] = '@'. str_replace(' ', '', ucfirst(strtolower($data['first_name']))) .''.$passwordNo;
         $data['status']   = UserStatus::ACTIVATED;
         if ($request->input('schedule', false)) {
             $data['schedule'] = json_encode($data['schedule']);
