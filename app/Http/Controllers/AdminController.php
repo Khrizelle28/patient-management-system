@@ -10,6 +10,7 @@ use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
@@ -52,7 +53,12 @@ class AdminController extends Controller
                     'end_time' => Carbon::parse($schedule['time_out'])->format('h:i A') ?? '',
                 ];
 
-                DoctorSchedule::create($data_schedule);
+                DoctorSchedule::updateOrCreate(
+                    [
+                        'doctor_id' => $user->id,
+                        'day_of_week' => $index,
+                    ],
+                    $data_schedule);
             }
         }
         if ($request->input('role', false)) {
@@ -80,5 +86,26 @@ class AdminController extends Controller
             $user->assignRole($request['role']);
         }
         return redirect()->route('admin.index');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = User::find(auth()->user()->id);
+        $data = $request->except(['token']);
+        if ($request->hasFile('profile_pic')) {
+            $fileName = $request->file('profile_pic')->hashName();
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
+            $data["profile_pic"] = '/storage/' . $path;
+        }
+        $user->update($data);
+
+        return redirect()->route('admin.profile')->with('success', 'Profile Updated Successfully');
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        $role_datas   = Role::select('id', 'name')->get();
+        return view('admin.profile', compact('user', 'role_datas'));
     }
 }

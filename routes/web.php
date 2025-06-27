@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('admin/store', [AdminController::class, 'store'])->name('admin.store');
     Route::get('admin/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
     Route::put('admin/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::put('profile/update', [AdminController::class, 'updateProfile'])->name('admin.update-profile');
 
     Route::get('patient', [PatientController::class, 'index'])->name('patient.index');
     Route::get('patient/create', [PatientController::class, 'create'])->name('patient.create');

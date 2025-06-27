@@ -31,7 +31,7 @@ class RegisterRequest extends FormRequest
             'ptr_no'       => 'required',
             'email'        => 'required|email|unique:users,email',
             'schedule'     => 'nullable',
-            'profile_pic'  => 'nullable',
+            'profile_pic'  => 'nullable|mimes:jpeg,jpg,png',
             'sex'          => 'required'
         ];
     }
