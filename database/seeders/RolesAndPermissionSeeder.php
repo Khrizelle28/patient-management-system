@@ -51,6 +51,7 @@ class RolesAndPermissionSeeder extends Seeder
             'email'             => "sablankhrizelle@gmail.com",
             'password'          => 'Secret123',
             'status'            => UserStatus::ACTIVATED,
+            'sex'               => 'Female',
             'email_verified_at' => Carbon::now(),
             'created_at'        => Carbon::now(),
             'updated_at'        => Carbon::now(),
