@@ -24,6 +24,12 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
                     Appointment Records
                 </a>
+                @hasanyrole('Administrator|Medical Staff')
+                    <a class="nav-link {{ request()->routeIs('product.index') ? 'active' : '' }}" href="{{ route('product.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                        Product Records
+                    </a>
+                @endhasanyrole
             </div>
         </div>
         <div class="sb-sidenav-footer">

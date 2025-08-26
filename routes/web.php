@@ -5,8 +5,10 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RegisterController;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -41,5 +43,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('patient/{id}/checkup', [PatientController::class, 'checkup'])->name('patient.checkup');
     Route::post('patient/{id}/diagnosis', [PatientController::class, 'diagnosis'])->name('patient.diagnosis');
 
+    Route::get('product', [ProductController::class, 'index'])->name('product.index');
+    Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
+    Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+
     Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
+});
+
+Route::get('/medical-certificate-pdf', function () {
+    $pdf = Pdf::loadView('pdf.medical-certificate');
+    
+    // Set paper size and orientation
+    $pdf->setPaper('A4', 'portrait');
+    
+    // Return PDF for download
+    $filename = 'medical-certificate.pdf';
+    
+    return $pdf->download($filename);
+    // return view('pdf.medical-certificate');
 });
