@@ -54,6 +54,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input class="form-control @error('expiration_date') is-invalid @enderror" id="inputExpirationDate" type="date" name="expiration_date" value="{{ old('expiration_date') }}" placeholder="Enter your expiration date" />
+                                    <label for="inputExpirationDate">Expiration Date <span style="color: red">*</span></label>
+                                    @error('price')
+                                        <small class="invalid-feedback">Please enter expiration date.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                         <img id="imagePreview" width="200" src="{{ asset('image/profile-pic.png') }}" height="200" style="max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
                         <div class="form-floating mb-3">
                             <input type="file" name="image" id="imageInput" class="form-control @error('image') is-invalid @enderror" accept="image/*" style="">

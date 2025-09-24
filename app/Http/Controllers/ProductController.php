@@ -30,17 +30,26 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->except(['_token']);
-        dd($request->hasFile('image'), $data);
         if ($request->hasFile('image')) {
             $fileName = $request->file('image')->hashName();
             $path = $request->file('image')->storeAs('product/image', $fileName, 'public');
-            dd($path);
             $data["image"] = '/storage/' . $path;
         }
 
         Product::create($data);
 
         return redirect()->route('product.index');
+    }
+
+    public function addStock($id)
+    {
+        $product = Product::find($id);
+        return view('product.add-stock', compact('product'));
+    }
+
+    public function updateStock($id)
+    {
+        
     }
 
     /**

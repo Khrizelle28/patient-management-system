@@ -15,7 +15,9 @@
                         <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
+                        <th>Expiration Date</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -24,28 +26,28 @@
                         <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
+                        <th>Expiration Date</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    @forelse($products ?? [] as $patient)
-                        <tr onclick="window.location='{{ route('patient.checkup', ['id' => $patient->id]) }}'" style="cursor:pointer;">
-                            <td>{{ $patient->full_name }}</td>
-                            <td>{{ $patient->age ?? 'N/A' }}</td>
-                            <td>{{ $patient->civil_status ?? 'N/A' }}</td>
-                            <td>{{ $patient->full_address }}</td>
-                            <td>{{ $patient->occupation }}</td>
-                            <td>{{ $patient->contact_no }}</td>
-                            <td>{{ $patient->birthday }}</td>
+                    {{-- {{dd($products)}} --}}
+                    @forelse($products ?? [] as $product)
+                        <tr>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->description }}</td>
+                            <td>{{ $product->price ?? 'N/A' }}</td>
+                            <td>{{ $product->stock }}</td>
+                            <td>{{ Carbon\Carbon::parse($product->expiration_date)->format('F d, Y') }}</td>
+                            <td><img src="{{ $product->image }}" height="50" width="50" alt=""></td>
                             <td>
                                 <div class="kebab-menu">
                                     <div class="kebab-icon">⋮</div>
                                         <div class="menu-options">
-                                            <a href="{{ route('patient.show', ['id' => $patient->id]) }}">View</a>
-                                            <a href="{{ route('patient.checkup', ['id' => $patient->id]) }}">Add Checkup</a>
-                                            <a href="{{ route('patient.edit', ['id' => $patient->id]) }}">Edit</a>
-                                            <a href="{{ route('admin.create') }}">Deactivate</a>
-                                            <a href="{{ route('admin.create') }}">Delete</a>
+                                            {{-- <a href="{{ route('product.show', ['id' => $product->id]) }}">View</a> --}}
+                                            <a href="{{ route('product.add-stock', ['id' => $product->id]) }}">Add Stock</a>
+                                            {{-- <a href="{{ route('product.edit', ['id' => $product->id]) }}">Edit</a> --}}
                                     </div>
                                 </div>
                             </td>

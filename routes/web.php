@@ -46,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('product', [ProductController::class, 'index'])->name('product.index');
     Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+    Route::get('product/{id}/add-stock', [ProductController::class, 'addStock'])->name('product.add-stock');
 
     Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
 });
