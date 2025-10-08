@@ -13,6 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
+
         return view('product.index', compact('products'));
     }
 
@@ -33,7 +34,7 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $fileName = $request->file('image')->hashName();
             $path = $request->file('image')->storeAs('product/image', $fileName, 'public');
-            $data["image"] = '/storage/' . $path;
+            $data['image'] = '/storage/'.$path;
         }
 
         Product::create($data);
@@ -44,13 +45,11 @@ class ProductController extends Controller
     public function addStock($id)
     {
         $product = Product::find($id);
+
         return view('product.add-stock', compact('product'));
     }
 
-    public function updateStock($id)
-    {
-        
-    }
+    public function updateStock($id) {}
 
     /**
      * Display the specified resource.
@@ -63,17 +62,28 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        //
+        $product = Product::find($id);
+
+        return view('product.edit', compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $data = $request->except(['token']);
+        if ($request->hasFile('profile_pic')) {
+            $fileName = $request->file('profile_pic')->hashName();
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
+            $data['image'] = '/storage/'.$path;
+        }
+        $product->update($data);
+
+        return redirect()->route('product.index');
     }
 
     /**

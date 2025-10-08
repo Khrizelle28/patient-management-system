@@ -4,9 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MedicalCertificateController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RegisterController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
@@ -46,20 +46,34 @@ Route::middleware(['auth'])->group(function () {
     Route::get('product', [ProductController::class, 'index'])->name('product.index');
     Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+    Route::get('product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::get('product/{id}/add-stock', [ProductController::class, 'addStock'])->name('product.add-stock');
 
     Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
+    Route::post('appointment/medical-certificate/{id}', [AppointmentController::class, 'storeMedicalCertificate'])->name('appointment.medical-certificate');
+
+    Route::get('medical-certificate', [MedicalCertificateController::class, 'index'])->name('medical-certificate.index');
+
+    Route::get('medical-certificate/generate/{id}', [MedicalCertificateController::class, 'generateMedicalCertificate'])->name('medical-certificate.generate');
+
+    Route::get('medical-certificate/{medicalCertificate}/preview', [MedicalCertificateController::class, 'preview'])->name('medical-certificate.preview');
+
+    Route::get('medical-certificate/{medicalCertificate}/download', [MedicalCertificateController::class, 'download'])->name('medical-certificate.download');
+
+    Route::get('medical-certificate/{medicalCertificate}/upload', [MedicalCertificateController::class, 'showUploadForm'])->name('medical-certificate.showUploadForm');
+
+    Route::post('medical-certificate/{medicalCertificate}/upload', [MedicalCertificateController::class, 'upload'])->name('medical-certificate.upload');
 });
 
 Route::get('/medical-certificate-pdf', function () {
     $pdf = Pdf::loadView('pdf.medical-certificate');
-    
+
     // Set paper size and orientation
     $pdf->setPaper('A4', 'portrait');
-    
+
     // Return PDF for download
     $filename = 'medical-certificate.pdf';
-    
-    return $pdf->download($filename);
-    // return view('pdf.medical-certificate');
+
+    return $pdf->stream($filename);
 });

@@ -47,7 +47,7 @@
                                         <div class="menu-options">
                                             {{-- <a href="{{ route('product.show', ['id' => $product->id]) }}">View</a> --}}
                                             <a href="{{ route('product.add-stock', ['id' => $product->id]) }}">Add Stock</a>
-                                            {{-- <a href="{{ route('product.edit', ['id' => $product->id]) }}">Edit</a> --}}
+                                            <a href="{{ route('product.edit', ['id' => $product->id]) }}">Edit</a>
                                     </div>
                                 </div>
                             </td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\MedicalCertificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -42,14 +43,14 @@ class AppointmentController extends Controller
                 'doctor_id' => 'required',
                 'appointment_date' => 'required',
                 'appointment_time' => 'required',
-                'notes' => 'nullable'
+                'notes' => 'nullable',
             ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Validation failed',
-                    'errors' => $validator->errors()
+                    'errors' => $validator->errors(),
                 ], 422);
             }
 
@@ -63,7 +64,7 @@ class AppointmentController extends Controller
             if ($existingAppointment) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'This time slot is already booked'
+                    'message' => 'This time slot is already booked',
                 ], 409);
             }
 
@@ -73,21 +74,22 @@ class AppointmentController extends Controller
                 'appointment_date' => $request->appointment_date,
                 'appointment_time' => $request->appointment_time,
                 'status' => 'scheduled',
-                'notes' => $request->notes ?? ''
+                'notes' => $request->notes ?? '',
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Appointment booked successfully',
-                'data' => $appointment
+                'data' => $appointment,
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Appointment creation failed: ' . $e->getMessage());
+            Log::error('Appointment creation failed: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to book appointment',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -135,15 +137,34 @@ class AppointmentController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $appointments
+                'data' => $appointments,
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Failed to fetch appointments: ' . $e->getMessage());
+            Log::error('Failed to fetch appointments: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch appointments'
+                'message' => 'Failed to fetch appointments',
             ], 500);
         }
+    }
+
+    public function storeMedicalCertificate(Request $request, $id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        $data = [
+            'appointment_id' => $appointment->id,
+            'doctor_id' => auth()->user()->id,
+            'patient_id' => $appointment->patient_id,
+            'purpose' => $request->purpose,
+            'medical_condition' => $request->medical_condition,
+            'remarks' => $request->remarks,
+        ];
+
+        MedicalCertificate::create($data);
+
+        return redirect()->route('medical-certificate.index');
     }
 }

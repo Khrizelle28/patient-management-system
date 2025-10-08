@@ -24,6 +24,12 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
                     Appointment Records
                 </a>
+                @hasanyrole('Doctor|Medical Staff')
+                    <a class="nav-link {{ request()->routeIs('medical-certificate.index') ? 'active' : '' }}" href="{{ route('medical-certificate.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                        Medical Certificate Records
+                    </a>
+                @endhasanyrole
                 @hasanyrole('Administrator|Medical Staff')
                     <a class="nav-link {{ request()->routeIs('product.index') ? 'active' : '' }}" href="{{ route('product.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>

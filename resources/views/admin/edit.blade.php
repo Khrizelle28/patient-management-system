@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-7">
             <div class="card mt-5">
-                <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Admin Account</h3></div>
+                <div class="card-header"><h3 class="text-center font-weight-light my-4">Edit Admin Account</h3></div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.store') }}">
                         @csrf
