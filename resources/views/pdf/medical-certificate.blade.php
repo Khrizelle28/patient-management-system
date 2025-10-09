@@ -149,8 +149,8 @@
         }
 
         .footer__qr {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
         }
 
         .signature-line {
@@ -202,20 +202,20 @@
 
         <!-- Date -->
         <div class="date-field">
-            Date : {{ $date }}
+            Date : <span  style="font-weight: bold; text-decoration: underline;">{{ $date }}</span>
         </div>
 
         <!-- Content -->
         <div class="content">
             <p>To Whom It May Concern:</p>
             <div class="certificate-text">
-                This is to certify that <span class="underline">{{ $patient_name }}</span>
-                age <span class="underline">{{ $age }}</span>,
-                sex <span class="underline">{{ $sex }}</span>,
-                civil status <span class="underline">{{ $civil_status }}</span>,
-                residing at <span class="underline">{{ $address }}</span>
+                This is to certify that <span class="underline" style="font-weight: bold;">{{ $patient_name }}</span>
+                age <span class="underline" style="font-weight: bold;">{{ $age }}</span>,
+                sex <span class="underline" style="font-weight: bold;">{{ $sex }}</span>,
+                civil status <span class="underline" style="font-weight: bold;">{{ $civil_status }}</span>,
+                residing at <span class="underline" style="font-weight: bold;">{{ $address }}</span>
                 was seen, examined and has been under my care for the following medical condition:
-                <div class="underline">
+                <div class="underline" style="font-weight: bold;">
                     {{ $medical_condition }}
                 </div>
             </div>
@@ -227,19 +227,20 @@
             <!-- Remarks Section -->
             <div class="remarks-section">
                 <strong>REMARKS:</strong>
-                <div class="remarks-lines">{{ $remarks }}</div>
+                <div class="remarks-lines" style="font-weight: bold;">{{ $remarks }}</div>
             </div>
         </div>
         <div class="qr-section">
             <img class="footer__qr d-block" src="{{ $qrBase64 }}" alt="QR">
+           <br><p style="font-size:80%;">(Scan QR Code to validate)</p>
         </div>
 
         <!-- Signature Section -->
         <div class="signature-section">
             <div class="doctor-info">
-                <span class="underline" style="line-height: 1.85">{{ $doctor_name }}</span>, M.D.<br>
-                Lic. No. {{ $license_number }}<br>
-                PTR No. {{ $ptr_number }}
+                <span class="underline" style="line-height: 1.85; font-weight: bold;">{{ $doctor_name }}</span>, M.D.<br>
+                Lic. No. <span class="underline" style="line-height: 1.85;font-weight: bold;"> {{ $license_number }}</span><br>
+                PTR No. <span class="underline" style="line-height: 1.85;font-weight: bold;">{{ $ptr_number }} </span>
             </div>
         </div>
     </div>

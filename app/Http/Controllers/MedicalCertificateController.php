@@ -55,7 +55,7 @@ class MedicalCertificateController extends Controller
         }
 
         // Patient sex is not in patient_users table, will show N/A
-        $sex = 'N/A';
+        $sex = 'F';
 
         return [
             'qrBase64' => $qrBase64,
