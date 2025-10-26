@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class PatientUser extends User
 {
-    use HasApiTokens; 
+    use HasApiTokens;
 
     protected $guarded = ['id'];
 
@@ -20,7 +17,7 @@ class PatientUser extends User
             'first_name',
             'middle_name',
             'last_name',
-            'name_ext'
+            'name_ext',
         ];
 
         $name = [];
@@ -47,25 +44,31 @@ class PatientUser extends User
                     $name_val = "{$name_val}.";
                 }
 
-                $name[]   = $name_val;
+                $name[] = $name_val;
             }
         }
 
         return implode(' ', $name);
     }
 
-    public function getFullAddressAttribute(): string{
-        $house_street = "";
+    public function getFullAddressAttribute(): string
+    {
+        $house_street = '';
 
         if ($this->street != null) {
-            $house_street .= $this->street . ", ";
+            $house_street .= $this->street.', ';
         }
 
-        return $house_street . "$this->barangay, $this->province, $this->city_municipality";
+        return $house_street."$this->barangay, $this->province, $this->city_municipality";
     }
 
     public function diagnosis()
     {
         return $this->hasMany(Diagnosis::class);
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
     }
 }

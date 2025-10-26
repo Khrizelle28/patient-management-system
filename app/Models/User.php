@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -56,7 +56,7 @@ class User extends Authenticatable
             'first_name',
             'middle_name',
             'last_name',
-            'name_ext'
+            'name_ext',
         ];
 
         $name = [];
@@ -83,14 +83,15 @@ class User extends Authenticatable
                     $name_val = "{$name_val}.";
                 }
 
-                $name[]   = $name_val;
+                $name[] = $name_val;
             }
         }
 
         return implode(' ', $name);
     }
 
-    public function getRoleAttribute(){
+    public function getRoleAttribute()
+    {
         return $this->roles->pluck('name')->toArray();
     }
 
