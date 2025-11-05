@@ -38,14 +38,14 @@ class OrderController extends Controller
     public function placeOrder(Request $request): JsonResponse
     {
         $request->validate([
-            'delivery_address' => 'required|string',
+            'pickup_name' => 'required|string',
             'contact_number' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 
         $patientUser = auth('sanctum')->user();
 
-        if (!$patientUser) {
+        if (! $patientUser) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthenticated. Please log in.',
@@ -58,7 +58,7 @@ class OrderController extends Controller
             ->where('patient_user_id', $patientUser->id)
             ->first();
 
-        if (!$cart || $cart->items->isEmpty()) {
+        if (! $cart || $cart->items->isEmpty()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Your cart is empty.',
@@ -93,7 +93,7 @@ class OrderController extends Controller
                 'order_number' => Order::generateOrderNumber(),
                 'total_amount' => $totalAmount,
                 'status' => 'pending',
-                'delivery_address' => $request->delivery_address,
+                'pickup_name' => $request->pickup_name,
                 'contact_number' => $request->contact_number,
                 'notes' => $request->notes,
             ]);
@@ -155,7 +155,7 @@ class OrderController extends Controller
             ->where('id', $id)
             ->first();
 
-        if (!$order) {
+        if (! $order) {
             return response()->json([
                 'success' => false,
                 'message' => 'Order not found.',
@@ -180,7 +180,7 @@ class OrderController extends Controller
             ->where('id', $id)
             ->first();
 
-        if (!$order) {
+        if (! $order) {
             return response()->json([
                 'success' => false,
                 'message' => 'Order not found.',

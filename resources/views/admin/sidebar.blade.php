@@ -36,6 +36,12 @@
                         Product Records
                     </a>
                 @endhasanyrole
+                @hasanyrole('Administrator|Medical Staff')
+                    <a class="nav-link {{ request()->routeIs('order.index') || request()->routeIs('order.show') ? 'active' : '' }}" href="{{ route('order.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-receipt"></i></div>
+                        Order Records
+                    </a>
+                @endhasanyrole
             </div>
         </div>
         <div class="sb-sidenav-footer">

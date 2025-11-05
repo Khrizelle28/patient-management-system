@@ -5,6 +5,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MedicalCertificateController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegisterController;
@@ -49,6 +50,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
     Route::put('product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::get('product/{id}/add-stock', [ProductController::class, 'addStock'])->name('product.add-stock');
+
+    Route::get('order', [OrderController::class, 'index'])->name('order.index');
+    Route::get('order/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('order/{id}/status/{status}', [OrderController::class, 'updateStatus'])->name('order.update-status');
 
     Route::get('appointment', [AppointmentController::class, 'index'])->name('appointment.index');
     Route::post('appointment/medical-certificate/{id}', [AppointmentController::class, 'storeMedicalCertificate'])->name('appointment.medical-certificate');

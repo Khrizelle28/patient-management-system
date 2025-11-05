@@ -6,7 +6,10 @@
       "Bash(php artisan:*)",
       "Bash(rm:*)",
       "Bash(del \"D:\\laragon\\www\\patient-management-system\\database\\migrations\\2025_10_11_223125_update_carts_table_timestamp.php\")",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(nul)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

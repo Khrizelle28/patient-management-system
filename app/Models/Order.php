@@ -13,7 +13,7 @@ class Order extends Model
         'order_number',
         'total_amount',
         'status',
-        'delivery_address',
+        'pickup_name',
         'contact_number',
         'notes',
     ];
@@ -27,7 +27,7 @@ class Order extends Model
      */
     public static function generateOrderNumber(): string
     {
-        return 'ORD-' . strtoupper(uniqid()) . '-' . time();
+        return 'ORD-'.strtoupper(uniqid()).'-'.time();
     }
 
     /**

@@ -75,6 +75,13 @@ class AppointmentController extends Controller
                 'appointment_time' => $request->appointment_time,
                 'status' => 'scheduled',
                 'notes' => $request->notes ?? '',
+                'service_type' => $request->service_type,
+                'service_price' => $request->service_price,
+                'has_pap_smear' => $request->has_pap_smear ?? false,
+                'pap_smear_price' => $request->pap_smear_price,
+                'needs_medical_certificate' => $request->needs_medical_certificate ?? false,
+                'medical_certificate_price' => $request->medical_certificate_price,
+                'total_amount' => $request->total_amount,
             ]);
 
             return response()->json([

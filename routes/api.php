@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\MedicationAlertController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\AppointmentController;
@@ -39,3 +40,10 @@ Route::get('orders', [OrderController::class, 'index']);
 Route::post('orders/place', [OrderController::class, 'placeOrder']);
 Route::get('orders/{id}', [OrderController::class, 'show']);
 Route::post('orders/{id}/cancel', [OrderController::class, 'cancel']);
+
+// Medication Alert routes
+Route::get('medication-alerts/patient/{patientId}', [MedicationAlertController::class, 'index']);
+Route::post('medication-alerts', [MedicationAlertController::class, 'store']);
+Route::get('medication-alerts/{id}', [MedicationAlertController::class, 'show']);
+Route::put('medication-alerts/{id}', [MedicationAlertController::class, 'update']);
+Route::delete('medication-alerts/{id}', [MedicationAlertController::class, 'destroy']);
