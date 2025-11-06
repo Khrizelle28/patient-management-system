@@ -62,14 +62,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('medical-certificate/generate/{id}', [MedicalCertificateController::class, 'generateMedicalCertificate'])->name('medical-certificate.generate');
 
-    Route::get('medical-certificate/{medicalCertificate}/preview', [MedicalCertificateController::class, 'preview'])->name('medical-certificate.preview');
-
     Route::get('medical-certificate/{medicalCertificate}/download', [MedicalCertificateController::class, 'download'])->name('medical-certificate.download');
 
     Route::get('medical-certificate/{medicalCertificate}/upload', [MedicalCertificateController::class, 'showUploadForm'])->name('medical-certificate.showUploadForm');
 
     Route::post('medical-certificate/{medicalCertificate}/upload', [MedicalCertificateController::class, 'upload'])->name('medical-certificate.upload');
 });
+
+Route::get('medical-certificate/{medicalCertificate}/preview', [MedicalCertificateController::class, 'preview'])->name('medical-certificate.preview');
 
 Route::get('/medical-certificate-pdf', function () {
     $pdf = Pdf::loadView('pdf.medical-certificate');

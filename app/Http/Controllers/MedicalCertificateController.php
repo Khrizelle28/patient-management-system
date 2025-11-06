@@ -24,7 +24,7 @@ class MedicalCertificateController extends Controller
     public function generateMedicalCertificate($id)
     {
         $certificate = MedicalCertificate::with(['patient', 'doctor'])->findOrFail($id);
-        $qrData = 'test1234'; // temporary
+        $qrData = route('medical-certificate.preview', $certificate->id);
 
         $qrResult = self::generate($qrData);
         $qrBase64 = $qrResult->getDataUri();
@@ -92,7 +92,7 @@ class MedicalCertificateController extends Controller
 
         // Otherwise generate PDF on the fly
         $medicalCertificate->load(['patient', 'doctor']);
-        $qrData = 'test1234'; // temporary
+        $qrData = route('medical-certificate.preview', $medicalCertificate->id);
         $qrResult = self::generate($qrData);
         $qrBase64 = $qrResult->getDataUri();
 

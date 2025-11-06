@@ -31,7 +31,7 @@
                 </tr>
             </tfoot>
             <tbody>
-                @forelse($appointments as $key => $appointment)
+                @forelse($appointmentss ?? [] as $key => $appointment)
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $appointment->patient->full_name }}</td>
@@ -50,9 +50,6 @@
                         </td>
                     </tr>
                 @empty
-                    <tr>
-                        <td colspan="7" class="text-center">No appointments found</td>
-                    </tr>
                 @endforelse
             </tbody>
         </table>
