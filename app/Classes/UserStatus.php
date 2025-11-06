@@ -4,6 +4,6 @@ namespace App\Classes;
 
 class UserStatus {
 
-    const ACTIVATED   = 'Activate';
-    const DEACTIVATED = 'Deactivate';
+    const ACTIVATED   = 'Active';
+    const DEACTIVATED = 'Deactivated';
 }
