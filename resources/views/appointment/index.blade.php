@@ -31,7 +31,7 @@
                 </tr>
             </tfoot>
             <tbody>
-                @forelse($appointmentss ?? [] as $key => $appointment)
+                @forelse($appointments ?? [] as $key => $appointment)
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $appointment->patient->full_name }}</td>
