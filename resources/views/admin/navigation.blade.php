@@ -15,9 +15,15 @@
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <a class="nav-link dropdown-toggle d-flex align-items-center" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @if(auth()->user()->profile_pic)
+                    <img src="{{ auth()->user()->profile_pic }}" alt="Profile" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                @else
+                    <i class="fas fa-user fa-fw me-2"></i>
+                @endif
+                <span class="d-none d-md-inline">{{ auth()->user()->first_name }}</span>
+            </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
                 <li><a class="dropdown-item" href="{{ route('admin.profile') }}">Edit Profile</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>

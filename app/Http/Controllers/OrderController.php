@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -41,31 +40,10 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
-        $validStatuses = ['pending', 'processing', 'completed', 'cancelled'];
+        $validStatuses = ['ready to pickup', 'completed'];
 
         if (! in_array($status, $validStatuses)) {
             return redirect()->back()->with('error', 'Invalid status.');
-        }
-
-        // If cancelling, restore stock
-        if ($status === 'cancelled' && $order->status !== 'cancelled') {
-            DB::beginTransaction();
-
-            try {
-                foreach ($order->items as $orderItem) {
-                    $orderItem->product->increment('stock', $orderItem->quantity);
-                }
-
-                $order->update(['status' => $status]);
-
-                DB::commit();
-
-                return redirect()->back()->with('success', 'Order cancelled and stock restored.');
-            } catch (\Exception) {
-                DB::rollBack();
-
-                return redirect()->back()->with('error', 'Failed to cancel order.');
-            }
         }
 
         $order->update(['status' => $status]);

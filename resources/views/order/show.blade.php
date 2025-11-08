@@ -36,14 +36,12 @@
                         <tr>
                             <th>Status</th>
                             <td>
-                                @if($order->status === 'pending')
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                @elseif($order->status === 'processing')
-                                    <span class="badge bg-info">Processing</span>
+                                @if($order->status === 'ready to pickup')
+                                    <span class="badge bg-info">Ready to Pickup</span>
                                 @elseif($order->status === 'completed')
                                     <span class="badge bg-success">Completed</span>
                                 @else
-                                    <span class="badge bg-danger">Cancelled</span>
+                                    <span class="badge bg-secondary">{{ ucfirst($order->status) }}</span>
                                 @endif
                             </td>
                         </tr>
@@ -88,18 +86,7 @@
             </div>
 
             <div class="mb-3">
-                @if($order->status === 'pending')
-                    <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'processing']) }}"
-                       class="btn btn-info"
-                       onclick="return confirm('Mark this order as processing?')">
-                        <i class="fa-solid fa-spinner"></i> Mark as Processing
-                    </a>
-                    <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'cancelled']) }}"
-                       class="btn btn-danger"
-                       onclick="return confirm('Cancel this order? Stock will be restored.')">
-                        <i class="fa-solid fa-times"></i> Cancel Order
-                    </a>
-                @elseif($order->status === 'processing')
+                @if($order->status === 'ready to pickup')
                     <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'completed']) }}"
                        class="btn btn-success"
                        onclick="return confirm('Mark this order as completed?')">

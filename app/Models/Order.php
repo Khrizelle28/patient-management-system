@@ -23,11 +23,21 @@ class Order extends Model
     ];
 
     /**
-     * Generate unique order number.
+     * Generate unique order number in format ORD-MM-SSSSS.
      */
     public static function generateOrderNumber(): string
     {
-        return 'ORD-'.strtoupper(uniqid()).'-'.time();
+        $month = now()->format('m'); // Current month (01-12)
+
+        // Count orders created in the current month
+        $count = self::whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month)
+            ->count();
+
+        // Increment series number
+        $series = str_pad($count + 1, 5, '0', STR_PAD_LEFT); // 5 digits with leading zeros
+
+        return "ORD-{$month}-{$series}";
     }
 
     /**

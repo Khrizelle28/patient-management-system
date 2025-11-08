@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('patient_user_id')->constrained('patient_users')->onDelete('cascade');
             $table->string('order_number')->unique();
             $table->decimal('total_amount', 10, 2);
-            $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['ready to pickup', 'completed'])->default('ready to pickup');
             $table->text('delivery_address')->nullable();
             $table->string('contact_number')->nullable();
             $table->text('notes')->nullable();

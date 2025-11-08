@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\UserStatus;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyEmail;
+use App\Models\DoctorMaxPatient;
 use App\Models\DoctorSchedule;
 use App\Models\Role;
 use App\Models\User;
@@ -18,34 +19,35 @@ class AdminController extends Controller
     public function index()
     {
         $admins = User::where('id', '!=', '1')->get();
+
         return view('admin.admin-index', compact('admins'));
     }
 
     public function create()
     {
-        $role_datas   = Role::select('id', 'name')->where('name', '!=', 'Administrator')->get();
+        $role_datas = Role::select('id', 'name')->where('name', '!=', 'Administrator')->get();
+
         return view('admin.register', compact('role_datas'));
     }
 
     public function store(RegisterRequest $request)
     {
-        $data = $request->except(['_token']);
-        $passwordNo       = rand(1000, 9999);
+        $data = $request->except(['_token', 'profile_pic']);
+        $passwordNo = rand(1000, 9999);
         $data['username'] = $data['email'];
-        $data['password'] = '@'. str_replace(' ', '', ucfirst(strtolower($data['first_name']))) .''.$passwordNo;
-        $data['status']   = UserStatus::ACTIVATED;
+        $data['password'] = '@'.str_replace(' ', '', ucfirst(strtolower($data['first_name']))).''.$passwordNo;
+        $data['status'] = UserStatus::ACTIVATED;
         if ($request->input('schedule', false)) {
             $data['schedule'] = json_encode($data['schedule']);
         }
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
             $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            $data["profile_pic"] = '/storage/' . $path;
+            $data['profile_pic'] = '/storage/'.$path;
         }
         $user = User::create($data);
         if ($request->input('schedule', false)) {
-            foreach($request->schedule as $index => $schedule)
-            {
+            foreach ($request->schedule as $index => $schedule) {
                 $data_schedule = [
                     'doctor_id' => $user->id,
                     'day_of_week' => $index,
@@ -65,6 +67,13 @@ class AdminController extends Controller
             $user->assignRole($data['role']);
         }
 
+        if ($request->input('max_patients') && $request->input('role') === 'Doctor') {
+            DoctorMaxPatient::create([
+                'doctor_id' => $user->id,
+                'max_patients' => $request->input('max_patients'),
+            ]);
+        }
+
         Mail::to($user->email)->send(new VerifyEmail($data));
 
         return redirect()->route('admin.index');
@@ -73,18 +82,28 @@ class AdminController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $role_datas   = Role::select('id', 'name')->where('name', '!=', 'Administrator')->get();
+        $role_datas = Role::select('id', 'name')->where('name', '!=', 'Administrator')->get();
+
         return view('admin.edit', compact('user', 'role_datas'));
     }
 
     public function update(RegisterRequest $request, $id)
     {
         $user = User::find($id);
-        $user->update($request->except(['token']));
+        $data = $request->except(['_token', 'profile_pic']);
+
+        if ($request->hasFile('profile_pic')) {
+            $fileName = $request->file('profile_pic')->hashName();
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
+            $data['profile_pic'] = '/storage/'.$path;
+        }
+
+        $user->update($data);
 
         if ($request->input('role', false)) {
             $user->assignRole($request['role']);
         }
+
         return redirect()->route('admin.index');
     }
 
@@ -95,7 +114,7 @@ class AdminController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
             $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            $data["profile_pic"] = '/storage/' . $path;
+            $data['profile_pic'] = '/storage/'.$path;
         }
         $user->update($data);
 
@@ -105,7 +124,53 @@ class AdminController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        $role_datas   = Role::select('id', 'name')->get();
+        $role_datas = Role::select('id', 'name')->get();
+
         return view('admin.profile', compact('user', 'role_datas'));
+    }
+
+    public function editSchedule($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Get existing schedules and organize by day
+        $schedules = DoctorSchedule::where('doctor_id', $id)
+            ->get()
+            ->keyBy('day_of_week')
+            ->map(function ($schedule) {
+                // Convert 12-hour format to 24-hour format for HTML time input
+                $schedule->start_time = Carbon::parse($schedule->start_time)->format('H:i');
+                $schedule->end_time = Carbon::parse($schedule->end_time)->format('H:i');
+                return $schedule;
+            });
+
+        return view('admin.schedule-edit', compact('user', 'schedules'));
+    }
+
+    public function updateSchedule(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Delete all existing schedules for this doctor
+        DoctorSchedule::where('doctor_id', $id)->delete();
+
+        // Create new schedules based on form input
+        if ($request->input('schedule', false)) {
+            foreach ($request->schedule as $index => $schedule) {
+                if (isset($schedule['time_in']) && isset($schedule['time_out'])) {
+                    $data_schedule = [
+                        'doctor_id' => $user->id,
+                        'day_of_week' => $index,
+                        'start_time' => Carbon::parse($schedule['time_in'])->format('h:i A'),
+                        'end_time' => Carbon::parse($schedule['time_out'])->format('h:i A'),
+                    ];
+
+                    DoctorSchedule::create($data_schedule);
+                }
+            }
+        }
+
+        return redirect()->route('admin.schedule.edit', ['id' => $id])
+            ->with('success', 'Schedule updated successfully.');
     }
 }

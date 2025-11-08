@@ -92,7 +92,7 @@ class OrderController extends Controller
                 'patient_user_id' => $patientUser->id,
                 'order_number' => Order::generateOrderNumber(),
                 'total_amount' => $totalAmount,
-                'status' => 'pending',
+                'status' => 'ready to pickup',
                 'pickup_name' => $request->pickup_name,
                 'contact_number' => $request->contact_number,
                 'notes' => $request->notes,
@@ -187,10 +187,10 @@ class OrderController extends Controller
             ], 404);
         }
 
-        if ($order->status !== 'pending') {
+        if ($order->status !== 'ready to pickup') {
             return response()->json([
                 'success' => false,
-                'message' => 'Only pending orders can be cancelled.',
+                'message' => 'Only orders ready to pickup can be cancelled.',
             ], 400);
         }
 
@@ -202,15 +202,17 @@ class OrderController extends Controller
                 $orderItem->product->increment('stock', $orderItem->quantity);
             }
 
-            // Update order status
-            $order->update(['status' => 'cancelled']);
+            // Delete order items
+            $order->items()->delete();
+
+            // Delete the order
+            $order->delete();
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Order cancelled successfully.',
-                'data' => $order,
             ]);
 
         } catch (\Exception $e) {

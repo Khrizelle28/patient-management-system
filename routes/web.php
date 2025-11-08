@@ -32,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('admin/store', [AdminController::class, 'store'])->name('admin.store');
     Route::get('admin/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
     Route::put('admin/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('admin/{id}/schedule/edit', [AdminController::class, 'editSchedule'])->name('admin.schedule.edit');
+    Route::put('admin/{id}/schedule', [AdminController::class, 'updateSchedule'])->name('admin.schedule.update');
     Route::get('profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::put('profile/update', [AdminController::class, 'updateProfile'])->name('admin.update-profile');
 

@@ -6,8 +6,9 @@
             <div class="card mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Edit Admin Account</h3></div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.store') }}">
+                    <form method="POST" action="{{ route('admin.update', ['id' => $user->id]) }}" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <div class="form-floating mb-3 mb-md-0">
@@ -78,19 +79,67 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="text" name="email" value="{{ $user->email }}" placeholder="name@example.com" />
+                                    <label for="inputEmail">Email address <span style="color: red">*</span></label>
+                                    @error('email')
+                                        <small class="invalid-feedback">Please enter a email.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <select name="sex" id="selectSex" class="form-control @error('sex') is-invalid @enderror">
+                                        <option value="" selected disabled>Please select sex</option>
+                                        <option value="MALE" {{ $user->sex == 'MALE' ? 'selected' : '' }}>Male</option>
+                                        <option value="FEMALE" {{ $user->sex == 'FEMALE' ? 'selected' : '' }}>Female</option>
+                                    </select>
+                                    <label for="selectSex">Sex <span style="color: red">*</span></label>
+                                    @error('sex')
+                                        <small class="invalid-feedback">Please select sex. </small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <img id="imagePreview" width="200" src="{{ $user->profile_pic ? $user->profile_pic : asset('image/profile-pic.png') }}" height="200" style="max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px; margin-top: 10px; margin-bottom: 10px; border-radius: 5px;">
                         <div class="form-floating mb-3">
-                            <input class="form-control  @error('email') is-invalid @enderror" id="inputEmail" type="text" name="email" value="{{ $user->email }}" placeholder="name@example.com" />
-                            <label for="inputEmail">Email address</label>
-                            @error('email')
-                                <small class="invalid-feedback">Please enter a email.</small>
+                            <input type="file" name="profile_pic" id="imageInput" class="form-control @error('profile_pic') is-invalid @enderror" accept="image/*">
+                            <label for="imageInput">Profile Picture</label>
+                            @error('profile_pic')
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mt-4 mb-0">
-                            <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Edit Account</button></div>
+                            <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Update Account</button></div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image preview
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+    @endpush
 @endsection

@@ -49,7 +49,9 @@
                                     <div class="menu-options">
                                         <a href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>
                                         <a href="#">Delete</a>
-                                        <a href="#">Add Schedule</a>
+                                        @if(in_array('Doctor', $admin->role))
+                                            <a href="{{ route('admin.schedule.edit', ['id' => $admin->id]) }}">Update Schedule</a>
+                                        @endif
                                 </div>
                             </div>
 

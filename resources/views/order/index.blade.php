@@ -52,14 +52,12 @@
                             <td>₱{{ number_format($order->total_amount, 2) }}</td>
                             <td>{{ $order->items->count() }}</td>
                             <td>
-                                @if($order->status === 'pending')
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                @elseif($order->status === 'processing')
-                                    <span class="badge bg-info">Processing</span>
+                                @if($order->status === 'ready to pickup')
+                                    <span class="badge bg-info">Ready to Pickup</span>
                                 @elseif($order->status === 'completed')
                                     <span class="badge bg-success">Completed</span>
                                 @else
-                                    <span class="badge bg-danger">Cancelled</span>
+                                    <span class="badge bg-secondary">{{ ucfirst($order->status) }}</span>
                                 @endif
                             </td>
                             <td>{{ Carbon\Carbon::parse($order->created_at)->format('F d, Y h:i A') }}</td>
@@ -68,23 +66,10 @@
                                     <div class="kebab-icon">⋮</div>
                                     <div class="menu-options">
                                         <a href="{{ route('order.show', ['id' => $order->id]) }}">View Details</a>
-                                        @if($order->status === 'pending')
-                                            <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'processing']) }}"
-                                               onclick="return confirm('Mark this order as processing?')">
-                                                Mark as Processing
-                                            </a>
-                                        @endif
-                                        @if($order->status === 'processing')
+                                        @if($order->status === 'ready to pickup')
                                             <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'completed']) }}"
                                                onclick="return confirm('Mark this order as completed?')">
                                                 Mark as Completed
-                                            </a>
-                                        @endif
-                                        @if($order->status === 'pending')
-                                            <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'cancelled']) }}"
-                                               onclick="return confirm('Cancel this order? Stock will be restored.')"
-                                               style="color: red;">
-                                                Cancel Order
                                             </a>
                                         @endif
                                     </div>

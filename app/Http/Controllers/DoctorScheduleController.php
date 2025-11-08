@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\DoctorMaxPatient;
 use App\Models\DoctorSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,10 +12,14 @@ class DoctorScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * Optionally accepts a date parameter to check availability for a specific date.
      */
-    public function getDoctorSchedule()
+    public function getDoctorSchedule(Request $request)
     {
         try {
+            // Get the date parameter or default to today
+            $selectedDate = $request->input('date') ? \Carbon\Carbon::parse($request->input('date')) : today();
+
             // Get all doctor schedules with doctor information
             $doctorSchedules = DoctorSchedule::with('doctor')->get();
 
@@ -21,12 +27,12 @@ class DoctorScheduleController extends Controller
             $groupedSchedules = $doctorSchedules->groupBy('day_of_week');
 
             $schedule = [
-                'mondayPeople' => $this->formatDoctorData($groupedSchedules['monday'] ?? collect()),
-                'tuesdayPeople' => $this->formatDoctorData($groupedSchedules['tuesday'] ?? collect()),
-                'wednesdayPeople' => $this->formatDoctorData($groupedSchedules['wednesday'] ?? collect()),
-                'thursdayPeople' => $this->formatDoctorData($groupedSchedules['thursday'] ?? collect()),
-                'fridayPeople' => $this->formatDoctorData($groupedSchedules['friday'] ?? collect()),
-                'saturdayPeople' => $this->formatDoctorData($groupedSchedules['saturday'] ?? collect()),
+                'mondayPeople' => $this->formatDoctorData($groupedSchedules['monday'] ?? collect(), $selectedDate),
+                'tuesdayPeople' => $this->formatDoctorData($groupedSchedules['tuesday'] ?? collect(), $selectedDate),
+                'wednesdayPeople' => $this->formatDoctorData($groupedSchedules['wednesday'] ?? collect(), $selectedDate),
+                'thursdayPeople' => $this->formatDoctorData($groupedSchedules['thursday'] ?? collect(), $selectedDate),
+                'fridayPeople' => $this->formatDoctorData($groupedSchedules['friday'] ?? collect(), $selectedDate),
+                'saturdayPeople' => $this->formatDoctorData($groupedSchedules['saturday'] ?? collect(), $selectedDate),
             ];
             // dd($schedule);
             return response()->json($schedule);
@@ -43,11 +49,24 @@ class DoctorScheduleController extends Controller
     /**
      * Format doctor data for consistent API response
      */
-    private function formatDoctorData($doctorSchedules)
+    private function formatDoctorData($doctorSchedules, $selectedDate)
     {
-        return $doctorSchedules->map(function ($schedule) {
+        return $doctorSchedules->map(function ($schedule) use ($selectedDate) {
             $doctor = $schedule->doctor;
 
+            // Get the day of week for both the schedule and selected date
+            $scheduleDayOfWeek = strtolower($schedule->day_of_week); // 'monday', 'tuesday', etc.
+            $selectedDayOfWeek = strtolower($selectedDate->format('l')); // 'monday', 'tuesday', etc.
+
+            // Only check capacity if this schedule's day matches the selected date's day
+            if ($scheduleDayOfWeek === $selectedDayOfWeek) {
+                // Check if doctor has reached max patients for the selected date
+                if ($this->isDoctorAtMaxCapacity($doctor->id ?? null, $selectedDate)) {
+                    return null; // Remove doctor from this day's list - they're at max capacity
+                }
+            }
+
+            // Doctor is available on this day
             return [
                 'id' => (string) $doctor->id ?? null,
                 'name' => $doctor ? $this->formatDoctorName($doctor) : 'Unknown Doctor',
@@ -63,7 +82,35 @@ class DoctorScheduleController extends Controller
                 'created_at' => $schedule->created_at,
                 'updated_at' => $schedule->updated_at,
             ];
-        })->values(); // Reset array keys
+        })->filter()->values(); // Filter out null values and reset array keys
+    }
+
+    /**
+     * Check if doctor has reached maximum patients for the selected date
+     */
+    private function isDoctorAtMaxCapacity($doctorId, $selectedDate)
+    {
+        if (!$doctorId) {
+            return false;
+        }
+
+        // Get doctor's max patients setting
+        $maxPatientRecord = DoctorMaxPatient::where('doctor_id', $doctorId)->first();
+
+        if (!$maxPatientRecord) {
+            return false; // No limit set, doctor is available
+        }
+
+        $maxPatients = (int) $maxPatientRecord->max_patients;
+
+        // Count appointments for this doctor on the selected date (excluding cancelled)
+        $dateAppointments = Appointment::where('doctor_id', $doctorId)
+            ->whereDate('appointment_date', $selectedDate)
+            ->whereIn('status', ['scheduled', 'completed'])
+            ->count();
+
+        // Return true if doctor has reached or exceeded max capacity
+        return $dateAppointments >= $maxPatients;
     }
 
     /**

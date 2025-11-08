@@ -21,6 +21,8 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('id'); // Get user ID from route parameter for update
+
         return [
             'role'         => 'required',
             'first_name'   => 'required',
@@ -29,9 +31,9 @@ class RegisterRequest extends FormRequest
             'suffix'       => 'nullable',
             'license_no'   => 'required',
             'ptr_no'       => 'required',
-            'email'        => 'required|email|unique:users,email',
+            'email'        => 'required|email|unique:users,email' . ($userId ? ',' . $userId : ''),
             'schedule'     => 'nullable',
-            'profile_pic'  => 'nullable|mimes:jpeg,jpg,png',
+            'profile_pic'  => 'nullable|file|extensions:jpeg,jpg,png|max:2048',
             'sex'          => 'required'
         ];
     }
