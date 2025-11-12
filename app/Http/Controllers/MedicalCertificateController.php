@@ -120,7 +120,7 @@ class MedicalCertificateController extends Controller
 
         // Otherwise generate PDF and download
         $medicalCertificate->load(['patient', 'doctor']);
-        $qrData = 'test1234'; // temporary
+        $qrData = route('medical-certificate.preview', $medicalCertificate->id); // temporary
         $qrResult = self::generate($qrData);
         $qrBase64 = $qrResult->getDataUri();
 

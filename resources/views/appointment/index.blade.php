@@ -44,7 +44,9 @@
                                 <div class="kebab-icon">⋮</div>
                                 <div class="menu-options">
                                     <a href="#" onclick="event.preventDefault();">View</a>
-                                    <a href="javascript:void(0);" onclick="openMedCertModal({{ $appointment->id }})">Generate MedCert</a>
+                                    @hasanyrole('Doctor')
+                                        <a href="javascript:void(0);" onclick="openMedCertModal({{ $appointment->id }})">Generate MedCert</a>
+                                    @endhasanyrole
                                 </div>
                             </div>
                         </td>
