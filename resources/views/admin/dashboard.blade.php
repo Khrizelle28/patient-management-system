@@ -1,66 +1,102 @@
 @extends('admin.index')
 
 @section('content')
-    <h1 class="mt-4">Dashboard</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
-    <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body">Primary Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
+    @hasanyrole('Administrator|Owner')
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fa-solid fa-money-bill-trend-up"></i>
+                Doctors Income Report
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Doctor</th>
+                            <th>Professional Fee</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Date</th>
+                            <th>Doctor</th>
+                            <th>Professional Fee</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @forelse($doctorIncomes ?? [] as $income)
+                            <tr>
+                                <td>{{ $income['date'] }}</td>
+                                <td>{{ $income['doctor'] }}</td>
+                                <td>₱{{ number_format($income['professional_fee'], 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center">No income records found</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-warning text-white mb-4">
-                <div class="card-body">Warning Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
+    @endhasanyrole
+
+    @hasanyrole('Administrator|Medical Staff|Owner')
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fa-solid fa-chart-line"></i>
+                Medicine Inventory Report
+            </div>
+            <div class="card-body">
+                <table id="datatablesMedicine" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Overall Stocks</th>
+                            <th>Remaining Stocks</th>
+                            <th>Expiration Date</th>
+                            <th>Unit Price</th>
+                            <th>Quantity Sold</th>
+                            <th>Total Income</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Overall Stocks</th>
+                            <th>Remaining Stocks</th>
+                            <th>Expiration Date</th>
+                            <th>Unit Price</th>
+                            <th>Quantity Sold</th>
+                            <th>Total Income</th>
+                            <th>Status</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @forelse($products ?? [] as $product)
+                            <tr>
+                                <td>{{ $product->name }}</td>
+                                <td>{{ number_format($product->overall_stock) }}</td>
+                                <td>{{ number_format($product->remaining_stock) }}</td>
+                                <td>{{ $product->expiration_date ?? 'N/A' }}</td>
+                                <td>₱{{ number_format($product->price, 2) }}</td>
+                                <td>{{ number_format($product->quantity_sold) }}</td>
+                                <td>₱{{ number_format($product->total_income, 2) }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $product->status_class }}">
+                                        {{ $product->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center">No products found</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-success text-white mb-4">
-                <div class="card-body">Success Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-danger text-white mb-4">
-                <div class="card-body">Danger Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-area me-1"></i>
-                    Area Chart Example
-                </div>
-                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Bar Chart Example
-                </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-            </div>
-        </div>
-    </div>
+    @endhasanyrole
 @endsection

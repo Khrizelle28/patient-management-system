@@ -7,6 +7,11 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesSimple);
     }
 
+    const datatablesMedicine = document.getElementById('datatablesMedicine');
+    if (datatablesMedicine) {
+        new simpleDatatables.DataTable(datatablesMedicine);
+    }
+
     $('.tableAdmin tbody tr').each(function () {
         $(this).find('td:eq(6)').addClass('table-options');
     });

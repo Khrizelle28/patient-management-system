@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
 
-class DashboardController extends Controller
+class InventoryReportController extends Controller
 {
-    public function index()
+    public function index(): \Illuminate\View\View
     {
         $products = Product::select(
             'id',
@@ -36,24 +34,6 @@ class DashboardController extends Controller
             return $product;
         });
 
-        $doctorIncomes = Appointment::select(
-            'doctor_id',
-            'appointment_date',
-            DB::raw('SUM(total_amount) as professional_fee')
-        )
-            ->with('doctor:id,first_name,middle_name,last_name,suffix')
-            ->whereNotNull('total_amount')
-            ->groupBy('doctor_id', 'appointment_date')
-            ->orderBy('appointment_date', 'desc')
-            ->get()
-            ->map(function ($appointment) {
-                return [
-                    'date' => $appointment->appointment_date,
-                    'doctor' => $appointment->doctor->full_name ?? 'N/A',
-                    'professional_fee' => $appointment->professional_fee,
-                ];
-            });
-
-        return view('admin.dashboard', compact('products', 'doctorIncomes'));
+        return view('report.inventory', compact('products'));
     }
 }

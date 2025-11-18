@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MedicalCertificateController;
 use App\Http\Controllers\OrderController;
@@ -63,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('medical-certificate', [MedicalCertificateController::class, 'index'])->name('medical-certificate.index');
 
     Route::get('medical-certificate/generate/{id}', [MedicalCertificateController::class, 'generateMedicalCertificate'])->name('medical-certificate.generate');
+
+    Route::get('inventory-report', [InventoryReportController::class, 'index'])->name('inventory-report.index');
 
     Route::get('medical-certificate/{medicalCertificate}/download', [MedicalCertificateController::class, 'download'])->name('medical-certificate.download');
 

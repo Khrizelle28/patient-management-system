@@ -2,8 +2,11 @@
 
 namespace App\Classes;
 
-class UserRoles {
-
+class UserRoles
+{
     const MEDICAL_STAFF = 'Medical Staff';
+
     const DOCTOR = 'Doctor';
+
+    const OWNER = 'Owner';
 }

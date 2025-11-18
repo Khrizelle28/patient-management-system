@@ -10,12 +10,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First, update existing orders with old statuses to new statuses
+        // Step 1: Convert enum to VARCHAR temporarily
+        DB::statement("ALTER TABLE orders MODIFY COLUMN status VARCHAR(50) DEFAULT 'ready to pickup'");
+
+        // Step 2: Update existing orders with old statuses to new statuses
         DB::table('orders')
             ->whereIn('status', ['pending', 'processing', 'cancelled'])
             ->update(['status' => 'ready to pickup']);
 
-        // Then alter the enum to only have 'ready to pickup' and 'completed'
+        // Step 3: Convert back to enum with only the new values
         DB::statement("ALTER TABLE orders MODIFY COLUMN status ENUM('ready to pickup', 'completed') DEFAULT 'ready to pickup'");
     }
 
@@ -24,12 +27,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert to original enum values
-        DB::statement("ALTER TABLE orders MODIFY COLUMN status ENUM('pending', 'processing', 'completed', 'cancelled') DEFAULT 'pending'");
+        // Step 1: Convert enum to VARCHAR temporarily
+        DB::statement("ALTER TABLE orders MODIFY COLUMN status VARCHAR(50) DEFAULT 'pending'");
 
-        // Optionally revert the status values (though this may not be accurate)
+        // Step 2: Revert the status values (though this may not be accurate)
         DB::table('orders')
             ->where('status', 'ready to pickup')
             ->update(['status' => 'pending']);
+
+        // Step 3: Revert to original enum values
+        DB::statement("ALTER TABLE orders MODIFY COLUMN status ENUM('pending', 'processing', 'completed', 'cancelled') DEFAULT 'pending'");
     }
 };

@@ -87,18 +87,19 @@ class OrderController extends Controller
                 $totalAmount += $cartItem->quantity * $cartItem->price;
             }
 
-            // Create order
+            // Create order with pending payment status
             $order = Order::create([
                 'patient_user_id' => $patientUser->id,
                 'order_number' => Order::generateOrderNumber(),
                 'total_amount' => $totalAmount,
-                'status' => 'ready to pickup',
+                'status' => 'pending_payment',
                 'pickup_name' => $request->pickup_name,
                 'contact_number' => $request->contact_number,
                 'notes' => $request->notes,
+                'payment_status' => 'pending',
             ]);
 
-            // Create order items and update product stock
+            // Create order items but don't update product stock yet
             foreach ($cart->items as $cartItem) {
                 $product = $cartItem->product;
 
@@ -111,12 +112,11 @@ class OrderController extends Controller
                     'subtotal' => $cartItem->quantity * $cartItem->price,
                 ]);
 
-                // Decrease product stock
-                $product->decrement('stock', $cartItem->quantity);
+                // Note: Stock will be decremented when payment is completed
             }
 
-            // Clear the cart
-            $cart->items()->delete();
+            // Keep cart items for now - will clear after payment
+            // $cart->items()->delete();
 
             DB::commit();
 
@@ -125,7 +125,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Order placed successfully!',
+                'message' => 'Order created. Please complete payment to confirm.',
                 'data' => [
                     'order' => $order,
                 ],
@@ -197,9 +197,10 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            // Restore product stock
+            // Restore product stock and decrement quantity sold
             foreach ($order->items as $orderItem) {
                 $orderItem->product->increment('stock', $orderItem->quantity);
+                $orderItem->product->decrement('quantity_sold', $orderItem->quantity);
             }
 
             // Delete order items

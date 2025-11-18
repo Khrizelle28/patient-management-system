@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\MedicationAlertController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
@@ -47,3 +48,8 @@ Route::post('medication-alerts', [MedicationAlertController::class, 'store']);
 Route::get('medication-alerts/{id}', [MedicationAlertController::class, 'show']);
 Route::put('medication-alerts/{id}', [MedicationAlertController::class, 'update']);
 Route::delete('medication-alerts/{id}', [MedicationAlertController::class, 'destroy']);
+
+// Payment routes
+Route::post('payment/create', [PaymentController::class, 'createPayment']);
+Route::post('payment/execute', [PaymentController::class, 'executePayment']);
+Route::get('payment/{paymentId}/status', [PaymentController::class, 'getPaymentStatus']);

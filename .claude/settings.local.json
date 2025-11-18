@@ -9,7 +9,9 @@
       "Bash(mv:*)",
       "Bash(nul)",
       "Bash(dir:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(if not exist \"resources\\views\\report\" mkdir \"resources\\views\\report\")",
+      "Bash(cat:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

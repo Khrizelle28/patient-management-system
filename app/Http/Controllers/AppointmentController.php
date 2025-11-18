@@ -73,7 +73,7 @@ class AppointmentController extends Controller
                 'doctor_id' => $request->doctor_id,
                 'appointment_date' => $request->appointment_date,
                 'appointment_time' => $request->appointment_time,
-                'status' => 'scheduled',
+                'status' => 'pending_payment',
                 'notes' => $request->notes ?? '',
                 'service_type' => $request->service_type,
                 'service_price' => $request->service_price,
@@ -82,11 +82,12 @@ class AppointmentController extends Controller
                 'needs_medical_certificate' => $request->needs_medical_certificate ?? false,
                 'medical_certificate_price' => $request->medical_certificate_price,
                 'total_amount' => $request->total_amount,
+                'payment_status' => 'pending',
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Appointment booked successfully',
+                'message' => 'Appointment created. Please complete payment to confirm.',
                 'data' => $appointment,
             ], 201);
 

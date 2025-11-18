@@ -25,7 +25,9 @@ class AdminController extends Controller
 
     public function create()
     {
-        $role_datas = Role::select('id', 'name')->where('name', '!=', 'Administrator')->get();
+        $role_datas = Role::select('id', 'name')
+            ->where('name', '!=', 'Owner')
+            ->get();
 
         return view('admin.register', compact('role_datas'));
     }
@@ -82,7 +84,9 @@ class AdminController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $role_datas = Role::select('id', 'name')->where('name', '!=', 'Administrator')->get();
+        $role_datas = Role::select('id', 'name')
+            ->where('name', '!=', 'Owner')
+            ->get();
 
         return view('admin.edit', compact('user', 'role_datas'));
     }
@@ -141,6 +145,7 @@ class AdminController extends Controller
                 // Convert 12-hour format to 24-hour format for HTML time input
                 $schedule->start_time = Carbon::parse($schedule->start_time)->format('H:i');
                 $schedule->end_time = Carbon::parse($schedule->end_time)->format('H:i');
+
                 return $schedule;
             });
 
