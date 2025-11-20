@@ -43,6 +43,7 @@ class DashboardController extends Controller
         )
             ->with('doctor:id,first_name,middle_name,last_name,suffix')
             ->whereNotNull('total_amount')
+            ->where('status', '!=', 'cancelled')
             ->groupBy('doctor_id', 'appointment_date')
             ->orderBy('appointment_date', 'desc')
             ->get()

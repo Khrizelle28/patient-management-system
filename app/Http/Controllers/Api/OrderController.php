@@ -10,6 +10,7 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -23,6 +24,7 @@ class OrderController extends Controller
         $orders = Order::query()
             ->with(['items.product'])
             ->where('patient_user_id', $patientUser->id)
+            ->where('status', '!=', 'cancelled')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -76,6 +78,18 @@ class OrderController extends Controller
                 ], 400);
             }
         }
+
+        // Auto-cancel old pending orders for this patient
+        // This prevents accumulation of failed/abandoned orders
+        Order::where('patient_user_id', $patientUser->id)
+            ->where('status', 'pending_payment')
+            ->where('payment_status', 'pending')
+            ->update([
+                'status' => 'cancelled',
+                'notes' => DB::raw("CONCAT(COALESCE(notes, ''), ' [Auto-cancelled: Payment not completed]')"),
+            ]);
+
+        Log::info("Auto-cancelled old pending orders for patient: {$patientUser->id}");
 
         // Use database transaction
         DB::beginTransaction();

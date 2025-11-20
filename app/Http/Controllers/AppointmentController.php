@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\MedicalCertificate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,6 +54,18 @@ class AppointmentController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
+
+            // Auto-cancel old pending appointments for this patient
+            // This prevents accumulation of failed/abandoned appointments
+            Appointment::where('patient_id', $request->patient_id)
+                ->where('status', 'pending_payment')
+                ->where('payment_status', 'pending')
+                ->update([
+                    'status' => 'cancelled',
+                    'notes' => DB::raw("CONCAT(COALESCE(notes, ''), ' [Auto-cancelled: Payment not completed]')"),
+                ]);
+
+            Log::info("Auto-cancelled old pending appointments for patient: {$request->patient_id}");
 
             // Check if appointment slot is available
             $existingAppointment = Appointment::where('doctor_id', $request->doctor_id)
