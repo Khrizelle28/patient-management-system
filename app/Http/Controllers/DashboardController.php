@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $products = Product::select(
             'id',
@@ -36,25 +37,122 @@ class DashboardController extends Controller
             return $product;
         });
 
-        $doctorIncomes = Appointment::select(
+        // Build query for doctor incomes with date filtering
+        $query = Appointment::select(
+            'id',
             'doctor_id',
+            'patient_id',
             'appointment_date',
-            DB::raw('SUM(total_amount) as professional_fee')
+            'total_amount'
         )
-            ->with('doctor:id,first_name,middle_name,last_name,suffix')
+            ->with([
+                'doctor:id,first_name,middle_name,last_name,suffix',
+                'patient:id,first_name,middle_name,last_name',
+            ])
             ->whereNotNull('total_amount')
-            ->where('status', '!=', 'cancelled')
-            ->groupBy('doctor_id', 'appointment_date')
+            ->where('status', '!=', 'cancelled');
+
+        // Apply date filters if provided
+        if ($request->filled('from_date')) {
+            $query->whereDate('appointment_date', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('appointment_date', '<=', $request->to_date);
+        }
+
+        $doctorIncomes = $query
             ->orderBy('appointment_date', 'desc')
             ->get()
             ->map(function ($appointment) {
                 return [
                     'date' => $appointment->appointment_date,
                     'doctor' => $appointment->doctor->full_name ?? 'N/A',
-                    'professional_fee' => $appointment->professional_fee,
+                    'patient' => $appointment->patient->full_name ?? 'N/A',
+                    'professional_fee' => $appointment->total_amount,
                 ];
             });
 
-        return view('admin.dashboard', compact('products', 'doctorIncomes'));
+        // Calculate total professional fee
+        $totalProfessionalFee = $doctorIncomes->sum('professional_fee');
+
+        // Get medicine income from orders with date filtering
+        $medicineQuery = Order::select(
+            'id',
+            'order_number',
+            'patient_user_id',
+            'total_amount',
+            'created_at'
+        )
+            ->with([
+                'patientUser:id,first_name,middle_name,last_name',
+                'items.product:id,name',
+            ])
+            ->where('payment_status', 'completed')
+            ->where('status', '!=', 'cancelled');
+
+        // Apply date filters for medicine income if provided
+        if ($request->filled('medicine_from_date')) {
+            $medicineQuery->whereDate('created_at', '>=', $request->medicine_from_date);
+        }
+
+        if ($request->filled('medicine_to_date')) {
+            $medicineQuery->whereDate('created_at', '<=', $request->medicine_to_date);
+        }
+
+        $medicineIncomes = $medicineQuery
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($order) {
+                $medicines = $order->items->map(function ($item) {
+                    return $item->product->name ?? 'N/A';
+                })->implode(', ');
+
+                $totalQuantity = $order->items->sum('quantity');
+
+                return [
+                    'order_number' => $order->order_number,
+                    'date' => $order->created_at,
+                    'patient' => $order->patientUser->full_name ?? 'N/A',
+                    'medicines' => $medicines,
+                    'total_quantity' => $totalQuantity,
+                    'total_amount' => $order->total_amount,
+                ];
+            });
+
+        // Calculate total medicine income
+        $totalMedicineIncome = $medicineIncomes->sum('total_amount');
+
+        // Get doctor's own income (for doctors only)
+        $doctorOwnIncome = collect([]);
+        $totalDoctorOwnIncome = 0;
+
+        if (auth()->check() && auth()->user()->hasRole('Doctor')) {
+            $doctorOwnIncome = Appointment::select(
+                'id',
+                'patient_id',
+                'appointment_date',
+                'total_amount'
+            )
+                ->with([
+                    'patient:id,first_name,middle_name,last_name',
+                ])
+                ->where('doctor_id', auth()->id())
+                ->whereNotNull('total_amount')
+                ->where('status', '!=', 'cancelled')
+                ->orderBy('appointment_date', 'desc')
+                ->get()
+                ->map(function ($appointment) {
+                    return [
+                        'date' => $appointment->appointment_date,
+                        'patient' => $appointment->patient->full_name ?? 'N/A',
+                        'professional_fee' => $appointment->total_amount,
+                    ];
+                });
+
+            $totalDoctorOwnIncome = $doctorOwnIncome->sum('professional_fee');
+        }
+
+        return view('admin.dashboard', compact('products', 'doctorIncomes', 'totalProfessionalFee', 'medicineIncomes', 'totalMedicineIncome', 'doctorOwnIncome', 'totalDoctorOwnIncome'));
     }
 }

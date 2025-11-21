@@ -34,6 +34,9 @@ class InventoryReportController extends Controller
             return $product;
         });
 
-        return view('report.inventory', compact('products'));
+        // Calculate total income from all products
+        $totalIncome = $products->sum('total_income');
+
+        return view('report.inventory', compact('products', 'totalIncome'));
     }
 }

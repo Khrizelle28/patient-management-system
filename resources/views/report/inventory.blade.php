@@ -24,38 +24,26 @@
             <table id="datatablesSimple" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Product Name</th>
-                        <th>Overall Stocks</th>
-                        <th>Remaining Stocks</th>
-                        <th>Expiration Date</th>
+                        <th>No.</th>
+                        <th>Medicine</th>
+                        <th>Stock In</th>
+                        <th>Stock Out</th>
+                        <th>Remaining Stock</th>
                         <th>Unit Price</th>
-                        <th>Quantity Sold</th>
-                        <th>Total Income</th>
+                        <th>Expiry Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Overall Stocks</th>
-                        <th>Remaining Stocks</th>
-                        <th>Expiration Date</th>
-                        <th>Unit Price</th>
-                        <th>Quantity Sold</th>
-                        <th>Total Income</th>
-                        <th>Status</th>
-                    </tr>
-                </tfoot>
                 <tbody>
-                    @forelse($products ?? [] as $product)
+                    @forelse($products ?? [] as $index => $product)
                         <tr>
+                            <td>{{ $index + 1 }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ number_format($product->overall_stock) }}</td>
-                            <td>{{ number_format($product->remaining_stock) }}</td>
-                            <td>{{ $product->expiration_date ?? 'N/A' }}</td>
-                            <td>₱{{ number_format($product->price, 2) }}</td>
                             <td>{{ number_format($product->quantity_sold) }}</td>
-                            <td>₱{{ number_format($product->total_income, 2) }}</td>
+                            <td>{{ number_format($product->remaining_stock) }}</td>
+                            <td>₱{{ number_format($product->price, 2) }}</td>
+                            <td>{{ $product->expiration_date ?? 'N/A' }}</td>
                             <td>
                                 <span class="badge bg-{{ $product->status_class }}">
                                     {{ $product->status }}

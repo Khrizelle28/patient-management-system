@@ -12,6 +12,16 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesMedicine);
     }
 
+    const datatablesMedicineIncome = document.getElementById('datatablesMedicineIncome');
+    if (datatablesMedicineIncome) {
+        new simpleDatatables.DataTable(datatablesMedicineIncome);
+    }
+
+    const datatablesDoctorOwn = document.getElementById('datatablesDoctorOwn');
+    if (datatablesDoctorOwn) {
+        new simpleDatatables.DataTable(datatablesDoctorOwn);
+    }
+
     $('.tableAdmin tbody tr').each(function () {
         $(this).find('td:eq(6)').addClass('table-options');
     });
