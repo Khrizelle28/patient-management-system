@@ -8,7 +8,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Dashboard
                 </a>
-                @hasanyrole('Administrator')
+                @hasanyrole('Administrator|Owner')
                     <a class="nav-link {{ request()->routeIs('admin.index') ? 'active' : '' }}" href="{{ route('admin.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                         Employee Accounts
@@ -30,18 +30,19 @@
                         Medical Certificate Records
                     </a>
                 @endhasanyrole
-                @hasanyrole('Administrator|Medical Staff')
+                @hasanyrole('Administrator|Medical Staff|Owner')
                     <a class="nav-link {{ request()->routeIs('product.index') ? 'active' : '' }}" href="{{ route('product.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
                         Product Records
                     </a>
                 @endhasanyrole
-                @hasanyrole('Administrator|Medical Staff')
+                @hasanyrole('Administrator|Medical Staff|Owner')
                     <a class="nav-link {{ request()->routeIs('order.index') || request()->routeIs('order.show') ? 'active' : '' }}" href="{{ route('order.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-receipt"></i></div>
                         Order Records
                     </a>
                 @endhasanyrole
+
             </div>
         </div>
         <div class="sb-sidenav-footer">
