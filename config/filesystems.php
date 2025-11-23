@@ -39,7 +39,7 @@ return [
         ],
 
         'public' => [
-            'driver' => 'local',
+            'driver' => env('FILESYSTEM_DISK') === 'local' ? 'local' : 's3',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',

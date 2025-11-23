@@ -44,11 +44,7 @@ class AdminController extends Controller
         }
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
-            if(env('APP_URL') == 'http://localhost') {
-                $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            } else {
-                $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public_s3');
-            }
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
             $data['profile_pic'] = '/storage/'.$path;
         }
         $user = User::create($data);
@@ -102,11 +98,7 @@ class AdminController extends Controller
 
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
-            if(env('APP_URL') == 'http://localhost') {
-                $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            } else {
-                $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public_s3');
-            }
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
             $data['profile_pic'] = '/storage/'.$path;
         }
 
@@ -125,11 +117,7 @@ class AdminController extends Controller
         $data = $request->except(['token']);
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
-            if(env('APP_URL') == 'http://localhost') {
-                $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            } else {
-                $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public_s3');
-            }
+            $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
             $data['profile_pic'] = '/storage/'.$path;
         }
         $user->update($data);
