@@ -33,7 +33,11 @@ class ProductController extends Controller
         $data = $request->except(['_token']);
         if ($request->hasFile('image')) {
             $fileName = $request->file('image')->hashName();
-            $path = $request->file('image')->storeAs('product/image', $fileName, 'public');
+            if(env('APP_URL') == 'http://localhost') {
+                $path = $request->file('image')->storeAs('product/image', $fileName, 'public');
+            } else {
+                $path = $request->file('image')->storeAs('product/image', $fileName, 'public_s3');
+            }
             $data['image'] = '/storage/'.$path;
         }
 
