@@ -19,7 +19,7 @@ trait QrCodeTrait
             data: $data,
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: QrCodeErrorCorrectionLevel::High,
-            size: 100,
+            size: 250,
             margin: 5,
             roundBlockSizeMode: RoundBlockSizeMode::Margin,
         );

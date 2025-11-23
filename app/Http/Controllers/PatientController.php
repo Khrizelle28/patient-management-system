@@ -29,7 +29,7 @@ class PatientController extends Controller
     {
         try {
             $data = $request->except(['_token']);
-            $data['username'] = strtolower(substr($data['first_name'], 0, 1) . $data['last_name'] . rand(1000, 9999));;
+            $data['username'] = strtolower(str_replace(' ', '', substr($data['first_name'], 0, 1) . $data['last_name']) . rand(1000, 9999));
             $firstName = ucfirst(strtolower($data['first_name']));
             $birthYear = str_replace('-', '', $data['birthday']);
             $rawPassword = '@'. str_replace(' ', '', $firstName) . '' . $birthYear;

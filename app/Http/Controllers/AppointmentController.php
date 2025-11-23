@@ -21,6 +21,7 @@ class AppointmentController extends Controller
                 $query->where('doctor_id', auth()->user()->id);
             })
             ->where('status', '!=', 'cancelled')
+            ->where('status', '!=', 'pending_payment')
             ->get();
 
         return view('appointment.index', compact('appointments'));

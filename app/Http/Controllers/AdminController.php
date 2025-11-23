@@ -28,6 +28,7 @@ class AdminController extends Controller
     {
         $role_datas = Role::select('id', 'name')
             ->where('name', '!=', 'Owner')
+            ->where('name', '!=', 'Administrator')
             ->get();
 
         return view('admin.register', compact('role_datas'));
@@ -87,6 +88,7 @@ class AdminController extends Controller
         $user = User::find($id);
         $role_datas = Role::select('id', 'name')
             ->where('name', '!=', 'Owner')
+            ->where('name', '!=', 'Administrator')
             ->get();
 
         return view('admin.edit', compact('user', 'role_datas'));
