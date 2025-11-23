@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -34,7 +35,7 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $fileName = $request->file('image')->hashName();
             $path = $request->file('image')->storeAs('product/image', $fileName, 'public');
-            $data['image'] = '/storage/'.$path;
+            $data['profile_pic'] = Storage::disk('public')->url($path);
         }
 
         Product::create($data);
@@ -79,7 +80,7 @@ class ProductController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
             $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            $data['image'] = '/storage/'.$path;
+            $data['profile_pic'] = Storage::disk('public')->url($path);
         }
         $product->update($data);
 

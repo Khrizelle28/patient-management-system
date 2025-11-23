@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -45,7 +46,7 @@ class AdminController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
             $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            $data['profile_pic'] = '/storage/'.$path;
+            $data['profile_pic'] = Storage::disk('public')->url($path);
         }
         $user = User::create($data);
         if ($request->input('schedule', false)) {
@@ -99,7 +100,7 @@ class AdminController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
             $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            $data['profile_pic'] = '/storage/'.$path;
+            $data['profile_pic'] = Storage::disk('public')->url($path);
         }
 
         $user->update($data);
@@ -118,7 +119,7 @@ class AdminController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileName = $request->file('profile_pic')->hashName();
             $path = $request->file('profile_pic')->storeAs('images', $fileName, 'public');
-            $data['profile_pic'] = '/storage/'.$path;
+            $data['profile_pic'] = Storage::disk('public')->url($path);
         }
         $user->update($data);
 
