@@ -20,6 +20,7 @@ class AppointmentController extends Controller
             ->when(auth()->user()->hasRole('Doctor'), function ($query) {
                 $query->where('doctor_id', auth()->user()->id);
             })
+            ->where('status', '!=', 'cancelled')
             ->get();
 
         return view('appointment.index', compact('appointments'));

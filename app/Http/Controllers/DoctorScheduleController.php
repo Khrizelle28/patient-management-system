@@ -79,6 +79,7 @@ class DoctorScheduleController extends Controller
                 'license_no' => $doctor->license_no ?? null,
                 'ptr_no' => $doctor->ptr_no ?? null,
                 'email' => $doctor->email ?? null,
+                'profile_pic' => $doctor->profile_pic ?? null,
                 'created_at' => $schedule->created_at,
                 'updated_at' => $schedule->updated_at,
             ];

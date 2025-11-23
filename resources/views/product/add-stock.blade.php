@@ -6,9 +6,8 @@
             <div class="card mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Add Stock</h3></div>
                 <div class="card-body">
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{ route('product.update-stock', ['id' => $product->id]) }}">
                         @csrf
-                        @method('POST')
                         <div class="row mb-3">
                             <div class="col-md-6">
                                <label><strong>Product Name</strong></label>

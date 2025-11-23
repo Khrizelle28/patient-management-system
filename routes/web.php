@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
     Route::put('product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::get('product/{id}/add-stock', [ProductController::class, 'addStock'])->name('product.add-stock');
+    Route::post('product/{id}/update-stock', [ProductController::class, 'updateStock'])->name('product.update-stock');
 
     Route::get('order', [OrderController::class, 'index'])->name('order.index');
     Route::get('order/{id}', [OrderController::class, 'show'])->name('order.show');

@@ -202,11 +202,13 @@
                                 <td>{{ number_format($product->quantity_sold) }}</td>
                                 <td>{{ number_format($product->remaining_stock) }}</td>
                                 <td>₱{{ number_format($product->price, 2) }}</td>
-                                <td>{{ $product->expiration_date ?? 'N/A' }}</td>
+                                <td>{{ Carbon\Carbon::parse($product->expiration_date)->format('F d, Y') ?? 'N/A' }}</td>
                                 <td>
-                                    <span class="badge bg-{{ $product->status_class }}">
-                                        {{ $product->status }}
-                                    </span>
+                                    @foreach($product->statuses as $status)
+                                        <span class="badge bg-{{ $status['class'] }} me-1">
+                                            {{ $status['label'] }}
+                                        </span>
+                                    @endforeach
                                 </td>
                             </tr>
                         @empty

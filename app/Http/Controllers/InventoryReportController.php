@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Carbon\Carbon;
 
 class InventoryReportController extends Controller
 {
@@ -12,31 +13,44 @@ class InventoryReportController extends Controller
             'id',
             'name',
             'stock',
-            'quantity_sold',
-            'price',
             'expiration_date'
-        )->get()->map(function ($product) {
-            $product->remaining_stock = $product->stock;
-            $product->overall_stock = $product->stock + $product->quantity_sold;
-            $product->total_income = $product->quantity_sold * $product->price;
+        )
+            ->where('stock', '<', 500)
+            ->get()
+            ->map(function ($product) {
+                $expirationDate = Carbon::parse($product->expiration_date);
+                $today = Carbon::today();
+                $oneMonthFromNow = $today->copy()->addMonth();
 
-            if ($product->remaining_stock < 500) {
-                $product->status = 'Low Stock';
-                $product->status_class = 'danger';
-            } elseif ($product->remaining_stock >= 500 && $product->remaining_stock < 1000) {
-                $product->status = 'Good Condition';
-                $product->status_class = 'warning';
-            } else {
-                $product->status = 'Sufficient';
-                $product->status_class = 'success';
-            }
+                $statuses = [];
+                $isNearExpiry = $expirationDate->between($today, $oneMonthFromNow);
 
-            return $product;
-        });
+                // Determine stock status
+                if ($product->stock < 500) {
+                    $statuses[] = [
+                        'label' => 'Low Stock',
+                        'class' => 'danger',
+                    ];
+                } else {
+                    $statuses[] = [
+                        'label' => 'Good Condition',
+                        'class' => 'success',
+                    ];
+                }
 
-        // Calculate total income from all products
-        $totalIncome = $products->sum('total_income');
+                // Add Near Expiry status if applicable
+                if ($isNearExpiry) {
+                    $statuses[] = [
+                        'label' => 'Near Expiry',
+                        'class' => 'warning',
+                    ];
+                }
 
-        return view('report.inventory', compact('products', 'totalIncome'));
+                $product->statuses = $statuses;
+
+                return $product;
+            });
+
+        return view('report.inventory', compact('products'));
     }
 }
