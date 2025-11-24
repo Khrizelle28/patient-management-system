@@ -53,7 +53,7 @@ class DashboardController extends Controller
             if ($isNearExpiry) {
                 $statuses[] = [
                     'label' => 'Near Expiry',
-                    'class' => 'warning',
+                    'class' => 'danger',
                 ];
             }
 
