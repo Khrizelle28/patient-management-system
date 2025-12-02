@@ -11,7 +11,8 @@
       "Bash(dir:*)",
       "Bash(findstr:*)",
       "Bash(if not exist \"resources\\views\\report\" mkdir \"resources\\views\\report\")",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(if not exist \"resources\\views\\admin\\reports\" mkdir \"resources\\views\\admin\\reports\")"
     ]
   },
   "enableAllProjectMcpServers": true,

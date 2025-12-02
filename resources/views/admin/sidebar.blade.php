@@ -43,6 +43,32 @@
                     </a>
                 @endhasanyrole
 
+                @hasanyrole('Administrator|Owner|Medical Staff')
+                    <div class="sb-sidenav-menu-heading">Reports</div>
+                @endhasanyrole
+
+
+                @hasanyrole('Administrator|Owner')
+                    <a class="nav-link {{ request()->routeIs('doctor-income.index') ? 'active' : '' }}" href="{{ route('doctor-income.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                        Doctors Income Report
+                    </a>
+                @endhasanyrole
+
+                @hasanyrole('Administrator|Owner')
+                    <a class="nav-link {{ request()->routeIs('medicine-income.index') ? 'active' : '' }}" href="{{ route('medicine-income.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-pills"></i></div>
+                        Medicine Income Report
+                    </a>
+                @endhasanyrole
+
+                @hasanyrole('Administrator|Owner|Medical Staff')
+                    <a class="nav-link {{ request()->routeIs('medicine-inventory.index') ? 'active' : '' }}" href="{{ route('medicine-inventory.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        Medicine Inventory Report
+                    </a>
+                @endhasanyrole
+
             </div>
         </div>
         <div class="sb-sidenav-footer">

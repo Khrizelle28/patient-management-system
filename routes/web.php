@@ -3,9 +3,12 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorIncomeController;
 use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MedicalCertificateController;
+use App\Http\Controllers\MedicineIncomeController;
+use App\Http\Controllers\MedicineInventoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProductController;
@@ -67,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('medical-certificate/generate/{id}', [MedicalCertificateController::class, 'generateMedicalCertificate'])->name('medical-certificate.generate');
 
     Route::get('inventory-report', [InventoryReportController::class, 'index'])->name('inventory-report.index');
+
+    Route::get('doctor-income', [DoctorIncomeController::class, 'index'])->name('doctor-income.index');
+    Route::get('medicine-income', [MedicineIncomeController::class, 'index'])->name('medicine-income.index');
+    Route::get('medicine-inventory', [MedicineInventoryController::class, 'index'])->name('medicine-inventory.index');
 
     Route::get('medical-certificate/{medicalCertificate}/download', [MedicalCertificateController::class, 'download'])->name('medical-certificate.download');
 

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Order;
+use App\Models\PatientUser;
 use App\Models\Product;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -12,141 +14,100 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::select(
-            'id',
-            'name',
-            'stock',
-            'quantity_sold',
-            'price',
-            'expiration_date'
-        )->get()->map(function ($product) {
-            $product->remaining_stock = $product->stock;
-            $product->overall_stock = $product->stock + $product->quantity_sold;
-            $product->total_income = $product->quantity_sold * $product->price;
+        // For Administrator and Owner, prepare chart data and statistics
+        $doctorIncomeChartData = [];
+        $medicineIncomeChartData = [];
+        $totalDoctorIncome = 0;
+        $totalMedicineIncome = 0;
+        $totalPatients = 0;
+        $totalDoctors = 0;
+        $totalEmployees = 0;
+        $lowStockMedicines = collect([]);
+        $nearExpiryMedicines = collect([]);
+        $latestOrders = collect([]);
 
-            $expirationDate = Carbon::parse($product->expiration_date);
-            $today = Carbon::today();
-            $oneMonthFromNow = $today->copy()->addMonth();
+        if (auth()->check() && auth()->user()->hasAnyRole(['Administrator', 'Owner', 'Medical Staff'])) {
+            // Get low stock medicines (less than 500)
+            $lowStockMedicines = Product::select('id', 'name', 'stock', 'price')
+                ->where('stock', '<', 500)
+                ->orderBy('stock', 'asc')
+                ->limit(10)
+                ->get();
 
-            $statuses = [];
-            $isNearExpiry = $expirationDate->between($today, $oneMonthFromNow);
+            // Get near expiry medicines (expiring within 1 month)
+            $oneMonthFromNow = Carbon::today()->addMonth();
+            $nearExpiryMedicines = Product::select('id', 'name', 'stock', 'expiration_date')
+                ->whereBetween('expiration_date', [Carbon::today(), $oneMonthFromNow])
+                ->orderBy('expiration_date', 'asc')
+                ->limit(10)
+                ->get();
 
-            // Determine stock status
-            if ($product->remaining_stock < 500) {
-                $statuses[] = [
-                    'label' => 'Low Stock',
-                    'class' => 'danger',
-                ];
-            } elseif ($product->remaining_stock >= 500 && $product->remaining_stock < 1000) {
-                $statuses[] = [
-                    'label' => 'Good Condition',
-                    'class' => 'warning',
-                ];
-            } else {
-                $statuses[] = [
-                    'label' => 'Sufficient',
-                    'class' => 'success',
-                ];
+            // Get latest medicine orders (excluding completed orders)
+            $latestOrders = Order::select('id', 'order_number', 'patient_user_id', 'total_amount', 'status', 'created_at')
+                ->with(['patientUser:id,first_name,middle_name,last_name'])
+                ->where('status', '!=', 'completed')
+                ->where('status', '!=', 'cancelled')
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
+        }
+
+        if (auth()->check() && auth()->user()->hasAnyRole(['Administrator', 'Owner'])) {
+            // Get statistics counts
+            $totalPatients = PatientUser::count();
+            $totalDoctors = User::role('Doctor')->count();
+            $totalEmployees = User::whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Administrator', 'Medical Staff', 'Owner']);
+            })->count();
+
+            // Get last 12 months of doctor income data
+            $doctorIncomeByMonth = Appointment::selectRaw('DATE_FORMAT(appointment_date, "%Y-%m") as month, SUM(total_amount) as total')
+                ->whereNotNull('total_amount')
+                ->where('status', '!=', 'cancelled')
+                ->where('appointment_date', '>=', Carbon::now()->subMonths(11)->startOfMonth())
+                ->groupBy('month')
+                ->orderBy('month', 'asc')
+                ->get()
+                ->keyBy('month');
+
+            // Get last 12 months of medicine income data
+            $medicineIncomeByMonth = Order::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total_amount) as total')
+                ->where('payment_status', 'completed')
+                ->where('status', '!=', 'cancelled')
+                ->where('created_at', '>=', Carbon::now()->subMonths(11)->startOfMonth())
+                ->groupBy('month')
+                ->orderBy('month', 'asc')
+                ->get()
+                ->keyBy('month');
+
+            // Prepare chart data for last 12 months
+            $months = [];
+            $doctorIncomes = [];
+            $medicineIncomes = [];
+
+            for ($i = 11; $i >= 0; $i--) {
+                $month = Carbon::now()->subMonths($i);
+                $monthKey = $month->format('Y-m');
+                $monthLabel = $month->format('M Y');
+
+                $months[] = $monthLabel;
+                $doctorIncomes[] = $doctorIncomeByMonth->get($monthKey)->total ?? 0;
+                $medicineIncomes[] = $medicineIncomeByMonth->get($monthKey)->total ?? 0;
             }
 
-            // Add Near Expiry status if applicable
-            if ($isNearExpiry) {
-                $statuses[] = [
-                    'label' => 'Near Expiry',
-                    'class' => 'danger',
-                ];
-            }
+            $doctorIncomeChartData = [
+                'labels' => $months,
+                'data' => $doctorIncomes,
+            ];
 
-            $product->statuses = $statuses;
+            $medicineIncomeChartData = [
+                'labels' => $months,
+                'data' => $medicineIncomes,
+            ];
 
-            return $product;
-        });
-
-        // Build query for doctor incomes with date filtering
-        $query = Appointment::select(
-            'id',
-            'doctor_id',
-            'patient_id',
-            'appointment_date',
-            'total_amount'
-        )
-            ->with([
-                'doctor:id,first_name,middle_name,last_name,suffix',
-                'patient:id,first_name,middle_name,last_name',
-            ])
-            ->whereNotNull('total_amount')
-            ->where('status', '!=', 'cancelled');
-
-        // Apply date filters if provided
-        if ($request->filled('from_date')) {
-            $query->whereDate('appointment_date', '>=', $request->from_date);
+            $totalDoctorIncome = array_sum($doctorIncomes);
+            $totalMedicineIncome = array_sum($medicineIncomes);
         }
-
-        if ($request->filled('to_date')) {
-            $query->whereDate('appointment_date', '<=', $request->to_date);
-        }
-
-        $doctorIncomes = $query
-            ->orderBy('appointment_date', 'desc')
-            ->get()
-            ->map(function ($appointment) {
-                return [
-                    'date' => $appointment->appointment_date,
-                    'doctor' => $appointment->doctor->full_name ?? 'N/A',
-                    'patient' => $appointment->patient->full_name ?? 'N/A',
-                    'professional_fee' => $appointment->total_amount,
-                ];
-            });
-
-        // Calculate total professional fee
-        $totalProfessionalFee = $doctorIncomes->sum('professional_fee');
-
-        // Get medicine income from orders with date filtering
-        $medicineQuery = Order::select(
-            'id',
-            'order_number',
-            'patient_user_id',
-            'total_amount',
-            'created_at'
-        )
-            ->with([
-                'patientUser:id,first_name,middle_name,last_name',
-                'items.product:id,name',
-            ])
-            ->where('payment_status', 'completed')
-            ->where('status', '!=', 'cancelled');
-
-        // Apply date filters for medicine income if provided
-        if ($request->filled('medicine_from_date')) {
-            $medicineQuery->whereDate('created_at', '>=', $request->medicine_from_date);
-        }
-
-        if ($request->filled('medicine_to_date')) {
-            $medicineQuery->whereDate('created_at', '<=', $request->medicine_to_date);
-        }
-
-        $medicineIncomes = $medicineQuery
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($order) {
-                $medicines = $order->items->map(function ($item) {
-                    return $item->product->name ?? 'N/A';
-                })->implode(', ');
-
-                $totalQuantity = $order->items->sum('quantity');
-
-                return [
-                    'order_number' => $order->order_number,
-                    'date' => $order->created_at,
-                    'patient' => $order->patientUser->full_name ?? 'N/A',
-                    'medicines' => $medicines,
-                    'total_quantity' => $totalQuantity,
-                    'total_amount' => $order->total_amount,
-                ];
-            });
-
-        // Calculate total medicine income
-        $totalMedicineIncome = $medicineIncomes->sum('total_amount');
 
         // Get doctor's own income (for doctors only)
         $doctorOwnIncome = collect([]);
@@ -178,6 +139,19 @@ class DashboardController extends Controller
             $totalDoctorOwnIncome = $doctorOwnIncome->sum('professional_fee');
         }
 
-        return view('admin.dashboard', compact('products', 'doctorIncomes', 'totalProfessionalFee', 'medicineIncomes', 'totalMedicineIncome', 'doctorOwnIncome', 'totalDoctorOwnIncome'));
+        return view('admin.dashboard', compact(
+            'doctorIncomeChartData',
+            'medicineIncomeChartData',
+            'totalDoctorIncome',
+            'totalMedicineIncome',
+            'totalPatients',
+            'totalDoctors',
+            'totalEmployees',
+            'lowStockMedicines',
+            'nearExpiryMedicines',
+            'latestOrders',
+            'doctorOwnIncome',
+            'totalDoctorOwnIncome'
+        ));
     }
 }
