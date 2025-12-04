@@ -29,12 +29,21 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-floating">
                                     <input class="form-control @error('stock') is-invalid @enderror" id="inputStock" name="stock" type="number" value="{{ old('stock') }}" placeholder="Enter your stock" />
-                                    <label for="inputStock">Stock</label>
+                                    <label for="inputStock">Stock Quantity</label>
                                     @error('stock')
                                         <small class="invalid-feedback">Please enter stock.</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input class="form-control @error('expiration_date') is-invalid @enderror" id="inputExpirationDate" name="expiration_date" type="date" value="{{ old('expiration_date') }}" placeholder="Enter expiration date" />
+                                    <label for="inputExpirationDate">Expiration Date</label>
+                                    @error('expiration_date')
+                                        <small class="invalid-feedback">Please enter expiration date.</small>
                                     @enderror
                                 </div>
                             </div>

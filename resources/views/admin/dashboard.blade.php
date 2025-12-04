@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('patient.index') }}">View Details</a>
+                        <a class="small text-white stretched-link" href="{{ route('patient.index') }}"></a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -36,8 +36,9 @@
                             </div>
                         </div>
                     </div>
+                    {{-- View Details --}}
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('admin.index') }}">View Details</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.index') }}"></a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -47,7 +48,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <div class="text-white-75 small">Total Employees</div>
+                                <div class="text-white-75 small">Medical Staffs</div>
                                 <div class="h2 mb-0">{{ number_format($totalEmployees ?? 0) }}</div>
                             </div>
                             <div>
@@ -56,7 +57,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{{ route('admin.index') }}">View Details</a>
+                        <a class="small text-white stretched-link" href="{{ route('admin.index') }}"></a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -67,7 +68,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="text-white-75 small">Medicines Alert</div>
-                                <div class="h2 mb-0">{{ number_format(($lowStockMedicines->count() ?? 0) + ($nearExpiryMedicines->count() ?? 0)) }}</div>
+                                <div class="h2 mb-0">{{ number_format($totalAlerts ?? 0) }}</div>
                             </div>
                             <div>
                                 <i class="fas fa-exclamation-triangle fa-3x opacity-50"></i>
@@ -75,7 +76,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#medicineAlerts">View Alerts</a>
+                        <a class="small text-white stretched-link" href="#medicineAlerts"></a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -230,15 +231,24 @@
                                     </thead>
                                     <tbody>
                                         @foreach($nearExpiryMedicines as $medicine)
-                                            <tr>
-                                                <td>{{ $medicine->name }}</td>
-                                                <td class="text-end">{{ number_format($medicine->stock) }}</td>
-                                                <td class="text-end">
-                                                    <span class="badge bg-warning">
-                                                        {{ \Carbon\Carbon::parse($medicine->expiration_date)->format('M d, Y') }}
-                                                    </span>
-                                                </td>
-                                            </tr>
+                                            @foreach($medicine->batches as $batchIndex => $batch)
+                                                <tr>
+                                                    <td>
+                                                        @if($batchIndex === 0)
+                                                            {{ $medicine->name }}
+                                                            @if($medicine->has_multiple_batches)
+                                                                <span class="badge bg-info ms-1" style="font-size: 0.65rem;">{{ $medicine->batches->count() }}</span>
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-end">{{ number_format($batch->stock) }}</td>
+                                                    <td class="text-end">
+                                                        <span class="badge bg-warning">
+                                                            {{ \Carbon\Carbon::parse($batch->expiration_date)->format('M d, Y') }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -551,15 +561,24 @@
                                     </thead>
                                     <tbody>
                                         @foreach($nearExpiryMedicines as $medicine)
-                                            <tr>
-                                                <td>{{ $medicine->name }}</td>
-                                                <td class="text-end">{{ number_format($medicine->stock) }}</td>
-                                                <td class="text-end">
-                                                    <span class="badge bg-warning">
-                                                        {{ \Carbon\Carbon::parse($medicine->expiration_date)->format('M d, Y') }}
-                                                    </span>
-                                                </td>
-                                            </tr>
+                                            @foreach($medicine->batches as $batchIndex => $batch)
+                                                <tr>
+                                                    <td>
+                                                        @if($batchIndex === 0)
+                                                            {{ $medicine->name }}
+                                                            @if($medicine->has_multiple_batches)
+                                                                <span class="badge bg-info ms-1" style="font-size: 0.65rem;">{{ $medicine->batches->count() }}</span>
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-end">{{ number_format($batch->stock) }}</td>
+                                                    <td class="text-end">
+                                                        <span class="badge bg-warning">
+                                                            {{ \Carbon\Carbon::parse($batch->expiration_date)->format('M d, Y') }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>

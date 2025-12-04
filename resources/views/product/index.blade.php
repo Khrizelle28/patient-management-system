@@ -19,7 +19,6 @@
                         <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
-                        <th>Expiration Date</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>
@@ -30,7 +29,6 @@
                         <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
-                        <th>Expiration Date</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>
@@ -43,7 +41,6 @@
                             <td>{{ $product->description }}</td>
                             <td>{{ $product->price ?? 'N/A' }}</td>
                             <td>{{ $product->stock }}</td>
-                            <td>{{ Carbon\Carbon::parse($product->expiration_date)->format('F d, Y') }}</td>
                             <td><img src="{{ $product->image }}" height="50" width="50" alt=""></td>
                             <td>
                                 <div class="d-flex gap-2">

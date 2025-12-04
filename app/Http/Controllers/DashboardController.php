@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Order;
 use App\Models\PatientUser;
 use App\Models\Product;
+use App\Models\ProductBatch;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // For Administrator and Owner, prepare chart data and statistics
+        // For Administrator and Owner chart data and statistics
         $doctorIncomeChartData = [];
         $medicineIncomeChartData = [];
         $totalDoctorIncome = 0;
@@ -25,22 +26,87 @@ class DashboardController extends Controller
         $lowStockMedicines = collect([]);
         $nearExpiryMedicines = collect([]);
         $latestOrders = collect([]);
+        $totalAlerts = 0;
 
         if (auth()->check() && auth()->user()->hasAnyRole(['Administrator', 'Owner', 'Medical Staff'])) {
-            // Get low stock medicines (less than 500)
-            $lowStockMedicines = Product::select('id', 'name', 'stock', 'price')
+            // Get low stock medicines (less than 500) - check both legacy products and batches
+            $lowStockFromBatches = ProductBatch::with('product:id,name,price')
+                ->selectRaw('product_id, SUM(quantity - quantity_sold) as remaining_stock')
+                ->groupBy('product_id')
+                ->having('remaining_stock', '<', 500)
+                ->orderBy('remaining_stock', 'asc')
+                ->limit(10)
+                ->get()
+                ->map(function ($batch) {
+                    return (object) [
+                        'id' => $batch->product->id,
+                        'name' => $batch->product->name,
+                        'stock' => $batch->remaining_stock,
+                        'price' => $batch->product->price,
+                    ];
+                });
+
+            $lowStockFromLegacy = Product::select('id', 'name', 'stock', 'price')
                 ->where('stock', '<', 500)
+                ->whereDoesntHave('batches')
                 ->orderBy('stock', 'asc')
                 ->limit(10)
                 ->get();
 
-            // Get near expiry medicines (expiring within 1 month)
+            $lowStockMedicines = $lowStockFromBatches->concat($lowStockFromLegacy)->take(10);
+
+            // Get near expiry medicines (expiring within 1 month) - check both legacy and batches
             $oneMonthFromNow = Carbon::today()->addMonth();
-            $nearExpiryMedicines = Product::select('id', 'name', 'stock', 'expiration_date')
+            $nearExpiryFromBatches = ProductBatch::with('product:id,name')
                 ->whereBetween('expiration_date', [Carbon::today(), $oneMonthFromNow])
+                ->whereRaw('quantity - quantity_sold > 0')
                 ->orderBy('expiration_date', 'asc')
                 ->limit(10)
-                ->get();
+                ->get()
+                ->groupBy('product_id')
+                ->map(function ($batches) {
+                    $product = $batches->first()->product;
+
+                    return (object) [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'batches' => $batches->map(function ($batch) {
+                            return (object) [
+                                'stock' => $batch->remaining_quantity,
+                                'expiration_date' => $batch->expiration_date,
+                            ];
+                        }),
+                        'has_multiple_batches' => $batches->count() > 1,
+                    ];
+                })
+                ->values();
+
+            $nearExpiryFromLegacy = Product::select('id', 'name', 'stock', 'expiration_date')
+                ->whereBetween('expiration_date', [Carbon::today(), $oneMonthFromNow])
+                ->whereDoesntHave('batches')
+                ->orderBy('expiration_date', 'asc')
+                ->limit(10)
+                ->get()
+                ->map(function ($product) {
+                    return (object) [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'batches' => collect([
+                            (object) [
+                                'stock' => $product->stock,
+                                'expiration_date' => $product->expiration_date,
+                            ],
+                        ]),
+                        'has_multiple_batches' => false,
+                    ];
+                });
+
+            $nearExpiryMedicines = $nearExpiryFromBatches->concat($nearExpiryFromLegacy)->take(10);
+
+            // Calculate total alerts (unique products with issues)
+            $lowStockProductIds = $lowStockMedicines->pluck('id')->unique();
+            $nearExpiryProductIds = $nearExpiryMedicines->pluck('id')->unique();
+            $totalAlerts = $lowStockProductIds->merge($nearExpiryProductIds)->unique()->count();
 
             // Get latest medicine orders (excluding completed orders)
             $latestOrders = Order::select('id', 'order_number', 'patient_user_id', 'total_amount', 'status', 'created_at')
@@ -160,7 +226,8 @@ class DashboardController extends Controller
             'latestOrders',
             'doctorOwnIncome',
             'totalDoctorOwnIncome',
-            'doctorOwnIncomeChartData'
+            'doctorOwnIncomeChartData',
+            'totalAlerts'
         ));
     }
 }

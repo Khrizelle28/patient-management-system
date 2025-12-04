@@ -158,10 +158,35 @@ class PaymentController extends Controller
                         // For orders, update status to ready for pickup and decrement stock
                         $item->update(['status' => 'ready to pickup']);
 
-                        // Decrement stock and increment quantity sold
+                        // Decrement stock and increment quantity sold using FIFO for batches
                         foreach ($item->items as $orderItem) {
-                            $orderItem->product->decrement('stock', $orderItem->quantity);
-                            $orderItem->product->increment('quantity_sold', $orderItem->quantity);
+                            $product = $orderItem->product;
+                            $remainingQuantity = $orderItem->quantity;
+
+                            // Check if product has batches
+                            $batches = $product->batches()
+                                ->whereRaw('quantity - quantity_sold > 0')
+                                ->orderBy('expiration_date', 'asc')
+                                ->get();
+
+                            if ($batches->isNotEmpty()) {
+                                // Deduct from batches using FIFO (oldest expiration first)
+                                foreach ($batches as $batch) {
+                                    if ($remainingQuantity <= 0) {
+                                        break;
+                                    }
+
+                                    $availableInBatch = $batch->quantity - $batch->quantity_sold;
+                                    $deductAmount = min($remainingQuantity, $availableInBatch);
+
+                                    $batch->increment('quantity_sold', $deductAmount);
+                                    $remainingQuantity -= $deductAmount;
+                                }
+                            }
+
+                            // Update product totals
+                            $product->decrement('stock', $orderItem->quantity);
+                            $product->increment('quantity_sold', $orderItem->quantity);
                         }
 
                         // Clear the cart

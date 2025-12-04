@@ -53,10 +53,20 @@ class ProductController extends Controller
     public function updateStock(Request $request, $id)
     {
         $request->validate([
-            'stock' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:1',
+            'expiration_date' => 'required|date|after:today',
         ]);
 
         $product = Product::findOrFail($id);
+
+        // Create a new batch
+        $product->batches()->create([
+            'quantity' => $request->stock,
+            'quantity_sold' => 0,
+            'expiration_date' => $request->expiration_date,
+        ]);
+
+        // Update product's total stock
         $product->stock = $product->stock + $request->stock;
         $product->save();
 
