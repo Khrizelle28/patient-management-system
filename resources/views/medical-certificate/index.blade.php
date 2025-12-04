@@ -40,15 +40,31 @@
                             <td>{{ $medical_certificate->upload_pdf == true ? 'Uploaded' : 'Generated' }}</td>
                             <td>{{ Carbon\Carbon::parse($medical_certificate->created_at)->format('F j, Y') }}</td>
                             <td>
-                                <div class="kebab-menu">
-                                    <div class="kebab-icon">⋮</div>
-                                        <div class="menu-options">
-                                            <a href="{{ route('medical-certificate.download', $medical_certificate->id) }}">Download</a>
-                                            @if($medical_certificate->upload_pdf != '1')
-                                                <a href="{{ route('medical-certificate.showUploadForm', $medical_certificate->id) }}">Upload</a>
-                                            @endif
-                                            <a href="{{ route('medical-certificate.preview', $medical_certificate->id) }}" target="_blank">Preview</a>
-                                    </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('medical-certificate.preview', $medical_certificate->id) }}"
+                                       class="btn btn-sm btn-info"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Preview Medical Certificate"
+                                       target="_blank">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('medical-certificate.download', $medical_certificate->id) }}"
+                                       class="btn btn-sm btn-primary"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Download Medical Certificate">
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+                                    @if($medical_certificate->upload_pdf != '1')
+                                        <a href="{{ route('medical-certificate.showUploadForm', $medical_certificate->id) }}"
+                                           class="btn btn-sm btn-success"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top"
+                                           title="Upload Medical Certificate">
+                                            <i class="fa-solid fa-upload"></i>
+                                        </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

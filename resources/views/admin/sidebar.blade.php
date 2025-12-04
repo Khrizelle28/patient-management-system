@@ -30,6 +30,7 @@
                         Medical Certificate Records
                     </a>
                 @endhasanyrole
+
                 @hasanyrole('Administrator|Medical Staff|Owner')
                     <a class="nav-link {{ request()->routeIs('product.index') ? 'active' : '' }}" href="{{ route('product.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
@@ -47,6 +48,16 @@
                     <div class="sb-sidenav-menu-heading">Reports</div>
                 @endhasanyrole
 
+                @hasanyrole('Doctor')
+                    <div class="sb-sidenav-menu-heading">Report</div>
+                @endhasanyrole
+
+                @hasanyrole('Doctor')
+                    <a class="nav-link {{ request()->routeIs('doctor-income.index') ? 'active' : '' }}" href="{{ route('doctor-income.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                        My Income Report
+                    </a>
+                @endhasanyrole
 
                 @hasanyrole('Administrator|Owner')
                     <a class="nav-link {{ request()->routeIs('doctor-income.index') ? 'active' : '' }}" href="{{ route('doctor-income.index') }}">

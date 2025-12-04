@@ -4,7 +4,11 @@
     <div class="card mt-4">
         <div class="card-header">
             <i class="fa-solid fa-money-bill-trend-up"></i>
-            Doctors Income Report
+            @hasanyrole('Doctor')
+                My Income Report
+            @else
+                Doctors Income Report
+            @endhasanyrole
         </div>
         <div class="card-body">
             <form action="{{ route('doctor-income.index') }}" method="GET" class="mb-4">

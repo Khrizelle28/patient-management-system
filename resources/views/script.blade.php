@@ -9,6 +9,17 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 
 <script>
+// Global Bootstrap Tooltip Initialization
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all tooltips on page load
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+
+<script>
 function togglePassword() {
     const passwordField = document.getElementById("form2Example22");
     const toggleIcon = document.getElementById("toggleEye");

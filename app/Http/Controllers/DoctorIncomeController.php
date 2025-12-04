@@ -24,6 +24,11 @@ class DoctorIncomeController extends Controller
             ->whereNotNull('total_amount')
             ->where('status', '!=', 'cancelled');
 
+        // If logged-in user is a doctor, filter to show only their income
+        if (auth()->user()->hasRole('Doctor')) {
+            $query->where('doctor_id', auth()->id());
+        }
+
         // Apply date filters if provided
         if ($request->filled('from_date')) {
             $query->whereDate('appointment_date', '>=', $request->from_date);

@@ -40,14 +40,25 @@
                         <td>{{ $appointment->status }}</td>
                         <td>{{ Carbon\Carbon::parse($appointment->created_at)->format('F d, Y H:i A') }}</td>
                         <td>
-                            <div class="kebab-menu">
-                                <div class="kebab-icon">⋮</div>
-                                <div class="menu-options">
-                                    <a href="#" onclick="event.preventDefault();">View</a>
-                                    @hasanyrole('Doctor')
-                                        <a href="javascript:void(0);" onclick="openMedCertModal({{ $appointment->id }})">Generate MedCert</a>
-                                    @endhasanyrole
-                                </div>
+                            <div class="d-flex gap-2">
+                                <a href="#"
+                                   class="btn btn-sm btn-info"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="View Appointment"
+                                   onclick="event.preventDefault();">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                @hasanyrole('Doctor')
+                                    <a href="javascript:void(0);"
+                                       class="btn btn-sm btn-success"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Generate Medical Certificate"
+                                       onclick="openMedCertModal({{ $appointment->id }})">
+                                        <i class="fa-solid fa-file-medical"></i>
+                                    </a>
+                                @endhasanyrole
                             </div>
                         </td>
                     </tr>

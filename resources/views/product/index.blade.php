@@ -7,7 +7,11 @@
             Product Records
         </div>
         <div class="card-body">
-            <a class="btn btn-primary" href="{{ route('product.create') }}">New Product</a>
+            <a class="btn btn-primary"
+               href="{{ route('product.create') }}"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Create New Product">New Product</a>
             <table id="datatablesSimple" class="tableProduct">
                 <thead>
                     <tr>
@@ -42,13 +46,21 @@
                             <td>{{ Carbon\Carbon::parse($product->expiration_date)->format('F d, Y') }}</td>
                             <td><img src="{{ $product->image }}" height="50" width="50" alt=""></td>
                             <td>
-                                <div class="kebab-menu">
-                                    <div class="kebab-icon">⋮</div>
-                                        <div class="menu-options">
-                                            {{-- <a href="{{ route('product.show', ['id' => $product->id]) }}">View</a> --}}
-                                            <a href="{{ route('product.add-stock', ['id' => $product->id]) }}">Add Stock</a>
-                                            <a href="{{ route('product.edit', ['id' => $product->id]) }}">Edit</a>
-                                    </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('product.add-stock', ['id' => $product->id]) }}"
+                                       class="btn btn-sm btn-success"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Add Stock">
+                                        <i class="fa-solid fa-box-open"></i>
+                                    </a>
+                                    <a href="{{ route('product.edit', ['id' => $product->id]) }}"
+                                       class="btn btn-sm btn-primary"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Edit Product">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

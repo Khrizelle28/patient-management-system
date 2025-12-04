@@ -7,7 +7,11 @@
         Employee Accounts
     </div>
     <div class="card-body">
-        <a class="btn btn-primary" href="{{ route('admin.create') }}">New Employee</a>
+        <a class="btn btn-primary"
+           href="{{ route('admin.create') }}"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Create New Employee Account">New Employee</a>
         <table id="datatablesSimple" class="tableAdmin">
             <thead>
                 <tr>
@@ -41,25 +45,37 @@
                         <td>{{ implode(', ', $admin->role) }}</td>
                         <td>{{ $admin->status }}</td>
                         <td>
-                            {{-- <a class="btn btn-primary" href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>  --}}
-                            {{-- <a class="btn btn-primary" href="{{ route('admin.create') }}">Deactivate</a> --}}
-                            {{-- <a class="btn btn-primary" href="{{ route('admin.create') }}">Delete</a> --}}
-                            <div class="kebab-menu">
-                                <div class="kebab-icon">⋮</div>
-                                    <div class="menu-options">
-                                        <a href="{{ route('admin.edit', ['id' => $admin->id]) }}">Edit</a>
-                                        <a href="#">Deactivate</a>
-                                        @if(in_array('Doctor', $admin->role))
-                                            <a href="{{ route('admin.schedule.edit', ['id' => $admin->id]) }}">Update Schedule</a>
-                                        @endif
-                                </div>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('admin.edit', ['id' => $admin->id]) }}"
+                                   class="btn btn-sm btn-primary"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Edit Employee">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                @if(in_array('Doctor', $admin->role))
+                                    <a href="{{ route('admin.schedule.edit', ['id' => $admin->id]) }}"
+                                       class="btn btn-sm btn-info"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Update Schedule">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </a>
+                                @endif
+                                <a href="#"
+                                   class="btn btn-sm btn-warning"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Deactivate Employee">
+                                    <i class="fa-solid fa-user-slash"></i>
+                                </a>
                             </div>
-
-
                         </td>
                     </tr>
                 @empty
                 @endforelse
             </tbody>
-        </table?
+        </table>
+    </div>
+</div>
 @endsection

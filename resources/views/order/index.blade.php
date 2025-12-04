@@ -62,17 +62,24 @@
                             </td>
                             <td>{{ Carbon\Carbon::parse($order->created_at)->format('F d, Y h:i A') }}</td>
                             <td>
-                                <div class="kebab-menu">
-                                    <div class="kebab-icon">⋮</div>
-                                    <div class="menu-options">
-                                        <a href="{{ route('order.show', ['id' => $order->id]) }}">View Details</a>
-                                        @if($order->status === 'ready to pickup')
-                                            <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'completed']) }}"
-                                               onclick="return confirm('Mark this order as completed?')">
-                                                Mark as Completed
-                                            </a>
-                                        @endif
-                                    </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('order.show', ['id' => $order->id]) }}"
+                                       class="btn btn-sm btn-info"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="View Order Details">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    @if($order->status === 'ready to pickup')
+                                        <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'completed']) }}"
+                                           class="btn btn-sm btn-success"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top"
+                                           title="Mark as Completed"
+                                           onclick="return confirm('Mark this order as completed?')">
+                                            <i class="fa-solid fa-check-circle"></i>
+                                        </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

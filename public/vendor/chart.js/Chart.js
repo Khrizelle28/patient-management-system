@@ -257,6 +257,7 @@ convert.rgb.hsl = function (rgb) {
 
 	l = (min + max) / 2;
 
+
 	if (max === min) {
 		s = 0;
 	} else if (l <= 0.5) {
@@ -1528,7 +1529,7 @@ function getAlpha(string) {
 // generators
 function hexString(rgba, a) {
    var a = (a !== undefined && rgba.length === 3) ? a : rgba[3];
-   return "#" + hexDouble(rgba[0]) 
+   return "#" + hexDouble(rgba[0])
               + hexDouble(rgba[1])
               + hexDouble(rgba[2])
               + (

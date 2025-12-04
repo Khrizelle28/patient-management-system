@@ -112,31 +112,39 @@ class DashboardController extends Controller
         // Get doctor's own income (for doctors only)
         $doctorOwnIncome = collect([]);
         $totalDoctorOwnIncome = 0;
+        $doctorOwnIncomeChartData = [];
 
         if (auth()->check() && auth()->user()->hasRole('Doctor')) {
-            $doctorOwnIncome = Appointment::select(
-                'id',
-                'patient_id',
-                'appointment_date',
-                'total_amount'
-            )
-                ->with([
-                    'patient:id,first_name,middle_name,last_name',
-                ])
+            // Get last 12 months of doctor's own income data
+            $doctorOwnIncomeByMonth = Appointment::selectRaw('DATE_FORMAT(appointment_date, "%Y-%m") as month, SUM(total_amount) as total')
                 ->where('doctor_id', auth()->id())
                 ->whereNotNull('total_amount')
                 ->where('status', '!=', 'cancelled')
-                ->orderBy('appointment_date', 'desc')
+                ->where('appointment_date', '>=', Carbon::now()->subMonths(11)->startOfMonth())
+                ->groupBy('month')
+                ->orderBy('month', 'asc')
                 ->get()
-                ->map(function ($appointment) {
-                    return [
-                        'date' => $appointment->appointment_date,
-                        'patient' => $appointment->patient->full_name ?? 'N/A',
-                        'professional_fee' => $appointment->total_amount,
-                    ];
-                });
+                ->keyBy('month');
 
-            $totalDoctorOwnIncome = $doctorOwnIncome->sum('professional_fee');
+            // Prepare chart data for last 12 months
+            $months = [];
+            $incomes = [];
+
+            for ($i = 11; $i >= 0; $i--) {
+                $month = Carbon::now()->subMonths($i);
+                $monthKey = $month->format('Y-m');
+                $monthLabel = $month->format('M Y');
+
+                $months[] = $monthLabel;
+                $incomes[] = $doctorOwnIncomeByMonth->get($monthKey)->total ?? 0;
+            }
+
+            $doctorOwnIncomeChartData = [
+                'labels' => $months,
+                'data' => $incomes,
+            ];
+
+            $totalDoctorOwnIncome = array_sum($incomes);
         }
 
         return view('admin.dashboard', compact(
@@ -151,7 +159,8 @@ class DashboardController extends Controller
             'nearExpiryMedicines',
             'latestOrders',
             'doctorOwnIncome',
-            'totalDoctorOwnIncome'
+            'totalDoctorOwnIncome',
+            'doctorOwnIncomeChartData'
         ));
     }
 }

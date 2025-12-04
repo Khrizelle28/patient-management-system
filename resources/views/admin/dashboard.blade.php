@@ -193,7 +193,11 @@
                                 </table>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{{ route('product.index') }}" class="btn btn-sm btn-danger">
+                                <a href="{{ route('product.index') }}"
+                                   class="btn btn-sm btn-danger"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Go to Product Records to Restock">
                                     <i class="fas fa-plus"></i> Restock Medicines
                                 </a>
                             </div>
@@ -240,7 +244,11 @@
                                 </table>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{{ route('medicine-inventory.index') }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('medicine-inventory.index') }}"
+                                   class="btn btn-sm btn-warning"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="View Medicine Inventory Report">
                                     <i class="fas fa-list"></i> View Inventory
                                 </a>
                             </div>
@@ -399,44 +407,77 @@
     @endhasanyrole
 
     @hasanyrole('Doctor')
-        <div class="card mt-4">
-            <div class="card-header">
-                <i class="fa-solid fa-money-bill-trend-up"></i>
-                My Income Report
-            </div>
-            <div class="card-body">
-                <table id="datatablesDoctorOwn" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Date of Consultation</th>
-                            <th>Patient Name</th>
-                            <th>Professional Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($doctorOwnIncome ?? [] as $index => $income)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ \Carbon\Carbon::parse($income['date'])->format('F d, Y') }}</td>
-                                <td>{{ $income['patient'] }}</td>
-                                <td>₱{{ number_format($income['professional_fee'], 2) }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center">No income records found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                <div class="mt-3 p-3 bg-light border">
-                    <div class="d-flex justify-content-between">
-                        <strong>Total Professional Fee:</strong>
-                        <strong>₱{{ number_format($totalDoctorOwnIncome ?? 0, 2) }}</strong>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                            My Income Trend
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted">Last 12 Months</small>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="doctorOwnIncomeChart" style="max-height: 300px;"></canvas>
+                        <div class="mt-3 p-3 bg-light border rounded">
+                            <div class="d-flex justify-content-between">
+                                <strong>Total (Last 12 Months):</strong>
+                                <strong class="text-success">₱{{ number_format($totalDoctorOwnIncome ?? 0, 2) }}</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Doctor Own Income Chart
+                const doctorOwnCtx = document.getElementById('doctorOwnIncomeChart').getContext('2d');
+                new Chart(doctorOwnCtx, {
+                    type: 'line',
+                    data: {
+                        labels: @json($doctorOwnIncomeChartData['labels'] ?? []),
+                        datasets: [{
+                            label: 'My Income',
+                            data: @json($doctorOwnIncomeChartData['data'] ?? []),
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return '₱' + context.parsed.y.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '₱' + value.toLocaleString('en-PH');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
     @endhasanyrole
 
     @hasanyrole('Medical Staff')
@@ -473,7 +514,11 @@
                                 </table>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{{ route('product.index') }}" class="btn btn-sm btn-danger">
+                                <a href="{{ route('product.index') }}"
+                                   class="btn btn-sm btn-danger"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Go to Product Records to Restock">
                                     <i class="fas fa-plus"></i> Restock Medicines
                                 </a>
                             </div>
@@ -520,7 +565,11 @@
                                 </table>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{{ route('medicine-inventory.index') }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('medicine-inventory.index') }}"
+                                   class="btn btn-sm btn-warning"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="View Medicine Inventory Report">
                                     <i class="fas fa-list"></i> View Inventory
                                 </a>
                             </div>
@@ -578,7 +627,11 @@
                                                 </td>
                                                 <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y h:i A') }}</td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('order.show', $order->id) }}" class="btn btn-sm btn-primary">
+                                                    <a href="{{ route('order.show', $order->id) }}"
+                                                       class="btn btn-sm btn-primary"
+                                                       data-bs-toggle="tooltip"
+                                                       data-bs-placement="top"
+                                                       title="View Order Details">
                                                         <i class="fas fa-eye"></i> View
                                                     </a>
                                                 </td>
@@ -588,7 +641,11 @@
                                 </table>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{{ route('order.index') }}" class="btn btn-sm btn-info">
+                                <a href="{{ route('order.index') }}"
+                                   class="btn btn-sm btn-info"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="View All Order Records">
                                     <i class="fas fa-list"></i> View All Orders
                                 </a>
                             </div>

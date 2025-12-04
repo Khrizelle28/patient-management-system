@@ -7,7 +7,11 @@
             Order Details - {{ $order->order_number }}
         </div>
         <div class="card-body">
-            <a href="{{ route('order.index') }}" class="btn btn-secondary mb-3">
+            <a href="{{ route('order.index') }}"
+               class="btn btn-secondary mb-3"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Back to Orders">
                 <i class="fa-solid fa-arrow-left"></i> Back to Orders
             </a>
 
@@ -89,6 +93,9 @@
                 @if($order->status === 'ready to pickup')
                     <a href="{{ route('order.update-status', ['id' => $order->id, 'status' => 'completed']) }}"
                        class="btn btn-success"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       title="Mark Order as Completed"
                        onclick="return confirm('Mark this order as completed?')">
                         <i class="fa-solid fa-check"></i> Mark as Completed
                     </a>
