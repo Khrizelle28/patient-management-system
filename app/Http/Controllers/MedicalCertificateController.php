@@ -78,6 +78,9 @@ class MedicalCertificateController extends Controller
      */
     public function preview(MedicalCertificate $medicalCertificate): \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\Response
     {
+        if($medicalCertificate->upload_pdf == '0' && $medicalCertificate->doctor_id != auth()->user()?->id){
+            abort(403, 'Unavailable');
+        }
         // Check if PDF was uploaded - prioritize uploaded file
         if ($medicalCertificate->upload_pdf == '1' && ! empty($medicalCertificate->generate_pdf)) {
             $filePath = storage_path('app/public/medical-certificates/'.$medicalCertificate->generate_pdf);
