@@ -8,10 +8,7 @@
         </div>
         <div class="card-body">
             <a class="btn btn-primary"
-               href="{{ route('product.create') }}"
-               data-bs-toggle="tooltip"
-               data-bs-placement="top"
-               title="Create New Product">New Product</a>
+               href="{{ route('product.create') }}">New Product</a>
             <table id="datatablesSimple" class="tableProduct">
                 <thead>
                     <tr>

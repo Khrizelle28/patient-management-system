@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
@@ -49,5 +51,16 @@ class OrderController extends Controller
         $order->update(['status' => $status]);
 
         return redirect()->back()->with('success', 'Order status updated successfully.');
+    }
+
+    /**
+     * Preview order invoice template as PDF.
+     */
+    public function previewInvoice(): Response
+    {
+        $pdf = Pdf::loadView('pdf.order-invoice');
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('order-invoice.pdf');
     }
 }

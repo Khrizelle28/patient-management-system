@@ -46,6 +46,9 @@ class MedicationAlertController extends Controller
             'medication_name' => 'required|string|max:255',
             'remarks' => 'nullable|string',
             'is_enabled' => 'boolean',
+            'selected_days' => 'nullable|string',
+            'duration_days' => 'nullable|integer|min:1',
+            'start_date' => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
@@ -64,6 +67,9 @@ class MedicationAlertController extends Controller
                 'medication_name' => $request->medication_name,
                 'remarks' => $request->remarks,
                 'is_enabled' => $request->is_enabled ?? true,
+                'selected_days' => $request->selected_days ?? '1,2,3,4,5,6,7',
+                'duration_days' => $request->duration_days ?? 7,
+                'start_date' => $request->start_date ?? now()->format('Y-m-d'),
             ]);
 
             return response()->json([
@@ -114,6 +120,9 @@ class MedicationAlertController extends Controller
             'medication_name' => 'required|string|max:255',
             'remarks' => 'nullable|string',
             'is_enabled' => 'boolean',
+            'selected_days' => 'nullable|string',
+            'duration_days' => 'nullable|integer|min:1',
+            'start_date' => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
@@ -134,6 +143,9 @@ class MedicationAlertController extends Controller
                 'medication_name' => $request->medication_name,
                 'remarks' => $request->remarks,
                 'is_enabled' => $request->is_enabled ?? $alert->is_enabled,
+                'selected_days' => $request->selected_days ?? $alert->selected_days,
+                'duration_days' => $request->duration_days ?? $alert->duration_days,
+                'start_date' => $request->start_date ?? $alert->start_date,
             ]);
 
             return response()->json([
@@ -156,14 +168,41 @@ class MedicationAlertController extends Controller
     public function destroy($id)
     {
         try {
+            \Log::info('Attempting to delete medication alert', ['id' => $id]);
+
             $alert = MedicationAlert::findOrFail($id);
+
+            \Log::info('Found medication alert', [
+                'id' => $alert->id,
+                'medication_name' => $alert->medication_name,
+            ]);
+
             $alert->delete();
+
+            \Log::info('Successfully deleted medication alert', ['id' => $id]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Medication alert deleted successfully',
             ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('Medication alert not found', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Medication alert not found',
+                'error' => $e->getMessage(),
+            ], 404);
         } catch (\Exception $e) {
+            \Log::error('Failed to delete medication alert', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete medication alert',

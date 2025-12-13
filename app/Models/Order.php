@@ -15,12 +15,14 @@ class Order extends Model
         'status',
         'pickup_name',
         'contact_number',
+        'email',
         'notes',
         'paypal_payment_id',
         'paypal_payer_id',
         'paypal_transaction_id',
         'payment_status',
         'payment_completed_at',
+        'last_pickup_notification_sent_at',
     ];
 
     protected $casts = [

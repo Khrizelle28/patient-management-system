@@ -195,10 +195,7 @@
                             </div>
                             <div class="text-center mt-3">
                                 <a href="{{ route('product.index') }}"
-                                   class="btn btn-sm btn-danger"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="Go to Product Records to Restock">
+                                   class="btn btn-sm btn-danger">
                                     <i class="fas fa-plus"></i> Restock Medicines
                                 </a>
                             </div>
@@ -255,10 +252,7 @@
                             </div>
                             <div class="text-center mt-3">
                                 <a href="{{ route('medicine-inventory.index') }}"
-                                   class="btn btn-sm btn-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="View Medicine Inventory Report">
+                                   class="btn btn-sm btn-warning">
                                     <i class="fas fa-list"></i> View Inventory
                                 </a>
                             </div>
@@ -525,10 +519,7 @@
                             </div>
                             <div class="text-center mt-3">
                                 <a href="{{ route('product.index') }}"
-                                   class="btn btn-sm btn-danger"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="Go to Product Records to Restock">
+                                   class="btn btn-sm btn-danger">
                                     <i class="fas fa-plus"></i> Restock Medicines
                                 </a>
                             </div>
@@ -585,10 +576,7 @@
                             </div>
                             <div class="text-center mt-3">
                                 <a href="{{ route('medicine-inventory.index') }}"
-                                   class="btn btn-sm btn-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="View Medicine Inventory Report">
+                                   class="btn btn-sm btn-warning">
                                     <i class="fas fa-list"></i> View Inventory
                                 </a>
                             </div>

@@ -46,6 +46,7 @@ class AppointmentController extends Controller
                 'doctor_id' => 'required',
                 'appointment_date' => 'required',
                 'appointment_time' => 'required',
+                'email' => 'nullable|email',
                 'notes' => 'nullable',
             ]);
 
@@ -88,6 +89,7 @@ class AppointmentController extends Controller
                 'doctor_id' => $request->doctor_id,
                 'appointment_date' => $request->appointment_date,
                 'appointment_time' => $request->appointment_time,
+                'email' => $request->email,
                 'status' => 'pending_payment',
                 'notes' => $request->notes ?? '',
                 'service_type' => $request->service_type,

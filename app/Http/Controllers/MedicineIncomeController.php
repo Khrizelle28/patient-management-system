@@ -9,7 +9,7 @@ class MedicineIncomeController extends Controller
 {
     public function index(Request $request)
     {
-        // Get medicine income from orders with date filtering
+        // medicine income from orders with date filtering
         $medicineQuery = Order::select(
             'id',
             'order_number',
@@ -19,9 +19,11 @@ class MedicineIncomeController extends Controller
         )
             ->with([
                 'patientUser:id,first_name,middle_name,last_name',
+                'items:id,order_id,product_id,quantity,subtotal',
                 'items.product:id,name',
             ])
-            ->where('payment_status', 'completed')
+            ->whereNotNull('payment_status')
+            ->where('payment_status', '!=', '')
             ->where('status', '!=', 'cancelled');
 
         // Apply date filters for medicine income if provided
@@ -37,18 +39,17 @@ class MedicineIncomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($order) {
-                $medicines = $order->items->map(function ($item) {
-                    return $item->product->name ?? 'N/A';
-                })->implode(', ');
-
-                $totalQuantity = $order->items->sum('quantity');
-
                 return [
                     'order_number' => $order->order_number,
                     'date' => $order->created_at,
                     'patient' => $order->patientUser->full_name ?? 'N/A',
-                    'medicines' => $medicines,
-                    'total_quantity' => $totalQuantity,
+                    'items' => $order->items->map(function ($item) {
+                        return [
+                            'medicine' => $item->product->name ?? 'N/A',
+                            'quantity' => $item->quantity,
+                            'subtotal' => $item->subtotal,
+                        ];
+                    }),
                     'total_amount' => $order->total_amount,
                 ];
             });

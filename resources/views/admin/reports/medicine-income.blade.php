@@ -35,9 +35,10 @@
                         <th>Order ID</th>
                         <th>Date</th>
                         <th>Patient</th>
-                        <th>Medicine/Meds Ordered</th>
+                        <th>Medicines Ordered</th>
                         <th>Qty</th>
-                        <th>Total Income</th>
+                        <th>Subtotal</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,13 +47,26 @@
                             <td>{{ $income['order_number'] }}</td>
                             <td>{{ \Carbon\Carbon::parse($income['date'])->format('F d, Y') }}</td>
                             <td>{{ $income['patient'] }}</td>
-                            <td>{{ $income['medicines'] }}</td>
-                            <td>{{ $income['total_quantity'] }}</td>
-                            <td>₱{{ number_format($income['total_amount'], 2) }}</td>
+                            <td>
+                                @foreach($income['items'] as $item)
+                                    {{ $item['medicine'] }}<br>
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach($income['items'] as $item)
+                                    {{ $item['quantity'] }}<br>
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach($income['items'] as $item)
+                                    {{ number_format($item['subtotal'], 0) }}<br>
+                                @endforeach
+                            </td>
+                            <td>{{ number_format($income['total_amount'], 0) }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center">No medicine sales found</td>
+                            <td colspan="7" class="text-center">No medicine sales found</td>
                         </tr>
                     @endforelse
                 </tbody>

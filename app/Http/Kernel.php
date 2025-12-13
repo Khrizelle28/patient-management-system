@@ -26,6 +26,7 @@ class Kernel extends HttpKernel
             // Web middleware group
             'auth' => \App\Http\Middleware\Authenticate::class,
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+            \App\Http\Middleware\CheckUserStatus::class,
         ],
 
         'api' => [

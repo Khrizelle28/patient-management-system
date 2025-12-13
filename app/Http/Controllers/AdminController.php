@@ -181,4 +181,35 @@ class AdminController extends Controller
         return redirect()->route('admin.schedule.edit', ['id' => $id])
             ->with('success', 'Schedule updated successfully.');
     }
+
+    public function deactivate($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Prevent deactivating the owner account
+        if ($user->id === 1) {
+            return redirect()->route('admin.index')
+                ->with('error', 'Cannot deactivate the owner account.');
+        }
+
+        // Prevent self-deactivation
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.index')
+                ->with('error', 'You cannot deactivate your own account.');
+        }
+
+        // Toggle status between Active and Deactivated
+        if ($user->status === UserStatus::ACTIVATED) {
+            $user->status = UserStatus::DEACTIVATED;
+            $message = 'Employee deactivated successfully.';
+        } else {
+            $user->status = UserStatus::ACTIVATED;
+            $message = 'Employee activated successfully.';
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.index')
+            ->with('success', $message);
+    }
 }

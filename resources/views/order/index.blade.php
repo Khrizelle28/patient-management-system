@@ -26,8 +26,8 @@
                     <tr>
                         <th>Order Number</th>
                         <th>Patient Name</th>
-                        <th>Total Amount</th>
-                        <th>Items Count</th>
+                        <th>Authorize Person</th>
+                        <th>Contact Number</th>
                         <th>Status</th>
                         <th>Order Date</th>
                         <th>Actions</th>
@@ -37,8 +37,8 @@
                     <tr>
                         <th>Order Number</th>
                         <th>Patient Name</th>
-                        <th>Total Amount</th>
-                        <th>Items Count</th>
+                        <th>Authorize Person</th>
+                        <th>Contact Number</th>
                         <th>Status</th>
                         <th>Order Date</th>
                         <th>Actions</th>
@@ -49,8 +49,8 @@
                         <tr>
                             <td>{{ $order->order_number }}</td>
                             <td>{{ $order->patientUser->full_name ?? 'N/A' }}</td>
-                            <td>₱{{ number_format($order->total_amount, 2) }}</td>
-                            <td>{{ $order->items->count() }}</td>
+                            <td>{{ $order->pickup_name ?? 'N/A' }}</td>
+                            <td>{{ $order->contact_number ?? 'N/A' }}</td>
                             <td>
                                 @if($order->status === 'ready to pickup')
                                     <span class="badge bg-info">Ready to Pickup</span>

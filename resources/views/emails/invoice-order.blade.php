@@ -1,261 +1,343 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Invoice</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+        * {
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            padding: 40px 20px;
+        }
+
         .email-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: white;
-            border: 2px solid #333;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
-        .header {
-            padding: 30px 40px;
-            background-color: white;
-            border-bottom: 1px solid #e0e0e0;
+
+        .email-header {
+            background: linear-gradient(135deg, #00a8cc 0%, #00a86b 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
         }
-        .logo-section {
+
+        .header-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .email-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .email-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .email-body {
+            padding: 40px 30px;
+        }
+
+        .greeting {
+            font-size: 20px;
+            color: #333;
             margin-bottom: 20px;
         }
-        .logo {
+
+        .greeting strong {
+            color: #00a8cc;
+        }
+
+        .message-box {
+            background: #f0f9ff;
+            border-left: 4px solid #00a8cc;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .message-box p {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .message-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .attachment-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-left: 5px solid #ffc107;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .attachment-notice h3 {
+            color: #856404;
+            font-size: 18px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
+            gap: 10px;
         }
-        .logo-icon {
+
+        .attachment-notice p {
+            color: #856404;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .invoice-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .invoice-summary h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #00a8cc;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 15px;
+        }
+
+        .summary-value {
+            color: #333;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .summary-row:last-child .summary-label,
+        .summary-row:last-child .summary-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00a8cc;
+        }
+
+        .pickup-notice {
+            background: linear-gradient(135deg, #d4f4dd 0%, #c3f0ca 100%);
+            border-left: 5px solid #00a86b;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .pickup-notice h3 {
+            color: #0a5f38;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pickup-notice p {
+            color: #0a5f38;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .contact-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px 25px;
+            text-align: center;
+        }
+
+        .contact-section p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .contact-section a {
+            color: #00a8cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer-logo {
+            margin-bottom: 15px;
+        }
+
+        .footer-logo-circle {
             width: 50px;
             height: 50px;
+            background: linear-gradient(135deg, #00a8cc 0%, #00a86b 100%);
             border-radius: 50%;
-            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-            margin-right: 15px;
+            margin: 0 auto 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 22px;
         }
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0ea5e9;
-        }
-        .clinic-name {
-            font-size: 14px;
-            color: #666;
-        }
-        .invoice-info {
-            text-align: right;
-            font-size: 12px;
-            color: #666;
-        }
-        .invoice-title {
-            text-align: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: #0ea5e9;
-            margin: 20px 0;
-            padding: 0 40px;
-        }
-        .content {
-            padding: 0 40px;
-        }
-        .invoice-to {
-            margin: 30px 0;
-        }
-        .invoice-to h3 {
-            color: #0ea5e9;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        .patient-name {
-            font-size: 20px;
-            font-weight: bold;
+
+        .footer-clinic {
             color: #333;
+            font-size: 16px;
+            font-weight: 600;
             margin-bottom: 5px;
         }
-        .patient-contact {
-            font-size: 14px;
-            color: #666;
-        }
-        .total-section {
-            text-align: right;
-            margin: 20px 0;
-        }
-        .total-label {
-            font-size: 14px;
-            color: #666;
-        }
-        .total-amount {
-            font-size: 28px;
-            font-weight: bold;
-            color: #0ea5e9;
-        }
-        .medicines-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-        }
-        .medicines-table thead {
-            background-color: #0ea5e9;
-            color: white;
-        }
-        .medicines-table th {
-            padding: 12px;
-            text-align: left;
-            font-weight: bold;
-        }
-        .medicines-table td {
-            padding: 12px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .medicines-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .payment-info {
-            background-color: #f0f9ff;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
-        }
-        .payment-info h3 {
-            color: #0ea5e9;
-            font-size: 16px;
-            margin-top: 0;
+
+        .footer-tagline {
+            color: #999;
+            font-size: 13px;
             margin-bottom: 15px;
         }
-        .payment-detail {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 14px;
-        }
-        .payment-label {
-            color: #666;
-        }
-        .payment-value {
-            font-weight: bold;
-            color: #333;
-        }
-        .total-row {
-            background-color: #0ea5e9;
-            color: white;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .thank-you {
-            text-align: center;
-            color: #0ea5e9;
-            font-size: 18px;
-            padding: 30px 40px 40px;
-        }
-        .footer {
-            padding: 20px 40px;
-            background-color: #f9fafb;
-            border-top: 1px solid #e0e0e0;
-            text-align: center;
-            color: #666;
+
+        .footer-note {
+            color: #999;
             font-size: 12px;
+            font-style: italic;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .email-container {
+                border-radius: 0;
+            }
+
+            .email-header {
+                padding: 30px 20px;
+            }
+
+            .email-body {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="email-container">
-        <div class="header">
-            <div class="logo-section">
-                <div>
-                    <div class="logo">
-                        <div class="logo-icon">T</div>
-                        <div>
-                            <div class="logo-text">Tejero Medical</div>
-                            <div class="clinic-name">and Maternity Clinic</div>
-                        </div>
-                    </div>
+        <!-- Header -->
+        <div class="email-header">
+            <div class="header-icon">💊</div>
+            <h1>Payment Received</h1>
+            <p>Your order invoice</p>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <div class="greeting">
+                Hello, <strong>{{ $data['patient_name'] }}</strong>
+            </div>
+
+            <div class="message-box">
+                <p>Thank you for your payment! We have successfully received your payment for your medicine order at Tejero Medical and Maternity Clinic.</p>
+                <p>Your order is now being prepared and will be ready for pickup soon.</p>
+            </div>
+
+            <!-- Attachment Notice -->
+            <div class="attachment-notice">
+                <h3>📎 Invoice Attached</h3>
+                <p><strong>Please see the attached PDF file for your official payment invoice and receipt.</strong> You can download, save, or print this document for your records.</p>
+            </div>
+
+            <!-- Quick Summary -->
+            {{-- <div class="invoice-summary">
+                <h3>Payment Summary</h3>
+                <div class="summary-row">
+                    <span class="summary-label">Invoice Number:</span>
+                    <span class="summary-value">#{{ $data['invoice_number'] }}</span>
                 </div>
-                <div class="invoice-info">
-                    <div>Invoice No: {{ $data['invoice_number'] }}</div>
-                    <div>Date: {{ $data['date'] }}</div>
+                <div class="summary-row">
+                    <span class="summary-label">Payment Date:</span>
+                    <span class="summary-value">{{ $data['date'] }}</span>
                 </div>
+                <div class="summary-row">
+                    <span class="summary-label">Payment Method:</span>
+                    <span class="summary-value">{{ $data['payment_method'] }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Reference Number:</span>
+                    <span class="summary-value">{{ $data['reference_number'] }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total Paid:</span>
+                    <span class="summary-value">{{ $data['total_amount'] }}</span>
+                </div>
+            </div> --}}
+
+            <!-- Pickup Notice -->
+            <div class="pickup-notice">
+                <h3>📍 Pickup Information</h3>
+                <p><strong>Your order is ready for pickup!</strong> Please bring a valid ID when collecting your medicines at our clinic. Present this invoice or the attached PDF as proof of payment.</p>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <p>If you have any questions or concerns, please don't hesitate to contact us.</p>
+                <p>Email: <a href="mailto:info@tejeromedical.com">info@tejeromedical.com</a> | Phone: (032) 123-4567</p>
             </div>
         </div>
 
-        <div class="invoice-title">Invoice</div>
-
-        <div class="content">
-            <div class="invoice-to">
-                <h3>Invoice to:</h3>
-                <div class="patient-name">{{ $data['patient_name'] }}</div>
-                <div class="patient-contact">{{ $data['patient_contact'] }}</div>
-            </div>
-
-            <div class="total-section">
-                <div class="total-label">Total due:</div>
-                <div class="total-amount">{{ $data['total_amount'] }}</div>
-            </div>
-
-            <table class="medicines-table">
-                <thead>
-                    <tr>
-                        <th>Medicine</th>
-                        <th class="text-right">Qty</th>
-                        <th class="text-right">Price</th>
-                        <th class="text-right">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($data['items'] as $item)
-                    <tr>
-                        <td>{{ $item['name'] }}</td>
-                        <td class="text-right">{{ $item['quantity'] }}</td>
-                        <td class="text-right">{{ $item['price'] }}</td>
-                        <td class="text-right">{{ $item['total'] }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            <div class="payment-info">
-                <h3>Payment Method:</h3>
-                <div class="payment-detail">
-                    <span class="payment-label">{{ $data['payment_method'] }}</span>
-                </div>
-                <div class="payment-detail">
-                    <span class="payment-label">Reference No:</span>
-                    <span class="payment-value">{{ $data['reference_number'] }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="total-row">
-            <span>Total:</span>
-            <span>{{ $data['total_amount'] }}</span>
-        </div>
-
-        <div class="thank-you">
-            Thank you for your purchase!
-        </div>
-
+        <!-- Footer -->
         <div class="footer">
-            This is an automated email. Please do not reply to this message.
+            <div class="footer-logo">
+                <div class="footer-logo-circle">T</div>
+                <div class="footer-clinic">Tejero Medical and Maternity Clinic</div>
+                <div class="footer-tagline">Providing Quality Healthcare with Compassion</div>
+            </div>
+            <p class="footer-note">
+                This is an automated email. Please do not reply to this message.
+            </p>
         </div>
     </div>
 </body>

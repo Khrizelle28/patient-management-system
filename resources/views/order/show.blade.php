@@ -72,11 +72,11 @@
                             <td>{{ $order->patientUser->contact_no ?? 'N/A' }}</td>
                         </tr>
                         <tr>
-                            <th>Pickup Name</th>
+                            <th>Authorize Person</th>
                             <td>{{ $order->pickup_name ?? 'N/A' }}</td>
                         </tr>
                         <tr>
-                            <th>Order Contact Number</th>
+                            <th>Contact Number</th>
                             <td>{{ $order->contact_number ?? 'N/A' }}</td>
                         </tr>
                         @if($order->notes)

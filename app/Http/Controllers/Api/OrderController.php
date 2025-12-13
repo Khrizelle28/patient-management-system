@@ -42,6 +42,7 @@ class OrderController extends Controller
         $request->validate([
             'pickup_name' => 'required|string',
             'contact_number' => 'required|string',
+            'email' => 'nullable|email',
             'notes' => 'nullable|string',
         ]);
 
@@ -109,6 +110,7 @@ class OrderController extends Controller
                 'status' => 'pending_payment',
                 'pickup_name' => $request->pickup_name,
                 'contact_number' => $request->contact_number,
+                'email' => $request->email,
                 'notes' => $request->notes,
                 'payment_status' => 'pending',
             ]);

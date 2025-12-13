@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('admin/store', [AdminController::class, 'store'])->name('admin.store');
     Route::get('admin/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
     Route::put('admin/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::put('admin/{id}/deactivate', [AdminController::class, 'deactivate'])->name('admin.deactivate');
     Route::get('admin/{id}/schedule/edit', [AdminController::class, 'editSchedule'])->name('admin.schedule.edit');
     Route::put('admin/{id}/schedule', [AdminController::class, 'updateSchedule'])->name('admin.schedule.update');
     Route::get('profile', [AdminController::class, 'profile'])->name('admin.profile');
@@ -59,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('product/{id}/update-stock', [ProductController::class, 'updateStock'])->name('product.update-stock');
 
     Route::get('order', [OrderController::class, 'index'])->name('order.index');
+    Route::get('order/invoice', [OrderController::class, 'previewInvoice'])->name('order.invoice');
     Route::get('order/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('order/{id}/status/{status}', [OrderController::class, 'updateStatus'])->name('order.update-status');
 

@@ -290,8 +290,11 @@ class PaymentController extends Controller
                 'reference_number' => $transactionId ?? $appointment->paypal_transaction_id ?? 'N/A',
             ];
 
-            if ($appointment->patient && $appointment->patient->email) {
-                Mail::to($appointment->patient->email)->send(new InvoiceMail($invoiceData, 'appointment'));
+            // Use email from appointment if provided, otherwise use patient's email
+            $emailTo = $appointment->email ?? ($appointment->patient ? $appointment->patient->email : null);
+
+            if ($emailTo) {
+                Mail::to($emailTo)->send(new InvoiceMail($invoiceData, 'appointment'));
             }
         } catch (\Exception $e) {
             Log::error('Failed to send appointment invoice email: '.$e->getMessage());
@@ -326,8 +329,11 @@ class PaymentController extends Controller
                 'reference_number' => $transactionId ?? $order->paypal_transaction_id ?? 'N/A',
             ];
 
-            if ($order->patientUser && $order->patientUser->email) {
-                Mail::to($order->patientUser->email)->send(new InvoiceMail($invoiceData, 'order'));
+            // Use email from order if provided, otherwise use patient's email
+            $emailTo = $order->email ?? ($order->patientUser ? $order->patientUser->email : null);
+
+            if ($emailTo) {
+                Mail::to($emailTo)->send(new InvoiceMail($invoiceData, 'order'));
             }
         } catch (\Exception $e) {
             Log::error('Failed to send order invoice email: '.$e->getMessage());

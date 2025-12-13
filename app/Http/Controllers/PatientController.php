@@ -9,7 +9,6 @@ use App\Models\PatientUser;
 use App\Models\User;
 use App\Services\SemaphoreSmsServices;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
@@ -17,6 +16,7 @@ class PatientController extends Controller
     public function index()
     {
         $patients = PatientUser::get();
+
         return view('patient.index', compact('patients'));
     }
 
@@ -29,14 +29,14 @@ class PatientController extends Controller
     {
         try {
             $data = $request->except(['_token']);
-            $data['username'] = strtolower(str_replace(' ', '', substr($data['first_name'], 0, 1) . $data['last_name']) . rand(1000, 9999));
+            $data['username'] = strtolower(str_replace(' ', '', substr($data['first_name'], 0, 1).$data['last_name']).rand(1000, 9999));
             $firstName = ucfirst(strtolower($data['first_name']));
-            $birthYear = str_replace('-', '', $data['birthday']);
-            $rawPassword = '@'. str_replace(' ', '', $firstName) . '' . $birthYear;
+            // $birthYear = str_replace('-', '', $data['birthday']);
+            $passwordNo = rand(1000, 9999);
+            $rawPassword = '@'.str_replace(' ', '', $firstName).''.$passwordNo;
             $data['password'] = bcrypt($rawPassword);
             $user = PatientUser::create($data);
-            if(env('ENABLE_SMS_NOTIFICATION', false) == true)
-            {
+            if (env('ENABLE_SMS_NOTIFICATION', false) == true) {
                 $this->sendSmsNotification($data, $user, $rawPassword);
             }
 
@@ -49,12 +49,14 @@ class PatientController extends Controller
     public function show($id)
     {
         $patient = PatientUser::find($id);
+
         return view('patient.show', compact('patient'));
     }
 
     public function edit($id)
     {
         $patient = PatientUser::find($id);
+
         return view('patient.edit', compact('patient'));
     }
 
@@ -62,6 +64,7 @@ class PatientController extends Controller
     {
         $patient = PatientUser::find($id);
         $patient->update($request->except(['token']));
+
         return redirect()->route('patient.index');
     }
 
@@ -69,6 +72,7 @@ class PatientController extends Controller
     {
         $patient = PatientUser::find($id);
         $doctors = User::role('Doctor')->get();
+
         return view('patient.checkup', compact('patient', 'doctors'));
     }
 
@@ -78,18 +82,15 @@ class PatientController extends Controller
             $data = $request->safe()->except(['_token', '_method']);
             $patient = PatientUser::find($id);
             $data['patient_user_id'] = $patient->id;
-            if(isset($data['family_histories_other']))
-            {
+            if (isset($data['family_histories_other'])) {
                 $data['family_histories']['others'] = $data['family_histories_other'];
             }
 
-            if($request->input('family_histories', false))
-            {
+            if ($request->input('family_histories', false)) {
                 $data['family_histories'] = json_encode($data['family_histories']);
             }
 
-            if($request->input('txtarea_remarks', false))
-            {
+            if ($request->input('txtarea_remarks', false)) {
                 $data['remarks'] = $data['txtarea_remarks'];
             }
             $data['comeback_info'] = isset($data['to_come_back']) ? Carbon::parse($data['return_date'])->format('Y-m-d h:i A') : $data['no_return_reason'];
@@ -108,10 +109,10 @@ class PatientController extends Controller
             Log::info('Starting SMS notification', [
                 'user_id' => $user->id,
                 'contact_no' => $data['contact_no'] ?? 'NOT_SET',
-                'sms_enabled' => env('ENABLE_SMS_NOTIFICATION', false)
+                'sms_enabled' => env('ENABLE_SMS_NOTIFICATION', false),
             ]);
 
-            $patientName = $data['first_name'] . ' ' . ucfirst(strtolower($data['last_name']));
+            $patientName = $data['first_name'].' '.ucfirst(strtolower($data['last_name']));
             $appName = env('APP_NAME', 'Good Health Clinic');
 
             $rawPassword = $password ?? $data['password'];
@@ -127,20 +128,21 @@ class PatientController extends Controller
             // Debug: Log the message content and length
             Log::info('SMS message prepared', [
                 'message_length' => strlen($message),
-                'message_preview' => substr($message, 0, 100) . '...'
+                'message_preview' => substr($message, 0, 100).'...',
             ]);
 
             // Check if contact number exists
             if (empty($data['contact_no'])) {
                 Log::error('Contact number is empty', ['data' => $data]);
+
                 return;
             }
 
-            $smsService = new SemaphoreSmsServices();
+            $smsService = new SemaphoreSmsServices;
 
             // Debug: Test service configuration
             Log::info('SMS service configuration', [
-                'api_key_set' => !empty($smsService->apiKey),
+                'api_key_set' => ! empty($smsService->apiKey),
             ]);
 
             $result = $smsService->sendSms(
@@ -152,19 +154,19 @@ class PatientController extends Controller
             Log::info('SMS send attempt completed', [
                 'user_id' => $user->id,
                 'result' => $result,
-                'success' => $result['success'] ?? false
+                'success' => $result['success'] ?? false,
             ]);
 
             if ($result['success']) {
                 Log::info('Welcome SMS sent to user', [
                     'user_id' => $user->id,
-                    'message_id' => $result['message_id'] ?? null
+                    'message_id' => $result['message_id'] ?? null,
                 ]);
             } else {
                 Log::error('Failed to send welcome SMS', [
                     'user_id' => $user->id,
                     'error' => $result['error'] ?? 'Unknown error',
-                    'response' => $result['response'] ?? null
+                    'response' => $result['response'] ?? null,
                 ]);
             }
 
@@ -172,9 +174,8 @@ class PatientController extends Controller
             Log::error('SMS notification exception', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
         }
     }
-
 }

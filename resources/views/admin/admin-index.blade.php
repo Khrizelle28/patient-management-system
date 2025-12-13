@@ -8,10 +8,7 @@
     </div>
     <div class="card-body">
         <a class="btn btn-primary"
-           href="{{ route('admin.create') }}"
-           data-bs-toggle="tooltip"
-           data-bs-placement="top"
-           title="Create New Employee Account">New Employee</a>
+           href="{{ route('admin.create') }}">New Employee</a>
         <table id="datatablesSimple" class="tableAdmin">
             <thead>
                 <tr>
@@ -62,13 +59,20 @@
                                         <i class="fa-solid fa-calendar-days"></i>
                                     </a>
                                 @endif
-                                <a href="#"
-                                   class="btn btn-sm btn-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="Deactivate Employee">
-                                    <i class="fa-solid fa-user-slash"></i>
-                                </a>
+                                <form action="{{ route('admin.deactivate', ['id' => $admin->id]) }}"
+                                      method="POST"
+                                      style="display: inline;"
+                                      onsubmit="return confirm('Are you sure you want to {{ $admin->status === 'Active' ? 'deactivate' : 'activate' }} this employee?');">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit"
+                                            class="btn btn-sm {{ $admin->status === 'Active' ? 'btn-warning' : 'btn-success' }}"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="{{ $admin->status === 'Active' ? 'Deactivate' : 'Activate' }} Employee">
+                                        <i class="fa-solid {{ $admin->status === 'Active' ? 'fa-user-slash' : 'fa-user-check' }}"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

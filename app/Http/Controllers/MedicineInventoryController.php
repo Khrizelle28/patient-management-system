@@ -10,6 +10,8 @@ class MedicineInventoryController extends Controller
 {
     public function index(Request $request)
     {
+        $pullouts = collect();
+
         $products = Product::with('batches')
             ->select(
                 'id',
@@ -18,7 +20,7 @@ class MedicineInventoryController extends Controller
                 'quantity_sold',
                 'price',
                 'expiration_date'
-            )->get()->map(function ($product) {
+            )->get()->map(function ($product) use (&$pullouts) {
                 $batches = $product->batches;
 
                 // If product has batches, group them
@@ -26,7 +28,7 @@ class MedicineInventoryController extends Controller
                     // Calculate total remaining stock across all batches
                     $totalRemainingStock = $batches->sum('remaining_quantity');
 
-                    $batchesData = $batches->map(function ($batch) use ($product) {
+                    $batchesData = $batches->map(function ($batch) use ($product, &$pullouts) {
                         $batchData = (object) [
                             'overall_stock' => $batch->quantity,
                             'quantity_sold' => $batch->quantity_sold,
@@ -37,10 +39,10 @@ class MedicineInventoryController extends Controller
 
                         $expirationDate = Carbon::parse($batch->expiration_date);
                         $today = Carbon::today();
-                        $oneMonthFromNow = $today->copy()->addMonth();
+                        $sixMonthsFromNow = $today->copy()->addMonths(6);
 
                         $statuses = [];
-                        $isNearExpiry = $expirationDate->between($today, $oneMonthFromNow);
+                        $isNearExpiry = $expirationDate->between($today, $sixMonthsFromNow);
 
                         // Add Near Expiry status if applicable (per batch)
                         if ($isNearExpiry) {
@@ -48,6 +50,15 @@ class MedicineInventoryController extends Controller
                                 'label' => 'Near Expiry ('.number_format($batchData->remaining_stock).' units expiring)',
                                 'class' => 'danger',
                             ];
+
+                            // Add to pullouts collection
+                            $pullouts->push([
+                                'medicine' => $product->name,
+                                'batch_id' => $batch->id,
+                                'quantity' => $batch->remaining_quantity,
+                                'expiration_date' => $batch->expiration_date,
+                                'reason' => 'Near Expiry',
+                            ]);
                         }
 
                         $batchData->statuses = $statuses;
@@ -110,10 +121,10 @@ class MedicineInventoryController extends Controller
 
                 $expirationDate = Carbon::parse($product->expiration_date);
                 $today = Carbon::today();
-                $oneMonthFromNow = $today->copy()->addMonth();
+                $sixMonthsFromNow = $today->copy()->addMonths(6);
 
                 $statuses = [];
-                $isNearExpiry = $expirationDate->between($today, $oneMonthFromNow);
+                $isNearExpiry = $expirationDate->between($today, $sixMonthsFromNow);
 
                 // Determine stock status
                 if ($product->remaining_stock < 500) {
@@ -139,6 +150,15 @@ class MedicineInventoryController extends Controller
                         'label' => 'Near Expiry ('.number_format($product->remaining_stock).' units expiring)',
                         'class' => 'danger',
                     ];
+
+                    // Add to pullouts collection
+                    $pullouts->push([
+                        'medicine' => $product->name,
+                        'batch_id' => null,
+                        'quantity' => $product->remaining_stock,
+                        'expiration_date' => $product->expiration_date,
+                        'reason' => 'Near Expiry',
+                    ]);
                 }
 
                 $product->statuses = $statuses;
@@ -148,6 +168,6 @@ class MedicineInventoryController extends Controller
                 return $product;
             });
 
-        return view('admin.reports.medicine-inventory', compact('products'));
+        return view('admin.reports.medicine-inventory', compact('products', 'pullouts'));
     }
 }
