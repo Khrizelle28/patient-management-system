@@ -204,6 +204,7 @@ class PaymentController extends Controller
 
                     DB::commit();
                 } catch (\Exception $e) {
+                    Log::error('Error updating payment status: '.$e->getMessage());
                     DB::rollBack();
                     throw $e;
                 }
@@ -237,6 +238,7 @@ class PaymentController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            Log::error('Get payment status error: '.$e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),

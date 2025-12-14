@@ -19,6 +19,11 @@ class MedicationAlert extends Model
         'selected_days',
         'duration_days',
         'start_date',
+        'prescribed_pieces',
+        'times_per_day',
+        'start_day',
+        'first_dose_time',
+        'first_dose_period',
     ];
 
     protected $casts = [

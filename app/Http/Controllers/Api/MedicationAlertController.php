@@ -39,6 +39,13 @@ class MedicationAlertController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info('Store medication alert called', [
+            'all_data' => $request->all(),
+            'prescribed_pieces' => $request->prescribed_pieces,
+            'times_per_day' => $request->times_per_day,
+            'start_day' => $request->start_day,
+        ]);
+
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|exists:patient_users,id',
             'time' => 'required|string',
@@ -49,9 +56,18 @@ class MedicationAlertController extends Controller
             'selected_days' => 'nullable|string',
             'duration_days' => 'nullable|integer|min:1',
             'start_date' => 'nullable|date',
+            // Prescribed pieces fields
+            'prescribed_pieces' => 'nullable|integer|min:1',
+            'times_per_day' => 'nullable|integer|min:1|max:4',
+            'start_day' => 'nullable|string',
+            'first_dose_time' => 'nullable|string',
+            'first_dose_period' => 'nullable|in:AM,PM',
         ]);
 
         if ($validator->fails()) {
+            \Log::error('Medication alert validation failed', [
+                'errors' => $validator->errors()->toArray(),
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Validation error',
@@ -60,6 +76,7 @@ class MedicationAlertController extends Controller
         }
 
         try {
+            \Log::info('Creating medication alert', ['data' => $request->all()]);
             $alert = MedicationAlert::create([
                 'patient_id' => $request->patient_id,
                 'time' => $request->time,
@@ -67,9 +84,20 @@ class MedicationAlertController extends Controller
                 'medication_name' => $request->medication_name,
                 'remarks' => $request->remarks,
                 'is_enabled' => $request->is_enabled ?? true,
-                'selected_days' => $request->selected_days ?? '1,2,3,4,5,6,7',
-                'duration_days' => $request->duration_days ?? 7,
+                'selected_days' => $request->selected_days ?? '', // Default to empty string if null
+                'duration_days' => $request->duration_days ?? 0,
                 'start_date' => $request->start_date ?? now()->format('Y-m-d'),
+                // Prescribed pieces fields
+                'prescribed_pieces' => $request->prescribed_pieces,
+                'times_per_day' => $request->times_per_day,
+                'start_day' => $request->start_day,
+                'first_dose_time' => $request->first_dose_time,
+                'first_dose_period' => $request->first_dose_period,
+            ]);
+
+            \Log::info('Medication alert created successfully', [
+                'id' => $alert->id,
+                'prescribed_pieces' => $alert->prescribed_pieces,
             ]);
 
             return response()->json([
@@ -78,6 +106,10 @@ class MedicationAlertController extends Controller
                 'alert' => $alert,
             ], 201);
         } catch (\Exception $e) {
+            \Log::error('Failed to create medication alert', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create medication alert',
@@ -123,6 +155,12 @@ class MedicationAlertController extends Controller
             'selected_days' => 'nullable|string',
             'duration_days' => 'nullable|integer|min:1',
             'start_date' => 'nullable|date',
+            // Prescribed pieces fields
+            'prescribed_pieces' => 'nullable|integer|min:1',
+            'times_per_day' => 'nullable|integer|min:1|max:4',
+            'start_day' => 'nullable|string',
+            'first_dose_time' => 'nullable|string',
+            'first_dose_period' => 'nullable|in:AM,PM',
         ]);
 
         if ($validator->fails()) {
@@ -143,9 +181,15 @@ class MedicationAlertController extends Controller
                 'medication_name' => $request->medication_name,
                 'remarks' => $request->remarks,
                 'is_enabled' => $request->is_enabled ?? $alert->is_enabled,
-                'selected_days' => $request->selected_days ?? $alert->selected_days,
-                'duration_days' => $request->duration_days ?? $alert->duration_days,
+                'selected_days' => $request->selected_days ?? ($alert->selected_days ?? ''),
+                'duration_days' => $request->duration_days ?? ($alert->duration_days ?? 0),
                 'start_date' => $request->start_date ?? $alert->start_date,
+                // Prescribed pieces fields
+                'prescribed_pieces' => $request->prescribed_pieces,
+                'times_per_day' => $request->times_per_day,
+                'start_day' => $request->start_day,
+                'first_dose_time' => $request->first_dose_time,
+                'first_dose_period' => $request->first_dose_period,
             ]);
 
             return response()->json([
