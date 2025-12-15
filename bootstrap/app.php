@@ -14,11 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
     })
-    // ->withSchedule(function ($schedule) {
-    //     // Check for orders needing pickup notification every hour
-    //     // This allows notifications to be sent exactly 24 hours after order creation
-    //     $schedule->command('orders:notify-pickup')->hourly();
-    // })
+    ->withSchedule(function ($schedule) {
+        // Check for orders needing pickup notification every hour
+        // This allows notifications to be sent exactly 24 hours after order creation
+        $schedule->command('orders:notify-pickup')->hourly();
+        $schedule->command('queue:work --once --timeout=60')->everyMinute()->withoutOverlapping();
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

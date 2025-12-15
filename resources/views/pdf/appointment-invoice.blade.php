@@ -264,7 +264,7 @@
             <div class="invoice-to">
                 <h3>Invoice to:</h3>
                 <div class="customer-name">{{ $data['patient_name'] }}</div>
-                <div class="customer-phone">{{ $data['patient_contact'] }}</div>
+                {{-- <div class="customer-phone">{{ $data['patient_contact'] }}</div> --}}
             </div>
             <div class="invoice-title-section">
                 <div class="invoice-title">Invoice</div>

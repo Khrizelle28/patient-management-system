@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Mail\InvoiceMail;
+use App\Jobs\SendInvoiceEmail;
 use App\Models\Appointment;
 use App\Models\Cart;
 use App\Models\Order;
@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
@@ -296,7 +295,7 @@ class PaymentController extends Controller
             $emailTo = $appointment->email ?? ($appointment->patient ? $appointment->patient->email : null);
 
             if ($emailTo) {
-                Mail::to($emailTo)->send(new InvoiceMail($invoiceData, 'appointment'));
+                SendInvoiceEmail::dispatch($emailTo, $invoiceData, 'appointment');
             }
         } catch (\Exception $e) {
             Log::error('Failed to send appointment invoice email: '.$e->getMessage());
@@ -335,7 +334,7 @@ class PaymentController extends Controller
             $emailTo = $order->email ?? ($order->patientUser ? $order->patientUser->email : null);
 
             if ($emailTo) {
-                Mail::to($emailTo)->send(new InvoiceMail($invoiceData, 'order'));
+                SendInvoiceEmail::dispatch($emailTo, $invoiceData, 'order');
             }
         } catch (\Exception $e) {
             Log::error('Failed to send order invoice email: '.$e->getMessage());
