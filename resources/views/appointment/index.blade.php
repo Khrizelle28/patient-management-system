@@ -41,14 +41,14 @@
                         <td>{{ Carbon\Carbon::parse($appointment->created_at)->format('F d, Y H:i A') }}</td>
                         <td>
                             <div class="d-flex gap-2">
-                                <a href="#"
+                                {{-- <a href="#"
                                    class="btn btn-sm btn-info"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="top"
                                    title="View Appointment"
                                    onclick="event.preventDefault();">
                                     <i class="fa-solid fa-eye"></i>
-                                </a>
+                                </a> --}}
                                 @hasanyrole('Doctor')
                                     <a href="javascript:void(0);"
                                        class="btn btn-sm btn-success"
@@ -94,6 +94,16 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
+
+                        <div class="form-group mb-3 d-none" id="otherPurposeWrapper{{ $appointment->id }}">
+                            <label for="otherPurpose{{ $appointment->id }}">Please specify:</label>
+                            <input type="text"
+                                class="form-control"
+                                id="otherPurpose{{ $appointment->id }}"
+                                name="other_purpose"
+                                placeholder="Enter purpose">
+                        </div>
+
 
                         <div class="form-group mb-3">
                             <label for="medicalCondition{{ $appointment->id }}">Medical Condition</label>

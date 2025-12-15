@@ -1,39 +1,7 @@
 @extends('admin.index')
 
 @section('content')
-    {{-- Pullout Section --}}
-    {{-- @if($pullouts->isNotEmpty())
-        <div class="card mt-4">
-            <div class="card-header bg-danger text-white">
-                <i class="fa-solid fa-exclamation-triangle"></i>
-                Medicine Pullout - Near Expiry Items
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Medicine</th>
-                            <th>Quantity</th>
-                            <th>Expiration Date</th>
-                            <th>Reason</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($pullouts as $index => $pullout)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $pullout['medicine'] }}</td>
-                                <td>{{ number_format($pullout['quantity']) }}</td>
-                                <td>{{ Carbon\Carbon::parse($pullout['expiration_date'])->format('F d, Y') }}</td>
-                                <td><span class="badge bg-danger">{{ $pullout['reason'] }}</span></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    @endif --}}
+
 
     <div class="card mt-4">
         <div class="card-header">
@@ -122,4 +90,38 @@
             </table>
         </div>
     </div>
+
+    {{-- Pullout Section --}}
+    {{-- @if($pullouts->isNotEmpty())
+        <div class="card mt-4">
+            <div class="card-header bg-danger text-white">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Medicine Pullout - Near Expiry Items
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Medicine</th>
+                            <th>Quantity</th>
+                            <th>Expiration Date</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($pullouts as $index => $pullout)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $pullout['medicine'] }}</td>
+                                <td>{{ number_format($pullout['quantity']) }}</td>
+                                <td>{{ Carbon\Carbon::parse($pullout['expiration_date'])->format('F d, Y') }}</td>
+                                <td><span class="badge bg-danger">{{ $pullout['reason'] }}</span></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif --}}
 @endsection
