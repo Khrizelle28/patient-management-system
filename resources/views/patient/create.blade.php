@@ -22,7 +22,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input class="form-control" id="inputMiddleName" name="middle_name" type="text" value="{{ old('middle_name') }}" placeholder="Enter your middle name" />
-                                    <label for="inputMiddleName">Middle name</label>
+                                    <label for="inputMiddleName">Middle name (optional)</label>
                                 </div>
                             </div>
                         </div>
@@ -40,7 +40,8 @@
                                 <div class="form-floating mb-3 mb-md-0">
                                     <input class="form-control @error('age') is-invalid @enderror"
                                         id="inputAge" type="text" name="age" value="{{ old('age') }}"
-                                        placeholder="Enter your age" />
+                                        placeholder="Age will be calculated" readonly
+                                        style="background-color: #e9ecef; cursor: not-allowed;" />
                                     <label for="inputAge">Age <span style="color: red">*</span></label>
                                     @error('age')
                                         <div class="invalid-feedback">
@@ -160,4 +161,34 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.getElementById('inputBirthday').addEventListener('change', function() {
+            const birthday = new Date(this.value);
+            const today = new Date();
+
+            if (this.value) {
+                let age = today.getFullYear() - birthday.getFullYear();
+                const monthDiff = today.getMonth() - birthday.getMonth();
+
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthday.getDate())) {
+                    age--;
+                }
+
+                document.getElementById('inputAge').value = age;
+            } else {
+                document.getElementById('inputAge').value = '';
+            }
+        });
+
+        // Trigger calculation on page load if birthday has a value (for old() values)
+        window.addEventListener('DOMContentLoaded', function() {
+            const birthdayInput = document.getElementById('inputBirthday');
+            if (birthdayInput.value) {
+                birthdayInput.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+    @endpush
 @endsection

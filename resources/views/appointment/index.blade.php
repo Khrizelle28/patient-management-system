@@ -95,14 +95,14 @@
                             </select>
                         </div>
 
-                        <div class="form-group mb-3 d-none" id="otherPurposeWrapper{{ $appointment->id }}">
+                        {{-- <div class="form-group mb-3 d-none" id="otherPurposeWrapper{{ $appointment->id }}">
                             <label for="otherPurpose{{ $appointment->id }}">Please specify:</label>
                             <input type="text"
                                 class="form-control"
                                 id="otherPurpose{{ $appointment->id }}"
                                 name="other_purpose"
                                 placeholder="Enter purpose">
-                        </div>
+                        </div> --}}
 
 
                         <div class="form-group mb-3">
